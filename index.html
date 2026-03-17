@@ -5,191 +5,255 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BlueHawks Stationers</title>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background: #f4f6f8;
+body { margin:0; font-family: Arial; background:#f5f7fb; }
+
+/* NAVBAR */
+nav {
+  background:#0b3d91;
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+nav h2 { color:white; margin:0; }
+nav a {
+  color:white;
+  margin:0 10px;
+  text-decoration:none;
+  cursor:pointer;
 }
 
-header {
-  background: #0b3d91;
-  color: white;
-  padding: 20px;
-  text-align: center;
+/* SECTIONS */
+.section { display:none; padding:40px; }
+.active { display:block; }
+
+/* HERO */
+.hero {
+  background:linear-gradient(135deg,#0b3d91,#1e5ed8);
+  color:white;
+  text-align:center;
+  padding:80px 20px;
 }
 
-header h1 { margin: 0; }
-header p { font-style: italic; }
-
-.container {
-  padding: 20px;
-  max-width: 1000px;
-  margin: auto;
+/* PRODUCTS */
+.grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
 }
 
 .card {
-  background: white;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 10px;
+  background:white;
+  border-radius:10px;
+  padding:15px;
+  text-align:center;
+}
+
+.img-placeholder {
+  height:150px;
+  background:#ddd;
+  margin-bottom:10px;
 }
 
 button {
-  background: #0b3d91;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
+  background:#0b3d91;
+  color:white;
+  border:none;
+  padding:10px;
+  width:100%;
+  border-radius:5px;
 }
 
-.cart {
-  background: #fff;
-  padding: 15px;
-  border-radius: 10px;
+/* CART */
+.cart-box {
+  background:white;
+  padding:20px;
+  border-radius:10px;
 }
 
-input, select {
-  padding: 8px;
-  margin: 5px 0;
-  width: 100%;
-}
-
-.total {
-  font-size: 18px;
-  font-weight: bold;
+/* INPUTS */
+input {
+  width:100%;
+  padding:10px;
+  margin:5px 0;
 }
 
 .footer {
-  text-align: center;
-  padding: 20px;
+  text-align:center;
+  margin-top:20px;
 }
 
-.contact-btns a {
-  display: inline-block;
-  margin: 5px;
-  text-decoration: none;
-  padding: 10px;
-  border-radius: 5px;
-  color: white;
+.contact a {
+  margin:5px;
+  padding:10px;
+  color:white;
+  border-radius:5px;
+  text-decoration:none;
 }
-
-.whatsapp { background: green; }
-.email { background: #555; }
+.whatsapp { background:green; }
+.email { background:#555; }
 
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1>BlueHawks Stationers</h1>
-  <p>"Noted!"</p>
-</header>
-
-<div class="container">
-
-  <div class="card">
-    <h3>Select Product</h3>
-
-    <label>Product</label>
-    <select id="product">
-      <option value="50">A5 80 pages</option>
-      <option value="65">A5 120 pages</option>
-      <option value="80">A5 200 pages</option>
-      <option value="100">A4 120 pages</option>
-      <option value="130">A4 200 pages</option>
-      <option value="100">School Diary</option>
-      <option value="100">Assessment Book</option>
-    </select>
-
-    <label>Type</label>
-    <select>
-      <option>Single Line</option>
-      <option>Square</option>
-      <option>Drawing / Scrap</option>
-    </select>
-
-    <label>Quantity</label>
-    <input type="number" id="qty" value="1">
-
-    <button onclick="addToCart()">Add to Cart</button>
+<!-- NAV -->
+<nav>
+  <h2>BlueHawks</h2>
+  <div>
+    <a onclick="show('home')">Home</a>
+    <a onclick="show('products')">Our Products</a>
+    <a onclick="show('cart')">My Cart</a>
+    <a onclick="show('contact')">Contact Us</a>
   </div>
+</nav>
 
-  <div class="cart">
-    <h3>Cart</h3>
-    <ul id="cartList"></ul>
-    <p class="total">Total: KES <span id="total">0</span></p>
+<!-- HOME -->
+<div id="home" class="section active">
+  <div class="hero">
+    <h1>BlueHawks Stationers</h1>
+    <p>"Noted!"</p>
+    <p>Your trusted school supplies partner</p>
   </div>
+</div>
 
-  <div class="card">
-    <h3>Request a Quote</h3>
+<!-- PRODUCTS -->
+<div id="products" class="section">
 
-    <input type="text" id="name" placeholder="School Name">
-    <input type="email" id="email" placeholder="Email Address">
-    <input type="text" id="phone" placeholder="Phone Number">
+<h2>Our Products</h2>
 
-    <button onclick="sendQuote()">Request Quote</button>
-  </div>
+<div class="grid">
 
-  <div class="footer">
-    <h3>Contact Us</h3>
+<!-- A5 -->
+<div class="card">
+<div class="img-placeholder">Image</div>
+<h3>A5 Exercise Books</h3>
+<p>80, 96, 120, 200 pages</p>
+<input type="number" id="a5qty" placeholder="Quantity">
+<button onclick="addItem('A5 Books',50,45,350,'a5qty')">Add to Cart</button>
+</div>
 
-    <div class="contact-btns">
-      <a class="whatsapp" href="https://wa.me/254723720681" target="_blank">WhatsApp</a>
-      <a class="email" href="mailto:nickkndegwa@gmail.com">Email</a>
-    </div>
-  </div>
+<!-- A4 -->
+<div class="card">
+<div class="img-placeholder">Image</div>
+<h3>A4 Exercise Books</h3>
+<p>120, 200 pages</p>
+<input type="number" id="a4qty">
+<button onclick="addItem('A4 Books',100,95,240,'a4qty')">Add to Cart</button>
+</div>
 
+<!-- Diaries -->
+<div class="card">
+<div class="img-placeholder">Image</div>
+<h3>School Diaries</h3>
+<p>MOQ: 100</p>
+<input type="number" id="dqty">
+<button onclick="addItem('Diaries',100,90,100,'dqty')">Add</button>
+</div>
+
+<!-- Assessment -->
+<div class="card">
+<div class="img-placeholder">Image</div>
+<h3>Assessment Books</h3>
+<p>Same price as diaries</p>
+<input type="number" id="aqty">
+<button onclick="addItem('Assessment',100,90,100,'aqty')">Add</button>
+</div>
+
+</div>
+</div>
+
+<!-- CART -->
+<div id="cart" class="section">
+<h2>My Cart</h2>
+
+<div class="cart-box">
+<ul id="cartList"></ul>
+<p><b>Total: KES <span id="total">0</span></b></p>
+
+<input id="school" placeholder="School Name">
+<input id="email" placeholder="Email">
+<input id="phone" placeholder="Phone">
+
+<button onclick="sendQuote()">Request Quote</button>
+<button onclick="generatePDF()">Download Invoice</button>
+</div>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="section">
+<h2>Contact Us</h2>
+
+<div class="footer">
+<div class="contact">
+<a class="whatsapp" href="https://wa.me/254723720681">WhatsApp</a>
+<a class="email" href="mailto:bluehawksinvestments@gmail.com">Email</a>
+</div>
+</div>
 </div>
 
 <script>
-let cart = [];
-let total = 0;
+let cart=[];
+let total=0;
 
-function addToCart() {
-  let product = document.getElementById("product");
-  let price = parseInt(product.value);
-  let name = product.options[product.selectedIndex].text;
-  let qty = parseInt(document.getElementById("qty").value);
+function show(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
 
+function addItem(name,normal,offer,moq,id){
+  let qty=parseInt(document.getElementById(id).value);
+  if(!qty) return alert("Enter quantity");
+
+  let price = qty>=moq ? offer : normal;
   let itemTotal = price * qty;
-  total += itemTotal;
 
-  cart.push(name + " x" + qty + " = " + itemTotal);
+  cart.push(`${name} x${qty} @${price} = ${itemTotal}`);
+  total += itemTotal;
 
   updateCart();
 }
 
-function updateCart() {
-  let list = document.getElementById("cartList");
-  list.innerHTML = "";
-
-  cart.forEach(item => {
-    let li = document.createElement("li");
-    li.textContent = item;
+function updateCart(){
+  let list=document.getElementById("cartList");
+  list.innerHTML="";
+  cart.forEach(i=>{
+    let li=document.createElement("li");
+    li.textContent=i;
     list.appendChild(li);
   });
-
-  document.getElementById("total").textContent = total;
+  document.getElementById("total").textContent=total;
 }
 
-function sendQuote() {
-  let name = document.getElementById("name").value;
-  let email = document.getElementById("email").value;
-  let phone = document.getElementById("phone").value;
+function sendQuote(){
+  let school=document.getElementById("school").value;
+  let email=document.getElementById("email").value;
+  let phone=document.getElementById("phone").value;
 
-  let cartDetails = cart.join("%0D%0A");
+  let body=`School: ${school}%0D%0AEmail: ${email}%0D%0APhone: ${phone}%0D%0A%0D%0AOrder:%0D%0A${cart.join("%0D%0A")}%0D%0ATotal: KES ${total}`;
 
-  let subject = "Quote Request - BlueHawks Stationers";
-  let body = "School: " + name +
-             "%0D%0AEmail: " + email +
-             "%0D%0APhone: " + phone +
-             "%0D%0A%0D%0AOrder:%0D%0A" + cartDetails +
-             "%0D%0A%0D%0ATotal: KES " + total;
+  window.location.href=`mailto:bluehawksinvestments@gmail.com?subject=Quote Request&body=${body}`;
+}
 
-  window.location.href = `mailto:${email},bluehawksinvestment@gmail.com?subject=${subject}&body=${body}`;
+function generatePDF(){
+  const { jsPDF } = window.jspdf;
+  let doc=new jsPDF();
+
+  doc.text("BlueHawks Stationers Invoice",10,10);
+
+  let y=20;
+  cart.forEach(item=>{
+    doc.text(item,10,y);
+    y+=10;
+  });
+
+  doc.text("Total: KES "+total,10,y+10);
+
+  doc.save("invoice.pdf");
 }
 </script>
 
