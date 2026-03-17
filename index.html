@@ -1,24 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlueHawks Stationers</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+body { margin:0; font-family: Arial; background:#f5f7fb; }
+
+/* NAV */
+nav {
+  background:#0b3d91;
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+}
+nav a { color:white; margin:0 10px; cursor:pointer; text-decoration:none; }
+
+/* SECTIONS */
+.section { display:none; padding:40px; }
+.active { display:block; }
+
+/* HERO */
+.hero {
+  background:linear-gradient(135deg,#0b3d91,#1e5ed8);
+  color:white;
+  text-align:center;
+  padding:80px 20px;
+}
+
+/* GRID */
+.grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
+
+.card {
+  background:white;
+  padding:15px;
+  border-radius:10px;
+}
+
+/* INPUT */
+input, select {
+  width:100%;
+  padding:8px;
+  margin:5px 0;
+}
+
+button {
+  background:#0b3d91;
+  color:white;
+  padding:10px;
+  border:none;
+  width:100%;
+  border-radius:5px;
+}
+
+/* CART */
+.cart-box {
+  background:white;
+  padding:20px;
+  border-radius:10px;
+}
+
+.footer { text-align:center; margin-top:20px; }
+
+.contact a {
+  margin:5px;
+  padding:10px;
+  color:white;
+  border-radius:5px;
+  text-decoration:none;
+}
+.whatsapp { background:green; }
+.email { background:#555; }
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <div style="color:white;font-weight:bold;">BlueHawks</div>
+  <div>
+    <a onclick="show('home')">Home</a>
+    <a onclick="show('products')">Our Products</a>
+    <a onclick="show('cart')">My Cart</a>
+    <a onclick="show('contact')">Contact Us</a>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="home" class="section active">
+  <div class="hero">
+    <h1>BlueHawks Stationers</h1>
+    <p>"Noted!"</p>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
 <div id="products" class="section">
 <h2>Our Products</h2>
 
 <div class="grid">
 
-<!-- A5 BOOKS -->
+<!-- A5 -->
 <div class="card">
 <h3>A5 Exercise Books</h3>
 
 <label>Pages</label>
 <select id="a5pages" onchange="updatePrice('a5')">
-  <option value="80">80</option>
-  <option value="120">120</option>
-  <option value="200">200</option>
+<option value="80">80</option>
+<option value="120">120</option>
+<option value="200">200</option>
 </select>
 
 <label>Type</label>
 <select>
-  <option>Single Line</option>
-  <option>Square</option>
-  <option>Drawing</option>
+<option>Single Line</option>
+<option>Square</option>
+<option>Drawing</option>
 </select>
 
 <label>Quantity</label>
@@ -29,21 +134,21 @@
 <button onclick="addA5()">Add to Cart</button>
 </div>
 
-<!-- A4 BOOKS -->
+<!-- A4 -->
 <div class="card">
 <h3>A4 Exercise Books</h3>
 
 <label>Pages</label>
 <select id="a4pages" onchange="updatePrice('a4')">
-  <option value="120">120</option>
-  <option value="200">200</option>
+<option value="120">120</option>
+<option value="200">200</option>
 </select>
 
 <label>Type</label>
 <select>
-  <option>Single Line</option>
-  <option>Square</option>
-  <option>Drawing</option>
+<option>Single Line</option>
+<option>Square</option>
+<option>Drawing</option>
 </select>
 
 <label>Quantity</label>
@@ -54,21 +159,172 @@
 <button onclick="addA4()">Add to Cart</button>
 </div>
 
-<!-- DIARIES -->
+<!-- Diaries -->
 <div class="card">
 <h3>School Diaries</h3>
 <input type="number" id="dqty" placeholder="Quantity">
-<p id="dprice">Normal: 100 (Offer: 90)</p>
+<p>Normal: 100 (Offer: 90)</p>
 <button onclick="addItem('Diary',100,90,100,'dqty')">Add</button>
 </div>
 
-<!-- ASSESSMENT -->
+<!-- Assessment -->
 <div class="card">
 <h3>Assessment Books</h3>
 <input type="number" id="aqty" placeholder="Quantity">
-<p id="aprice">Normal: 100 (Offer: 90)</p>
+<p>Normal: 100 (Offer: 90)</p>
 <button onclick="addItem('Assessment',100,90,100,'aqty')">Add</button>
 </div>
 
 </div>
 </div>
+
+<!-- CART -->
+<div id="cart" class="section">
+<h2>My Cart</h2>
+
+<div class="cart-box">
+<ul id="cartList"></ul>
+<p><b>Total: KES <span id="total">0</span></b></p>
+
+<input id="school" placeholder="School Name">
+<input id="email" placeholder="Email">
+<input id="phone" placeholder="Phone">
+
+<button onclick="sendQuote()">Request Quote</button>
+<button onclick="generatePDF()">Download Invoice</button>
+</div>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="section">
+<h2>Contact Us</h2>
+
+<div class="footer">
+<div class="contact">
+<a class="whatsapp" href="https://wa.me/254723720681">WhatsApp</a>
+<a class="email" href="mailto:bluehawksinvestments@gmail.com">Email</a>
+</div>
+</div>
+</div>
+
+<script>
+let cart=[];
+let total=0;
+
+/* NAVIGATION */
+function show(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+/* PRICING */
+const pricing = {
+  a5: {
+    80:{normal:50, offer:45, moq:350},
+    120:{normal:65, offer:60, moq:250},
+    200:{normal:80, offer:75, moq:150}
+  },
+  a4: {
+    120:{normal:100, offer:95, moq:240},
+    200:{normal:130, offer:125, moq:144}
+  }
+};
+
+/* UPDATE PRICE */
+function updatePrice(type){
+  let pages=document.getElementById(type+"pages").value;
+  let d=pricing[type][pages];
+
+  document.getElementById(type+"price").innerHTML =
+    `Normal: ${d.normal} (Offer: ${d.offer})`;
+}
+
+/* INIT */
+updatePrice('a5');
+updatePrice('a4');
+
+/* ADD ITEMS */
+function addA5(){
+  let pages=document.getElementById("a5pages").value;
+  let qty=parseInt(document.getElementById("a5qty").value);
+  if(!qty) return alert("Enter quantity");
+
+  let d=pricing.a5[pages];
+  let price= qty>=d.moq ? d.offer : d.normal;
+
+  let totalItem=price*qty;
+  cart.push(`A5 ${pages}pg x${qty} @${price} = ${totalItem}`);
+  total+=totalItem;
+  updateCart();
+}
+
+function addA4(){
+  let pages=document.getElementById("a4pages").value;
+  let qty=parseInt(document.getElementById("a4qty").value);
+  if(!qty) return alert("Enter quantity");
+
+  let d=pricing.a4[pages];
+  let price= qty>=d.moq ? d.offer : d.normal;
+
+  let totalItem=price*qty;
+  cart.push(`A4 ${pages}pg x${qty} @${price} = ${totalItem}`);
+  total+=totalItem;
+  updateCart();
+}
+
+function addItem(name,normal,offer,moq,id){
+  let qty=parseInt(document.getElementById(id).value);
+  if(!qty) return alert("Enter quantity");
+
+  let price= qty>=moq ? offer : normal;
+  let totalItem=price*qty;
+
+  cart.push(`${name} x${qty} @${price} = ${totalItem}`);
+  total+=totalItem;
+  updateCart();
+}
+
+/* CART */
+function updateCart(){
+  let list=document.getElementById("cartList");
+  list.innerHTML="";
+  cart.forEach(i=>{
+    let li=document.createElement("li");
+    li.textContent=i;
+    list.appendChild(li);
+  });
+  document.getElementById("total").textContent=total;
+}
+
+/* EMAIL */
+function sendQuote(){
+  let school=document.getElementById("school").value;
+  let email=document.getElementById("email").value;
+  let phone=document.getElementById("phone").value;
+
+  let body=`School: ${school}%0D%0AEmail: ${email}%0D%0APhone: ${phone}%0D%0A%0D%0AOrder:%0D%0A${cart.join("%0D%0A")}%0D%0ATotal: KES ${total}`;
+
+  window.location.href=`mailto:bluehawksinvestments@gmail.com?subject=Quote Request&body=${body}`;
+}
+
+/* PDF */
+function generatePDF(){
+  const { jsPDF } = window.jspdf;
+  let doc=new jsPDF();
+
+  doc.text("BlueHawks Stationers Invoice",10,10);
+
+  let y=20;
+  cart.forEach(item=>{
+    doc.text(item,10,y);
+    y+=10;
+  });
+
+  doc.text("Total: KES "+total,10,y+10);
+
+  doc.save("invoice.pdf");
+}
+</script>
+
+</body>
+</html>
