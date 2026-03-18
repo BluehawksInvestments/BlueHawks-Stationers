@@ -7,7 +7,7 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script type="text/javascript">
    (function(){
-      emailjs.init("service_grbq937"); 
+      emailjs.init("fwDpHEASxtrinsPa-"); 
    })();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -342,9 +342,6 @@ button:hover { background:#5ea8ff; }
   </div>
 </div>
 
-</div>
-</div>
-
 <div id="successPopup"></div>
 
 
@@ -402,6 +399,18 @@ const pricing = {
 function show(id){ 
     document.querySelectorAll(".section").forEach(s=>s.classList.remove("active")); 
     document.getElementById(id).classList.add("active"); 
+}
+function goToProduct(id) {
+    show('home'); // First switch to the home tab
+    setTimeout(() => {
+        const element = document.getElementById(id);
+        if(element) {
+            element.scrollIntoView({behavior: "smooth"});
+            // Add a temporary highlight effect so the user sees which one it is
+            element.style.border = "2px solid #ffc600";
+            setTimeout(() => { element.style.border = "none"; }, 2000);
+        }
+    }, 100);
 }
 
 function showSuccessPopup(text){
