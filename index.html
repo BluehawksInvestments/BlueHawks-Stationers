@@ -559,71 +559,104 @@ function sendQuote(){
     });
 }
 
-function placeOrder(){
-  if(Object.keys(cart).length === 0) return alert("Cart is empty");
+// --- HELPER: VALIDATE CART CONTACTS ---
+function validateCartContacts() {
+    let phone = document.getElementById("cartPhone").value.trim();
+    let email = document.getElementById("cartEmail").value.trim();
+    
+    if (phone.length !== 10) {
+        alert("Please enter a valid 10-digit phone number.");
+        return false;
+    }
+    if (!email.includes("@") || !email.includes(".")) {
+        alert("Please enter a valid email address.");
+        return false;
+    }
+    return { phone, email };
+}
 
-  let orderSummary = "";
-  for(let key in cart) { 
-      // Key now includes the type (e.g., "A5 (80 Pages - Ruled)")
-      orderSummary += `${key} x${cart[key]}\n`; 
-  }
-  
-  const templateParams = {
-    order_details: orderSummary,
-    total_price: total
-  };
+// --- UPDATED PLACE ORDER ---
+function placeOrder() {
+    if (Object.keys(cart).length === 0) return alert("Cart is empty");
+    
+    let contacts = validateCartContacts();
+    if (!contacts) return; // Stop if validation fails
 
-  emailjs.send('service_grbq937', 'template_cqywzot', templateParams)
+    let orderSummary = `Customer: ${contacts.email} (${contacts.phone})\n\nItems:\n`;
+    for (let key in cart) { 
+        orderSummary += `- ${key} x${cart[key]}\n`; 
+    }
+    
+    const templateParams = {
+        customer_phone: contacts.phone,
+        customer_email: contacts.email,
+        order_details: orderSummary,
+        total_price: total.toLocaleString()
+    };
+
+    emailjs.send('YOUR_SERVICE_ID', 'YOUR_ORDER_TEMPLATE_ID', templateParams)
     .then(() => {
-        window.whatsappMessage = `New Order from BlueHawks Website:\n\n${orderSummary}\nTotal: KES ${total}`;
+        window.whatsappMessage = `New Order:\n${orderSummary}\nTotal: KES ${total.toLocaleString()}`;
         document.getElementById("orderPopup").style.display = "block";
     }, (err) => {
-        alert("Email automation error. Redirecting...");
-        window.location.href=`mailto:bluehawksinvestments@gmail.com?subject=New Order&body=${encodeURIComponent(orderSummary)}`;
+        window.location.href = `mailto:bluehawksinvestment@gmail.com?subject=New Order&body=${encodeURIComponent(orderSummary)}`;
     });
 }
 
-// --- PDF INVOICE ---
+// --- UPDATED PROFORMA INVOICE ---
 function generatePDF() {
+    if (Object.keys(cart).length === 0) return alert("Cart is empty");
+    
+    let contacts = validateCartContacts();
+    if (!contacts) return; // Stop if validation fails
+
     const { jsPDF } = window.jspdf;
     let doc = new jsPDF();
     let y = 20;
 
-    // --- HEADER ---
+    // Header
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
-    doc.text("PROFORMA INVOICE", 20, y); // Top Left Title
+    doc.text("PROFORMA INVOICE", 20, y);
     
+    // Company Info
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text("BlueHawk Stationers", 140, y);
+    doc.text("BlueHawks Stationers", 140, y);
     doc.text("bluehawksinvestment@gmail.com", 140, y + 5);
     doc.text("Phone: +254 790 333 932", 140, y + 10);
-    doc.text("https://bluehawksinvestments.github.io/BlueHawks-Stationers/#", 140, y + 15, { maxWidth: 60 });
     
-    y += 30;
-    doc.setLineWidth(0.5);
-    doc.line(20, y, 190, y); // Horizontal line
-    y += 10;
+    // Customer Info (Added this section)
+    y += 25;
+    doc.setFont("helvetica", "bold");
+    doc.text("BILLED TO:", 20, y);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Email: ${contacts.email}`, 20, y + 5);
+    doc.text(`Phone: ${contacts.phone}`, 20, y + 10);
 
-    // --- TABLE HEADERS ---
+    y += 20;
+    doc.setLineWidth(0.5);
+    doc.line(20, y, 190, y); 
+    
+    // Table Headers
+    y += 10;
     doc.setFont("helvetica", "bold");
     doc.text("Item Description", 20, y);
-    doc.text("Qty", 120, y);
-    doc.text("Unit Price", 140, y);
-    doc.text("Total (KES)", 170, y);
+    doc.text("Qty", 110, y);
+    doc.text("Cost/Pc", 135, y);
+    doc.text("Total (KES)", 165, y);
+    
     y += 8;
     doc.line(20, y, 190, y);
     y += 10;
 
-    // --- ITEMS ---
+    // Items Loop
     doc.setFont("helvetica", "normal");
     for (let key in cart) {
         let qty = cart[key];
         let priceData = null;
         let unitPrice = 100;
 
-        // Price Logic (Matches your cart)
         if (key.includes("A5")) {
             if (key.includes("80")) priceData = pricing.a5[80];
             else if (key.includes("120")) priceData = pricing.a5[120];
@@ -634,31 +667,19 @@ function generatePDF() {
         } else if (key === "Diary") { priceData = pricing.diary; }
         else if (key === "Assessment") { priceData = pricing.assessment; }
 
-        if (priceData) {
-            unitPrice = qty >= priceData.moq ? priceData.offer : priceData.normal;
-        }
-
+        if (priceData) unitPrice = qty >= priceData.moq ? priceData.offer : priceData.normal;
         let itemTotal = unitPrice * qty;
 
-        // Add to PDF
-        doc.text(key, 20, y, { maxWidth: 90 });
-        doc.text(qty.toString(), 120, y);
-        doc.text(unitPrice.toString(), 140, y);
-        doc.text(itemTotal.toLocaleString(), 170, y);
-        
+        doc.text(key, 20, y, { maxWidth: 85 });
+        doc.text(qty.toString(), 110, y);
+        doc.text(unitPrice.toLocaleString(), 135, y);
+        doc.text(itemTotal.toLocaleString(), 165, y);
         y += 10;
-        if (y > 270) { doc.addPage(); y = 20; } // Handle page break
     }
 
-    // --- TOTAL ---
-    y += 5;
-    doc.line(130, y, 190, y);
-    y += 10;
-    doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text(`GRAND TOTAL: KES ${total.toLocaleString()}`, 130, y);
-
-    doc.save("BlueHawks_Proforma_Invoice.pdf");
+    doc.text(`GRAND TOTAL: KES ${total.toLocaleString()}`, 120, y + 10);
+    doc.save(`Proforma_${contacts.phone}.pdf`);
 }
 
 function sendWhatsApp(){
