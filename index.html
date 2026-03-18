@@ -621,7 +621,7 @@ function placeOrder() {
         total_price: total.toLocaleString()
     };
 
-    emailjs.send('service_grbq937', 'template_rfcn2bc', templateParams)
+    emailjs.send('service_grbq937', 'template_cqywzot', templateParams)
     .then(() => {
         window.whatsappMessage = `New Order:\n${orderSummary}\nTotal: KES ${total.toLocaleString()}`;
         document.getElementById("orderPopup").style.display = "block";
