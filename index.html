@@ -149,6 +149,12 @@ button:hover { background:#5ea8ff; }
   font-style: italic;    /* optional styling */
 }
 </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init("service_grbq937"); 
+   })();
+</script>
 </head>
 
 <a href="https://wa.me/254790333932" target="_blank" class="whatsapp-float">
@@ -361,8 +367,8 @@ button:hover { background:#5ea8ff; }
   <div style="text-align:center; margin-top:10px;">
     <button style="width:50%; max-width:200px;" onclick="sendQuote()" id="quoteBtn">Request Quote</button>
   </div>
-
-  let cart = {};
+<script>
+let cart = {};
 let total = 0;
 window.whatsappMessage = "";
 
@@ -373,7 +379,7 @@ const pricing = {
   assessment:{normal:100,offer:90,moq:100}
 };
 
-// --- NAVIGATION & UI ---
+// --- NAVIGATION ---
 function show(id){ 
     document.querySelectorAll(".section").forEach(s=>s.classList.remove("active")); 
     document.getElementById(id).classList.add("active"); 
@@ -386,7 +392,7 @@ function showSuccessPopup(text){
   setTimeout(() => { popup.style.display = "none"; }, 3000);
 }
 
-// --- CART LOGIC ---
+// --- CART & PRICING ---
 function updatePrice(type){
   let qty=0, priceData, priceToUse;
   if(type==="a5"){ 
@@ -474,7 +480,8 @@ function updateCart(){
 
 function removeItem(key){ delete cart[key]; updateCart(); }
 
-// --- AUTOMATED EMAIL 1: ENQUIRY ---
+// --- AUTOMATED EMAILS ---
+
 function sendQuote(){
   let school=document.getElementById("school").value.trim();
   let email=document.getElementById("email").value.trim();
@@ -484,23 +491,21 @@ function sendQuote(){
   if(!school || !email || !phone) return alert("Please fill all mandatory fields.");
   
   const templateParams = {
-    from_name: school,
+    school_name: school,
     customer_email: email,
     customer_phone: phone,
-    message: message,
-    subject: "New Website Enquiry"
+    message: message
   };
 
-  // Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with yours from EmailJS
-  emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+  emailjs.send('YOUR_SERVICE_ID', 'YOUR_ENQUIRY_TEMPLATE_ID', templateParams)
     .then(() => {
-       alert("Enquiry sent successfully! Nicholas will be in touch.");
+       alert("Enquiry sent! Nicholas will contact you shortly.");
     }, (error) => {
-       alert("Email failed to send. Please use WhatsApp.");
+       alert("Automation error. Sending via mail app instead.");
+       window.location.href=`mailto:bluehawksinvestments@gmail.com?subject=Enquiry&body=${message}`;
     });
 }
 
-// --- AUTOMATED EMAIL 2: ORDER ---
 function placeOrder(){
   if(Object.keys(cart).length === 0) return alert("Cart is empty");
 
@@ -509,18 +514,31 @@ function placeOrder(){
   
   const templateParams = {
     order_details: orderSummary,
-    total_price: total,
-    subject: "New Website Order"
+    total_price: total
   };
 
-  emailjs.send('YOUR_SERVICE_ID', 'ORDER_TEMPLATE_ID', templateParams)
+  emailjs.send('YOUR_SERVICE_ID', 'YOUR_ORDER_TEMPLATE_ID', templateParams)
     .then(() => {
-        window.whatsappMessage = `Order Summary: ${orderSummary} Total: KES ${total}`;
+        window.whatsappMessage = `Order Summary:\n${orderSummary}\nTotal: KES ${total}`;
         document.getElementById("orderPopup").style.display = "block";
     }, (err) => {
-        alert("Order email failed. Redirecting to manual email...");
-        window.location.href=`mailto:bluehawksinvestments@gmail.com?subject=Order&body=${orderSummary}`;
+        alert("Automation error. Sending via mail app instead.");
+        window.location.href=`mailto:bluehawksinvestments@gmail.com?subject=New Order&body=${orderSummary}`;
     });
+}
+
+// --- PDF & WHATSAPP ---
+function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    let doc = new jsPDF();
+    doc.text("BlueHawks Stationers Invoice", 20, 20);
+    let y = 30;
+    for (let key in cart) {
+        doc.text(`${key} x${cart[key]}`, 20, y);
+        y += 10;
+    }
+    doc.text(`Total: KES ${total}`, 20, y + 10);
+    doc.save("BlueHawks_Invoice.pdf");
 }
 
 function sendWhatsApp(){
@@ -536,10 +554,13 @@ function closePopup(){
   updateCart();
 }
 
+// --- INIT ---
 window.onload = function(){
   let savedCart = localStorage.getItem("cart");
   if(savedCart){ cart = JSON.parse(savedCart); updateCart(); }
 };
+</script>
+  
 
 </body>
 </html>
