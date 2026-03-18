@@ -603,7 +603,7 @@ function placeOrder() {
         total_price: total.toLocaleString()
     };
 
-    emailjs.send('YOUR_SERVICE_ID', 'YOUR_ORDER_TEMPLATE_ID', templateParams)
+    emailjs.send('service_grbq937', 'template_rfcn2bc', templateParams)
     .then(() => {
         window.whatsappMessage = `New Order:\n${orderSummary}\nTotal: KES ${total.toLocaleString()}`;
         document.getElementById("orderPopup").style.display = "block";
