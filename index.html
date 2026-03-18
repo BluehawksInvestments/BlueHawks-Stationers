@@ -569,26 +569,78 @@ function placeOrder(){
 function generatePDF() {
     const { jsPDF } = window.jspdf;
     let doc = new jsPDF();
+    let y = 20;
+
+    // --- HEADER ---
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.text("PROFORMA INVOICE", 20, y); // Top Left Title
     
-    doc.setFontSize(18);
-    doc.text("BlueHawks Stationers - Invoice", 105, 20, { align: "center" });
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text("BlueHawk Stationers", 140, y);
+    doc.text("bluehawksinvestment@gmail.com", 140, y + 5);
+    doc.text("Phone: +254 790 333 932", 140, y + 10);
+    doc.text("https://bluehawksinvestments.github.io/BlueHawks-Stationers/#", 140, y + 15, { maxWidth: 60 });
     
-    doc.setFontSize(12);
-    let y = 40;
-    doc.text("Items Ordered:", 20, y);
+    y += 30;
+    doc.setLineWidth(0.5);
+    doc.line(20, y, 190, y); // Horizontal line
     y += 10;
-    
+
+    // --- TABLE HEADERS ---
+    doc.setFont("helvetica", "bold");
+    doc.text("Item Description", 20, y);
+    doc.text("Qty", 120, y);
+    doc.text("Unit Price", 140, y);
+    doc.text("Total (KES)", 170, y);
+    y += 8;
+    doc.line(20, y, 190, y);
+    y += 10;
+
+    // --- ITEMS ---
+    doc.setFont("helvetica", "normal");
     for (let key in cart) {
-        // Key includes Name, Pages, and Type
-        doc.text(`${key} x${cart[key]}`, 20, y);
-        y += 8;
+        let qty = cart[key];
+        let priceData = null;
+        let unitPrice = 100;
+
+        // Price Logic (Matches your cart)
+        if (key.includes("A5")) {
+            if (key.includes("80")) priceData = pricing.a5[80];
+            else if (key.includes("120")) priceData = pricing.a5[120];
+            else if (key.includes("200")) priceData = pricing.a5[200];
+        } else if (key.includes("A4")) {
+            if (key.includes("120")) priceData = pricing.a4[120];
+            else if (key.includes("200")) priceData = pricing.a4[200];
+        } else if (key === "Diary") { priceData = pricing.diary; }
+        else if (key === "Assessment") { priceData = pricing.assessment; }
+
+        if (priceData) {
+            unitPrice = qty >= priceData.moq ? priceData.offer : priceData.normal;
+        }
+
+        let itemTotal = unitPrice * qty;
+
+        // Add to PDF
+        doc.text(key, 20, y, { maxWidth: 90 });
+        doc.text(qty.toString(), 120, y);
+        doc.text(unitPrice.toString(), 140, y);
+        doc.text(itemTotal.toLocaleString(), 170, y);
+        
+        y += 10;
+        if (y > 270) { doc.addPage(); y = 20; } // Handle page break
     }
-    
+
+    // --- TOTAL ---
+    y += 5;
+    doc.line(130, y, 190, y);
     y += 10;
     doc.setFontSize(14);
-    doc.text(`Grand Total: KES ${total}`, 20, y);
-    
-    doc.save("BlueHawks_Order_Invoice.pdf");
+    doc.setFont("helvetica", "bold");
+    doc.text(`GRAND TOTAL: KES ${total.toLocaleString()}`, 130, y);
+
+    doc.save("BlueHawks_Proforma_Invoice.pdf");
 }
 
 function sendWhatsApp(){
