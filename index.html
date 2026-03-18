@@ -368,6 +368,7 @@ button:hover { background:#5ea8ff; }
     <button style="width:50%; max-width:200px;" onclick="sendQuote()" id="quoteBtn">Request Quote</button>
   </div>
 <script>
+// --- DATA & STATE ---
 let cart = {};
 let total = 0;
 window.whatsappMessage = "";
@@ -423,19 +424,23 @@ function updatePrice(type){
 function addA5(){ 
     let qty=parseInt(document.getElementById("a5qty").value)||0; 
     if(!qty) return alert("Enter quantity"); 
-    let key=`A5-${document.getElementById("a5pages").value}`; 
+    let pages = document.getElementById("a5pages").value;
+    let type = document.getElementById("a5type").value;
+    let key = `A5 (${pages} Pages - ${type})`; // Added Type here
     cart[key]=(cart[key]||0)+qty; 
     updateCart(); 
-    showSuccessPopup(`${qty} A5 added to cart`);
+    showSuccessPopup(`${qty} ${key} added to cart`);
 }
 
 function addA4(){ 
     let qty=parseInt(document.getElementById("a4qty").value)||0; 
     if(!qty) return alert("Enter quantity"); 
-    let key=`A4-${document.getElementById("a4pages").value}`; 
+    let pages = document.getElementById("a4pages").value;
+    let type = document.getElementById("a4type").value;
+    let key = `A4 (${pages} Pages - ${type})`; // Added Type here
     cart[key]=(cart[key]||0)+qty; 
     updateCart(); 
-    showSuccessPopup(`${qty} A4 added to cart`);
+    showSuccessPopup(`${qty} ${key} added to cart`);
 }
 
 function addItem(name,type){ 
@@ -455,12 +460,16 @@ function updateCart(){
 
   for(let key in cart){
     let qty=cart[key], priceToUse=100, priceData;
-    if(key.startsWith("A5")){ 
-        let pages=key.split("-")[1]; priceData=pricing.a5[pages]; 
+    
+    // Logic to determine price based on the name/key
+    if(key.includes("A5")){ 
+        let pages = key.match(/\d+/)[0]; // Extract page number from string
+        priceData=pricing.a5[pages]; 
         priceToUse = qty>=priceData.moq ? priceData.offer : priceData.normal; 
     }
-    else if(key.startsWith("A4")){ 
-        let pages=key.split("-")[1]; priceData=pricing.a4[pages]; 
+    else if(key.includes("A4")){ 
+        let pages = key.match(/\d+/)[0]; 
+        priceData=pricing.a4[pages]; 
         priceToUse = qty>=priceData.moq ? priceData.offer : priceData.normal; 
     }
     else if(key==="Diary"){ priceData=pricing.diary; priceToUse = qty>=priceData.moq ? priceData.offer : priceData.normal; }
@@ -469,7 +478,7 @@ function updateCart(){
     let itemTotal = priceToUse*qty;
     total += itemTotal;
     let li = document.createElement("li");
-    li.innerHTML = `${key} x${qty} @${priceToUse} = ${itemTotal} <button class="remove-btn" onclick="removeItem('${key}')">Remove</button>`;
+    li.innerHTML = `<strong>${key}</strong> x${qty} @${priceToUse} = ${itemTotal} <button class="remove-btn" onclick="removeItem('${key}')">Remove</button>`;
     list.appendChild(li);
   }
   document.getElementById("total").textContent = total;
@@ -499,9 +508,9 @@ function sendQuote(){
 
   emailjs.send('YOUR_SERVICE_ID', 'YOUR_ENQUIRY_TEMPLATE_ID', templateParams)
     .then(() => {
-       alert("Enquiry sent! Nicholas will contact you shortly.");
+       alert("Enquiry sent successfully!");
     }, (error) => {
-       alert("Automation error. Sending via mail app instead.");
+       alert("Error sending. Using mail app...");
        window.location.href=`mailto:bluehawksinvestments@gmail.com?subject=Enquiry&body=${message}`;
     });
 }
@@ -510,7 +519,10 @@ function placeOrder(){
   if(Object.keys(cart).length === 0) return alert("Cart is empty");
 
   let orderSummary = "";
-  for(let key in cart) { orderSummary += `${key} x${cart[key]}\n`; }
+  for(let key in cart) { 
+      // Key now includes the type (e.g., "A5 (80 Pages - Ruled)")
+      orderSummary += `${key} x${cart[key]}\n`; 
+  }
   
   const templateParams = {
     order_details: orderSummary,
@@ -519,26 +531,38 @@ function placeOrder(){
 
   emailjs.send('YOUR_SERVICE_ID', 'YOUR_ORDER_TEMPLATE_ID', templateParams)
     .then(() => {
-        window.whatsappMessage = `Order Summary:\n${orderSummary}\nTotal: KES ${total}`;
+        window.whatsappMessage = `New Order from BlueHawks Website:\n\n${orderSummary}\nTotal: KES ${total}`;
         document.getElementById("orderPopup").style.display = "block";
     }, (err) => {
-        alert("Automation error. Sending via mail app instead.");
-        window.location.href=`mailto:bluehawksinvestments@gmail.com?subject=New Order&body=${orderSummary}`;
+        alert("Email automation error. Redirecting...");
+        window.location.href=`mailto:bluehawksinvestments@gmail.com?subject=New Order&body=${encodeURIComponent(orderSummary)}`;
     });
 }
 
-// --- PDF & WHATSAPP ---
+// --- PDF INVOICE ---
 function generatePDF() {
     const { jsPDF } = window.jspdf;
     let doc = new jsPDF();
-    doc.text("BlueHawks Stationers Invoice", 20, 20);
-    let y = 30;
+    
+    doc.setFontSize(18);
+    doc.text("BlueHawks Stationers - Invoice", 105, 20, { align: "center" });
+    
+    doc.setFontSize(12);
+    let y = 40;
+    doc.text("Items Ordered:", 20, y);
+    y += 10;
+    
     for (let key in cart) {
+        // Key includes Name, Pages, and Type
         doc.text(`${key} x${cart[key]}`, 20, y);
-        y += 10;
+        y += 8;
     }
-    doc.text(`Total: KES ${total}`, 20, y + 10);
-    doc.save("BlueHawks_Invoice.pdf");
+    
+    y += 10;
+    doc.setFontSize(14);
+    doc.text(`Grand Total: KES ${total}`, 20, y);
+    
+    doc.save("BlueHawks_Order_Invoice.pdf");
 }
 
 function sendWhatsApp(){
@@ -560,7 +584,5 @@ window.onload = function(){
   if(savedCart){ cart = JSON.parse(savedCart); updateCart(); }
 };
 </script>
-  
-
 </body>
 </html>
