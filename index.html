@@ -347,19 +347,12 @@ button:hover { background:#5ea8ff; }
 
   <input id="school" placeholder="School Name*" required>
   
-  <input id="email" type="email" placeholder="Email*" required
-         oninput="validateEmail()" style="position:relative;">
+  <input id="email" type="email" placeholder="Email*" required oninput="validateEmail()">
   <span id="emailError" style="color:red; font-size:0.9em; display:none;">Invalid Email</span>
 
   <div style="position:relative;">
-    <input id="phone" type="text" maxlength="10" placeholder="0701234567*"
-           onfocus="this.placeholder=''" 
-           onblur="if(this.value===''){this.placeholder='0701234567*'}"
-           oninput="validatePhone()">
-    <span id="phoneError" style="color:white; background:red; font-size:0.8em; 
-          padding:3px 6px; border-radius:5px; display:none; position:absolute; right:-150px; top:0;">
-      Phone must be 10 digits
-    </span>
+    <input id="phone" type="text" maxlength="10" placeholder="0701234567*" oninput="validatePhone()">
+    <span id="phoneError" style="color:red; font-size:0.8em; display:none;">Phone must be 10 digits</span>
   </div>
 
   <textarea id="message" maxlength="250" placeholder="Enter your message (max 250 characters)"></textarea>
@@ -367,7 +360,21 @@ button:hover { background:#5ea8ff; }
   <div style="text-align:center; margin-top:10px;">
     <button style="width:50%; max-width:200px;" onclick="sendQuote()" id="quoteBtn">Request Quote</button>
   </div>
-<script>
+
+  <div class="contact-methods" style="margin-top:40px; display:flex; gap:30px; justify-content:center;">
+    
+    <a href="mailto:bluehawksinvestment@gmail.com" style="text-decoration:none; text-align:center; color:#0a2e6d;">
+      <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Email Us" style="width:50px; height:50px;">
+      <div style="font-weight:bold; margin-top:5px;">Email Us</div>
+    </a>
+
+    <a href="tel:+254790333932" style="text-decoration:none; text-align:center; color:#0a2e6d;">
+      <img src="https://cdn-icons-png.flaticon.com/512/159/159832.png" alt="Call Us" style="width:50px; height:50px;">
+      <div style="font-weight:bold; margin-top:5px;">Call Us</div>
+    </a>
+
+  </div>
+</div>
 // --- DATA & STATE ---
 let cart = {};
 let total = 0;
