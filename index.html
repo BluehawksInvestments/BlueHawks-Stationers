@@ -542,30 +542,45 @@ function updateCart() {
 function removeItem(key){ delete cart[key]; updateCart(); }
 
 // --- AUTOMATED EMAILS ---
+function sendQuote() {
+    // 1. Get the values from the Contact Section inputs
+    let school = document.getElementById("school").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let phone = document.getElementById("phone").value.trim();
+    let message = document.getElementById("message").value.trim();
 
-function sendQuote(){
-  let school=document.getElementById("school").value.trim();
-  let email=document.getElementById("email").value.trim();
-  let phone=document.getElementById("phone").value.trim();
-  let message=document.getElementById("message").value.trim();
+    // 2. Validation Check
+    if (!school || !email || !phone) {
+        alert("Please fill in all required fields (School Name, Email, and Phone).");
+        return;
+    }
 
-  if(!school || !email || !phone) return alert("Please fill all mandatory fields.");
-  
-  const templateParams = {
-    school_name: school,
-    customer_email: email,
-    customer_phone: phone,
-    message: message
-  };
+    // 3. Prepare the Variables (Must match your EmailJS Template exactly)
+    const templateParams = {
+        school_name: school,
+        customer_email: email,
+        customer_phone: phone,
+        message: message || "No specific message provided."
+    };
 
-  emailjs.send('YOUR_SERVICE_ID', 'YOUR_ENQUIRY_TEMPLATE_ID', templateParams)
-    .then(() => {
-       alert("Enquiry sent successfully!");
-    }, (error) => {
-       alert("Error sending. Using mail app...");
-       window.location.href=`mailto:bluehawksinvestments@gmail.com?subject=Enquiry&body=${message}`;
-    });
+    // 4. Send via EmailJS
+    // REPLACE 'YOUR_ENQUIRY_TEMPLATE_ID' with your actual Template ID
+    emailjs.send('service_grbq937', 'template_rfcn2bc', templateParams)
+        .then(() => {
+            alert("Your quote request has been sent successfully!");
+            // Clear the form after success
+            document.getElementById("school").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("phone").value = "";
+            document.getElementById("message").value = "";
+        }, (error) => {
+            console.error("Quote Error:", error);
+            alert("Failed to send automatically. Opening your email app...");
+            // Fallback to mailto link
+            window.location.href = `mailto:bluehawksinvestment@gmail.com?subject=Quote Request - ${school}&body=${encodeURIComponent(message)}`;
+        });
 }
+
 
 // --- HELPER: VALIDATE CART CONTACTS ---
 function validateCartContacts() {
