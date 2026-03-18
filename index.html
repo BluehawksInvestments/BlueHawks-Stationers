@@ -42,8 +42,12 @@ nav a { color:#ffc600; margin:0 12px; cursor:pointer; text-decoration:none; font
 nav a:hover { color:#5ea8ff; transition:0.3s; }
 .hero { background: linear-gradient(135deg,#0a2e6d,#5ea8ff); color:white; text-align:center; padding:80px 20px; border-bottom-left-radius:50px; border-bottom-right-radius:50px; display:flex; justify-content:space-between; align-items:center;}
 .hero h1 { font-size:3em; margin:10px 0 0 0; display:flex; align-items:center; }
-.hero img.title-img { max-width:80px; height:auto; margin-right:15px; }
-.hero-img { max-width:200px; height:auto; border-radius:10px; object-fit:cover; align-self:flex-start; }
+width: 96px;  /* 1 inch */
+    height: 96px; /* 1 inch */
+    object-fit: contain; /* Ensures the whole logo fits without distortion */
+    margin-right: 15px;
+    vertical-align: middle; /* Aligns the logo vertically with the text */
+}
 .section { display:none; padding:50px 20px; }
 .active { display:block; }
 .grid { display:grid; grid-template-columns: repeat(2,1fr); gap:25px; margin-top:30px; }
