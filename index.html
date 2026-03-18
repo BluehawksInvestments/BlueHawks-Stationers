@@ -564,7 +564,7 @@ function placeOrder(){
     total_price: total
   };
 
-  emailjs.send('YOUR_SERVICE_ID', 'YOUR_ORDER_TEMPLATE_ID', templateParams)
+  emailjs.send('service_grbq937', 'template_cqywzot', templateParams)
     .then(() => {
         window.whatsappMessage = `New Order from BlueHawks Website:\n\n${orderSummary}\nTotal: KES ${total}`;
         document.getElementById("orderPopup").style.display = "block";
