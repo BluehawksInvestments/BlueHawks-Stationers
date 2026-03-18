@@ -156,6 +156,27 @@ button:hover { background:#5ea8ff; }
   color: #ffc600;        /* golden color to match nav links, optional */
   font-style: italic;    /* optional styling */
 }
+  /* Update this in your <style> section */
+nav img.title-img {
+    width: 96px;         /* Standard 1-inch width */
+    height: 96px;        /* Standard 1-inch height */
+    object-fit: contain; /* Prevents the hawk from stretching */
+    margin-right: 12px;
+    vertical-align: middle;
+    border-radius: 4px;  /* Optional: slight rounding if the image has sharp edges */
+}
+
+/* Mobile Tweak: If the screen is very small, we scale it down slightly 
+   so the navigation links still fit on one line. */
+@media (max-width: 480px) {
+    nav img.title-img {
+        width: 60px;
+        height: 60px;
+    }
+    nav div {
+        font-size: 1.1em !important; /* Adjusts the "BlueHawks" text size */
+    }
+}
 </style>
 </head>
 
@@ -195,8 +216,15 @@ button:hover { background:#5ea8ff; }
 <a onclick="show('contact')">Contact Us</a>
   
 </div>
+  <div style="display: flex; align-items: center; color: white; font-weight: bold; font-size: 1.3em;">
+    <img src="images/Bluehawk.png" class="title-img" alt="Blue Hawk Logo">
+    <span>BlueHawks</span>
+  </div>
 
-
+  <div>
+    <a onclick="show('home')">Home</a>
+    ...
+  </div>
 </nav>
 
 <!-- HOME -->
