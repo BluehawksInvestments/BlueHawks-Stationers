@@ -46,9 +46,8 @@ nav a:hover { color:#5ea8ff; transition:0.3s; }
 .section { display:none; padding:50px 20px; }
 .active { display:block; }
 .grid { display:grid; grid-template-columns: repeat(2,1fr); gap:25px; margin-top:30px; }
-.card { background:white; padding:20px; border-radius:15px; box-shadow:0 6px 15px rgba(0,0,0,0.1); transition: transform 0.2s; width:85%; margin:auto;}
-.card:hover { transform: translateY(-5px); }
-.product-img { width: 100%; max-width: 200px; height: auto; display: block; margin: 10px auto; border-radius: 10px; object-fit: cover; transition: opacity 0.3s ease-in-out; }
+.card { background:white; padding:20px; border-radius:15px; box-shadow:0 6px 15px rgba(0,0,0,0.1); width:85%; margin:auto;}
+.product-img { width: 100%; max-width: 200px; height: auto; display: block; margin: 10px auto; border-radius: 10px; transition: opacity 0.3s ease-in-out; }
 
 /* 4. GALLERY DOTS */
 .image-gallery-container { position: relative; width: 100%; margin: 10px auto; display: flex; flex-direction: column; align-items: center; }
@@ -66,7 +65,7 @@ button:hover { background:#5ea8ff; }
 #orderPopup {
   display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
   background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  z-index: 2000; text-align: center; border: 2px solid #0a2e6d;
+  z-index: 2000; text-align: center; border: 2px solid #0a2e6d; width: 90%; max-width: 400px;
 }
 
 @media (max-width: 480px) {
@@ -107,7 +106,7 @@ button:hover { background:#5ea8ff; }
          <h2 class="subheading">Elevating Institutional Identity</h2>
          <p class="promo-statement">Customized exercise books!</p>
       </div>
-      <img src="images/Exercise books.png" class="hero-img" alt="Exercise Books">
+      <img src="images/Exercise books.png" class="hero-img">
   </div>
   
   <h2>Order Products</h2>
@@ -188,22 +187,19 @@ button:hover { background:#5ea8ff; }
 <div id="productsPage" class="section">
   <h2>Our Products</h2>
   <ul>
-    <li><a onclick="goToProduct('a5')">A5 Exercise Books</a> - 80, 120, 200 Pages. Delivery: 5 days.</li>
-    <li><a onclick="goToProduct('a4')">A4 Exercise Books</a> - 120, 200 Pages. Delivery: 5 days.</li>
-    <li><a onclick="goToProduct('assessment')">Assessment Books</a> - Delivery: 5 days.</li>
-    <li><a onclick="goToProduct('diary')">School Diaries</a> - Delivery: 5 days.</li>
+    <li><a onclick="goToProduct('a5')">A5 Exercise Books</a> (80, 120, 200 Pages).</li>
+    <li><a onclick="goToProduct('a4')">A4 Exercise Books</a> (120, 200 Pages).</li>
+    <li><a onclick="goToProduct('assessment')">Assessment Books</a></li>
+    <li><a onclick="goToProduct('diary')">School Diaries</a></li>
   </ul>
 </div>
 
 <div id="cart" class="section">
   <h2>My Cart</h2>
-  <div id="emptyCartMessage"><p>Your Cart is Empty</p> <button onclick="show('home')">Go Back to Shopping</button></div>
+  <div id="emptyCartMessage"><p>Your Cart is Empty</p> <button onclick="show('home')">Shop Now</button></div>
   <div id="cartContent" style="display:none;">
-    <div style="margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px;">
-        <h4 style="margin-bottom:10px;">Order Contact Details</h4>
-        <input id="cartPhone" type="text" maxlength="10" placeholder="Phone Number (e.g. 0712345678)*">
-        <input id="cartEmail" type="email" placeholder="Email Address*">
-    </div>
+    <input id="cartPhone" type="text" maxlength="10" placeholder="Phone (e.g. 0712345678)*">
+    <input id="cartEmail" type="email" placeholder="Email Address*">
     <ul id="cartList" style="list-style:none; padding:0;"></ul>
     <p><b>Total: KES <span id="total">0</span></b></p>
     <div style="display:flex; gap:10px;">
@@ -215,19 +211,16 @@ button:hover { background:#5ea8ff; }
 
 <div id="contact" class="section">
   <h2>Contact Us</h2>
-  <h3>Request a Quote</h3>
   <input id="school" placeholder="School Name*">
-  <input id="email" type="email" placeholder="Email*">
-  <input id="phone" placeholder="Phone Number*">
-  <textarea id="message" placeholder="Message..."></textarea>
+  <input id="cEmail" placeholder="Email*">
+  <input id="cPhone" placeholder="Phone*">
+  <textarea id="cMsg" placeholder="Message..."></textarea>
   <button onclick="sendQuote()">Request Quote</button>
 </div>
 
 <script>
 let cart = {};
 let total = 0;
-window.whatsappMessage = "";
-
 const pricing = {
   a5:{80:{normal:50,offer:45,moq:350},120:{normal:65,offer:60,moq:250},200:{normal:80,offer:75,moq:150}},
   a4:{120:{normal:100,offer:95,moq:240},200:{normal:130,offer:125,moq:144}},
@@ -289,11 +282,9 @@ function updateCart() {
   list.innerHTML = ""; total = 0; let count = 0;
   for (let key in cart) {
     count++; let qty = cart[key]; let pData = null;
-    if (key.includes("A5")) {
-        let p = key.split('(')[1].split(' ')[0]; pData = pricing.a5[p];
-    } else if (key.includes("A4")) {
-        let p = key.split('(')[1].split(' ')[0]; pData = pricing.a4[p];
-    } else if (key === "Diary") pData = pricing.diary;
+    if (key.includes("A5")) pData = pricing.a5[key.split('(')[1].split(' ')[0]];
+    else if (key.includes("A4")) pData = pricing.a4[key.split('(')[1].split(' ')[0]];
+    else if (key === "Diary") pData = pricing.diary;
     else if (key === "Assessment") pData = pricing.assessment;
 
     let up = pData ? (qty >= pData.moq ? pData.offer : pData.normal) : 100;
@@ -310,81 +301,49 @@ function updateCart() {
 function removeItem(key){ delete cart[key]; updateCart(); }
 function showSuccessPopup(txt){ const p=document.getElementById("successPopup"); p.innerText=txt; p.style.display="block"; setTimeout(()=>p.style.display="none", 2000); }
 
-function validateContacts() {
-  let p = document.getElementById("cartPhone").value.trim();
-  let e = document.getElementById("cartEmail").value.trim();
-  if (p.length !== 10 || !e.includes("@")) { alert("Please enter valid 10-digit phone and email."); return false; }
-  return { phone: p, email: e };
-}
-
 function getOrderID() {
   let n = new Date();
   return `SC${n.getFullYear().toString().slice(-2)}${(n.getMonth()+1).toString().padStart(2,'0')}${n.getDate().toString().padStart(2,'0')}${n.getHours().toString().padStart(2,'0')}${n.getMinutes().toString().padStart(2,'0')}`;
 }
 
 function generatePDF() {
-  let contacts = validateContacts(); if (!contacts) return null;
-  let orderID = getOrderID();
-  const { jsPDF } = window.jspdf; 
-  let doc = new jsPDF();
+  let phone = document.getElementById("cartPhone").value;
+  let email = document.getElementById("cartEmail").value;
+  if (phone.length !== 10 || !email.includes("@")) return alert("Valid contacts required");
   
+  let orderID = getOrderID();
+  const { jsPDF } = window.jspdf; let doc = new jsPDF();
   doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(10, 46, 109);
   doc.text("PROFORMA INVOICE", 20, 20);
   doc.setFontSize(11); doc.setTextColor(0,0,0);
-  doc.text(`Order Number: ${orderID}`, 20, 35);
-  doc.text(`Date: ${new Date().toLocaleDateString('en-GB')}`, 20, 42);
+  doc.text(`Order: ${orderID}`, 20, 35);
+  doc.text(`Email: ${email}`, 20, 42);
   doc.text("BlueHawks Stationers", 140, 20);
-  doc.setFontSize(9); doc.text("bluehawksinvestment@gmail.com", 140, 25);
-  doc.text("Phone: +254 790 333 932", 140, 30);
-
-  doc.setFont("helvetica", "bold"); doc.text("BILL TO:", 20, 55);
-  doc.setFont("helvetica", "normal"); doc.text(`Email: ${contacts.email}`, 20, 60); doc.text(`Phone: ${contacts.phone}`, 20, 65);
-
-  let y = 80; doc.line(20, y, 190, y); y += 7;
-  doc.setFont("helvetica", "bold"); doc.text("Item", 22, y); doc.text("Qty", 110, y); doc.text("Total (KES)", 165, y);
-  y += 3; doc.line(20, y, 190, y); y += 10;
   
-  for (let key in cart) {
-    doc.setFont("helvetica", "normal"); doc.text(key, 22, y); doc.text(cart[key].toString(), 110, y);
-    y += 10; doc.line(20, y-2, 190, y-2);
-  }
-  doc.setFont("helvetica", "bold"); doc.text(`GRAND TOTAL: KES ${total.toLocaleString()}`, 130, y+10);
-
-  let sigY = y+40; if (sigY > 250) { doc.addPage(); sigY = 30; }
-  doc.text("Prepared by: Nicholas Ndegwa", 140, sigY);
-  doc.setFont("times", "italic"); doc.text("Nicholas", 140, sigY+10);
-  doc.line(140, sigY+12, 175, sigY+12);
+  let y = 80; doc.line(20, y, 190, y); y += 10;
+  for (let key in cart) { doc.text(`${key} x${cart[key]}`, 20, y); y += 10; }
+  doc.text(`TOTAL: KES ${total.toLocaleString()}`, 20, y+10);
+  
+  doc.text("Prepared by: Nicholas Ndegwa", 140, y+40);
+  doc.setFont("times", "italic"); doc.text("Nicholas", 140, y+50);
   
   doc.save(`Proforma_${orderID}.pdf`);
   return orderID;
 }
 
 function placeOrder() {
-  let contacts = validateContacts(); if (!contacts) return;
-  let orderID = generatePDF(); if(!orderID) return;
-
-  let summary = `Order ID: ${orderID}\n`;
-  for (let key in cart) summary += `- ${key} x${cart[key]}\n`;
-
-  emailjs.send('service_grbq937', 'template_cqywzot', {
-    order_id: orderID, customer_phone: contacts.phone, customer_email: contacts.email, order_details: summary, total_price: total.toLocaleString()
-  }).then(() => {
-    window.whatsappMessage = `Order ${orderID}:\n${summary}\nTotal: KES ${total.toLocaleString()}`;
-    document.getElementById("orderPopup").innerHTML = `
-      <p>Order <strong>${orderID}</strong> received!</p>
-      <button onclick="window.open('https://wa.me/254790333932?text='+encodeURIComponent(window.whatsappMessage), '_blank')">WhatsApp Us</button>
-      <button onclick="location.reload()">Close</button>
-    `;
-    document.getElementById("orderPopup").style.display = "block";
+  let orderID = generatePDF();
+  if(!orderID) return;
+  emailjs.send('service_grbq937', 'template_cqywzot', { order_id: orderID, total_price: total }).then(() => {
+    alert("Order " + orderID + " Placed!");
   });
 }
 
 function sendQuote() {
-  emailjs.send('service_grbq937', 'template_rfcn2bc', { school_name: document.getElementById("school").value, email: document.getElementById("email").value })
-  .then(() => alert("Quote request sent!"));
+  emailjs.send('service_grbq937', 'template_rfcn2bc', { school_name: document.getElementById("school").value }).then(() => alert("Quote requested!"));
 }
 
-window.onload = function(){ let s = localStorage.getItem("cart"); if(s){ cart = JSON.parse(s); updateCart(); } };
+window.onload = function(){ if(localStorage.getItem("cart")) { cart = JSON.parse(localStorage.getItem("cart")); updateCart(); } };
 </script>
 </body>
 </html>
