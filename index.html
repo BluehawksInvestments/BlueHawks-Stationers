@@ -495,34 +495,32 @@ function updateCart() {
     let list = document.getElementById("cartList");
     let emptyMsg = document.getElementById("emptyCartMessage");
     let cartContent = document.getElementById("cartContent");
+    let cartCountElement = document.getElementById("cartCount"); 
+    
     list.innerHTML = "";
     total = 0;
+    let entryCount = 0; // This counts the number of rows/entries
 
     for (let key in cart) {
+        entryCount++; // Increment for each unique product entry
+        
         let qty = cart[key];
         let priceData = null;
-        let priceToUse = 100; // Default fallback price
+        let priceToUse = 100;
 
-        // 1. Identify if it's A5 and find the page count
+        // 1. Identify Pricing Logic
         if (key.includes("A5")) {
             if (key.includes("80")) priceData = pricing.a5[80];
             else if (key.includes("120")) priceData = pricing.a5[120];
             else if (key.includes("200")) priceData = pricing.a5[200];
         } 
-        // 2. Identify if it's A4 and find the page count
         else if (key.includes("A4")) {
             if (key.includes("120")) priceData = pricing.a4[120];
             else if (key.includes("200")) priceData = pricing.a4[200];
         } 
-        // 3. Identify Diaries or Assessment books
-        else if (key === "Diary") {
-            priceData = pricing.diary;
-        } 
-        else if (key === "Assessment") {
-            priceData = pricing.assessment;
-        }
+        else if (key === "Diary") { priceData = pricing.diary; } 
+        else if (key === "Assessment") { priceData = pricing.assessment; }
 
-        // 4. Calculate Price based on MOQ
         if (priceData) {
             priceToUse = qty >= priceData.moq ? priceData.offer : priceData.normal;
         }
@@ -530,7 +528,7 @@ function updateCart() {
         let itemTotal = priceToUse * qty;
         total += itemTotal;
 
-        // 5. Build the list item
+        // 2. Build the visual list item
         let li = document.createElement("li");
         li.style.padding = "8px 0";
         li.style.borderBottom = "1px solid #eee";
@@ -542,8 +540,13 @@ function updateCart() {
         list.appendChild(li);
     }
 
-    // Update Total and Visibility
-    document.getElementById("total").textContent = total;
+    // 3. Update the Nav Bar Counter
+    if (cartCountElement) {
+        cartCountElement.textContent = entryCount;
+    }
+
+    // 4. Update Total and Visibility
+    document.getElementById("total").textContent = total.toLocaleString();
     if (total === 0) {
         emptyMsg.style.display = "block";
         cartContent.style.display = "none";
@@ -551,30 +554,7 @@ function updateCart() {
         emptyMsg.style.display = "none";
         cartContent.style.display = "block";
     }
- {
-    let list = document.getElementById("cartList");
-    let emptyMsg = document.getElementById("emptyCartMessage");
-    let cartContent = document.getElementById("cartContent");
-    let cartCountElement = document.getElementById("cartCount"); 
-    
-    list.innerHTML = "";
-    total = 0;
-    let entryCount = 0; // Initialize entry counter
 
-    for (let key in cart) {
-        entryCount++; // Each unique item/entry counts as 1
-        
-        let qty = cart[key];
-        // ... (keep all your existing pricing/item building logic here) ...
-    }
-
-    // Update the counter on the navigation bar
-    if (cartCountElement) {
-        cartCountElement.textContent = entryCount;
-    }
-
-    // ... (rest of your existing total and visibility logic) ...
-}
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
