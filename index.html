@@ -544,7 +544,24 @@ function sendQuote() {
   .then(() => alert("Quote request sent!"));
 }
 
-window.onload = function(){ let s = localStorage.getItem("cart"); if(s){ cart = JSON.parse(s); updateCart(); } };
+// This combined function handles both the cart recovery and the dropdown initialization
+window.onload = function() {
+    // 1. Recover Cart Data
+    let s = localStorage.getItem("cart");
+    if (s) { 
+        cart = JSON.parse(s); 
+        updateCart(); 
+    }
+    
+    // 2. Initialize dropdowns for exercise books
+    // This ensures they aren't blank when the page first loads
+    syncTiers('a5');
+    syncTiers('a4');
+    
+    // 3. Initialize totals for Diary and Assessment
+    updatePrice('d');
+    updatePrice('a');
+};
 </script>
 </body>
 </html>
