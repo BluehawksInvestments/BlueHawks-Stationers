@@ -92,6 +92,41 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
     nav { padding: 10px; }
     nav img.title-img { width: 60px; height: 60px; }
 }
+  .image-gallery-container {
+  position: relative;
+  width: 100%;
+  margin: 10px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gallery-dots {
+  position: absolute;
+  bottom: 10px;
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 5px 10px;
+  border-radius: 15px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: #bbb; /* Grey */
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dot.active {
+  background-color: #0a2e6d; /* BlueHawks Blue */
+}
+
+.product-img {
+  transition: opacity 0.3s ease-in-out;
+}
 </style>
 </head>
 
@@ -129,54 +164,65 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
   
   <h2>Order Products</h2>
   <div class="grid">
-    <div class="card" id="a5">
-      <h3>A5 Exercise Books</h3>
-      <img src="images/A5 Exercise book.png" class="product-img">
-      <p id="a5price">Normal: 50 (Offer: 45) MOQ: 350</p>
-      <p class="price-note">Select pages to see prices</p>
-      <select id="a5pages" onchange="updatePrice('a5')">
-        <option value="80">80 Pages</option>
-        <option value="120">120 Pages</option>
-        <option value="200">200 Pages</option>
-      </select>
-      <select id="a5type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
-      <input type="number" id="a5qty" placeholder="Quantity" oninput="updatePrice('a5')">
-      <p>Total Amount: KES <span id="a5total">0</span></p>
-      <button onclick="addA5()">Add to Cart</button>
+  <div class="card" id="a5">
+    <h3>A5 Exercise Books</h3>
+    <div class="image-gallery-container">
+      <img src="images/A5 Exercise book.png" id="img-a5" class="product-img">
+      <div class="gallery-dots" id="dots-a5">
+        <div class="dot active" onclick="showImg('a5', 'images/A5 Exercise book.png', 0)"></div>
+        <div class="dot" onclick="showImg('a5', 'images/A5 Exercise book.png', 1)"></div>
+      </div>
     </div>
+    <p id="a5price">Normal: 50 (Offer: 45) MOQ: 350</p>
+    <p class="price-note">Select pages to see prices</p>
+    <select id="a5pages" onchange="updatePrice('a5')">
+      <option value="80">80 Pages</option>
+      <option value="120">120 Pages</option>
+      <option value="200">200 Pages</option>
+    </select>
+    <select id="a5type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
+    <input type="number" id="a5qty" placeholder="Quantity" oninput="updatePrice('a5')">
+    <p>Total Amount: KES <span id="a5total">0</span></p>
+    <button onclick="addA5()">Add to Cart</button>
+  </div>
 
-    <div class="card" id="a4">
-      <h3>A4 Exercise Books</h3>
-      <img src="images/A4 Exercise book.png" class="product-img">
-      <p id="a4price">Normal: 100 (Offer: 95) MOQ: 240</p>
-      <p class="price-note">Select pages to see prices</p>
-      <select id="a4pages" onchange="updatePrice('a4')">
-        <option value="120">120 Pages</option>
-        <option value="200">200 Pages</option>
-      </select>
-      <select id="a4type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
-      <input type="number" id="a4qty" placeholder="Quantity" oninput="updatePrice('a4')">
-      <p>Total Amount: KES <span id="a4total">0</span></p>
-      <button onclick="addA4()">Add to Cart</button>
+  <div class="card" id="a4">
+    <h3>A4 Exercise Books</h3>
+    <div class="image-gallery-container">
+      <img src="images/A4 Exercise book.png" id="img-a4" class="product-img">
+      <div class="gallery-dots" id="dots-a4">
+        <div class="dot active" onclick="showImg('a4', 'images/A4 Exercise book.png', 0)"></div>
+        <div class="dot" onclick="showImg('a4', 'images/A4 Exercise book.png', 1)"></div>
+      </div>
     </div>
+    <p id="a4price">Normal: 100 (Offer: 95) MOQ: 240</p>
+    <p class="price-note">Select pages to see prices</p>
+    <select id="a4pages" onchange="updatePrice('a4')">
+      <option value="120">120 Pages</option>
+      <option value="200">200 Pages</option>
+    </select>
+    <select id="a4type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
+    <input type="number" id="a4qty" placeholder="Quantity" oninput="updatePrice('a4')">
+    <p>Total Amount: KES <span id="a4total">0</span></p>
+    <button onclick="addA4()">Add to Cart</button>
+  </div>
 
-    <div class="card" id="diary">
-      <h3>School Diaries</h3>
-      <img src="images/School Diary.png" class="product-img">
-      <p>Normal: 100 (Offer: 90) MOQ: 100</p>
-      <input type="number" id="dqty" placeholder="Quantity" oninput="updatePrice('d')">
-      <p>Total Amount: KES <span id="dtotal">0</span></p>
-      <button onclick="addItem('Diary','d')">Add to Cart</button>
-    </div>
+  <div class="card" id="diary">
+    <h3>School Diaries</h3>
+    <img src="images/School Diary.png" class="product-img">
+    <p>Normal: 100 (Offer: 90) MOQ: 100</p>
+    <input type="number" id="dqty" placeholder="Quantity" oninput="updatePrice('d')">
+    <p>Total Amount: KES <span id="dtotal">0</span></p>
+    <button onclick="addItem('Diary','d')">Add to Cart</button>
+  </div>
 
-    <div class="card" id="assessment">
-      <h3>Assessment Books</h3>
-      <img src="images/Assesment book.png" class="product-img">
-      <p>Normal: 100 (Offer: 90) MOQ: 100</p>
-      <input type="number" id="aqty" placeholder="Quantity" oninput="updatePrice('a')">
-      <p>Total Amount: KES <span id="atotal">0</span></p>
-      <button onclick="addItem('Assessment','a')">Add to Cart</button>
-    </div>
+  <div class="card" id="assessment">
+    <h3>Assessment Books</h3>
+    <img src="images/Assesment book.png" class="product-img">
+    <p>Normal: 100 (Offer: 90) MOQ: 100</p>
+    <input type="number" id="aqty" placeholder="Quantity" oninput="updatePrice('a')">
+    <p>Total Amount: KES <span id="atotal">0</span></p>
+    <button onclick="addItem('Assessment','a')">Add to Cart</button>
   </div>
 </div>
 
@@ -437,6 +483,35 @@ function showFinalSuccess() {
       <button onclick="closePopup()">Close</button>
     </div>
   `;
+}
+
+  function showImg(productId, originalPath, dotIndex) {
+  const imgElement = document.getElementById(`img-${productId}`);
+  let newSrc = originalPath;
+
+  // If the second dot (index 1) is clicked, add 'b' suffix
+  if (dotIndex === 1) {
+    newSrc = originalPath.replace(".png", "b.png");
+  }
+
+  // Prevent redundant loading if already on this image
+  if (imgElement.src.includes(newSrc)) return;
+
+  // Animation: Fade out, swap, fade in
+  imgElement.style.opacity = '0';
+
+  // Update dots UI
+  const dotsContainer = document.getElementById(`dots-${productId}`);
+  const allDots = dotsContainer.getElementsByClassName("dot");
+  for (let i = 0; i < allDots.length; i++) {
+    allDots[i].classList.remove("active");
+  }
+  allDots[dotIndex].classList.add("active");
+
+  setTimeout(() => {
+    imgElement.src = newSrc;
+    imgElement.style.opacity = '1';
+  }, 300);
 }
 
 function validateCartContacts() {
