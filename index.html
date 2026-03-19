@@ -551,39 +551,33 @@ function updateCart() {
         emptyMsg.style.display = "none";
         cartContent.style.display = "block";
     }
-    localStorage.setItem("cart", JSON.stringify(cart));
-}
-function updateCart() {
+ {
     let list = document.getElementById("cartList");
     let emptyMsg = document.getElementById("emptyCartMessage");
     let cartContent = document.getElementById("cartContent");
-    let cartCountElement = document.getElementById("cartCount"); // Get the counter element
+    let cartCountElement = document.getElementById("cartCount"); 
     
     list.innerHTML = "";
     total = 0;
-    let itemCount = 0; // Initialize item counter
+    let entryCount = 0; // Initialize entry counter
 
     for (let key in cart) {
+        entryCount++; // Each unique item/entry counts as 1
+        
         let qty = cart[key];
-        itemCount += qty; // Add the quantity of this item to the total count
-        
-        // ... (keep all your existing pricing logic here) ...
-        
-        // (existing code to build the list item)
-        let li = document.createElement("li");
-        // ... rest of your item building code ...
-        list.appendChild(li);
+        // ... (keep all your existing pricing/item building logic here) ...
     }
 
     // Update the counter on the navigation bar
     if (cartCountElement) {
-        cartCountElement.textContent = itemCount;
+        cartCountElement.textContent = entryCount;
     }
 
     // ... (rest of your existing total and visibility logic) ...
-    document.getElementById("total").textContent = total;
-    // ...
 }
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
 function removeItem(key){ delete cart[key]; updateCart(); }
 
 // --- AUTOMATED EMAILS ---
