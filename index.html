@@ -347,7 +347,6 @@ function getOrderID() {
   let n = new Date();
   return `SC${n.getFullYear().toString().slice(-2)}${(n.getMonth()+1).toString().padStart(2,'0')}${n.getDate().toString().padStart(2,'0')}${n.getHours().toString().padStart(2,'0')}${n.getMinutes().toString().padStart(2,'0')}`;
 }
-
 function generatePDF() {
   if (Object.keys(cart).length === 0) return alert("Cart is empty");
   let contacts = validateCartContacts(); if (!contacts) return null;
@@ -356,7 +355,7 @@ function generatePDF() {
   const { jsPDF } = window.jspdf; 
   let doc = new jsPDF();
 
-  // --- PDF GENERATION LOGIC (Preserved) ---
+  // --- HEADER & COMPANY INFO ---
   doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(10, 46, 109);
   doc.text("PROFORMA INVOICE", 20, 20);
   doc.setFontSize(11); doc.setTextColor(0,0,0);
@@ -366,16 +365,20 @@ function generatePDF() {
   doc.setFont("helvetica", "normal"); doc.setFontSize(9);
   doc.text("bluehawksinvestment@gmail.com", 140, 25);
   doc.text("Phone: +254 790 333 932", 140, 30);
-  doc.setFont("helvetica", "bold"); doc.text("BILL TO:", 20, 55);
+
+  // --- BILL TO ---
+  doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.text("BILL TO:", 20, 55);
   doc.setFont("helvetica", "normal"); doc.text(`Email: ${contacts.email}`, 20, 60);
   doc.text(`Phone: ${contacts.phone}`, 20, 65);
 
+  // --- TABLE HEADER ---
   let y = 80; doc.setDrawColor(10, 46, 109); doc.setLineWidth(0.5); doc.line(20, y, 190, y);
   y += 7; doc.setFont("helvetica", "bold"); doc.text("Item Description", 22, y); doc.text("Qty", 110, y); doc.text("Total (KES)", 165, y);
   y += 3; doc.line(20, y, 190, y); y += 10;
   
+  // --- TABLE ITEMS ---
   doc.setFont("helvetica", "normal");
-  let summaryForAdmin = ""; // Track items for the admin email
+  let summaryForAdmin = ""; 
   for (let key in cart) {
     doc.text(key, 22, y); doc.text(cart[key].toString(), 110, y);
     summaryForAdmin += `- ${key} x${cart[key]}\n`;
@@ -383,16 +386,24 @@ function generatePDF() {
   }
   doc.setFont("helvetica", "bold"); doc.text(`GRAND TOTAL: KES ${total.toLocaleString()}`, 130, y+10);
 
-  let sigY = y+40; doc.text("Prepared by:", 140, sigY);
+  // --- SIGNATURE AREA ---
+  let sigY = y+40; 
+  if (sigY > 250) { doc.addPage(); sigY = 30; } // Prevent signature from falling off the page
+  doc.text("Prepared by:", 140, sigY);
   doc.setFont("helvetica", "normal"); doc.text("Nicholas Ndegwa", 140, sigY+7);
   doc.setFont("times", "italic"); doc.setFontSize(15); doc.text("Nicholas", 140, sigY+16);
   doc.line(140, sigY+18, 175, sigY+18);
 
+  // --- RESTORED DISCLAIMER FOOTER ---
+  doc.setFont("helvetica", "italic"); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
+  const footerY = 280; // Fixed position at the bottom of the page
+  doc.text("Note: This proforma is valid for 30 days from the date of issue.", 20, footerY);
+  doc.text("Prices are subject to change based on market fluctuations and final artwork specifications.", 20, footerY + 5);
+
   // Trigger Download
   doc.save(`Proforma_${orderID}.pdf`);
 
-  // --- NEW: SEND ADMIN NOTIFICATION ---
-  // This sends an email to YOU informing you a proforma was generated
+  // --- ADMIN NOTIFICATION ---
   emailjs.send('service_grbq937', 'template_rfcn2bc', {
     order_id: orderID,
     customer_email: contacts.email,
@@ -400,8 +411,6 @@ function generatePDF() {
     items: summaryForAdmin,
     total: total.toLocaleString(),
     action: "Downloaded Proforma Invoice"
-  }).then(() => {
-    console.log("Admin notified of PDF download.");
   });
 
   return orderID;
