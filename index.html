@@ -1,353 +1,248 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="BlueHawks">
-  <meta name="theme-color" content="#002147">
-<link rel="apple-touch-icon" href="Logo.png">
-  <title>BlueHawks Stationers</title>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="BlueHawks">
+    <meta name="theme-color" content="#002147">
+    <link rel="apple-touch-icon" href="Logo.png">
+    <title>BlueHawks Stationers</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
-<script type="text/javascript">
-  (function(){
-    // PASTE YOUR KEY FROM THE ACCOUNT TAB HERE
-    emailjs.init("akSFncjRjnQQHb9iK"); 
-  })();
-</script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <link rel="icon" type="image/png" href="Logo.png">
-<style>
-#successPopup {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: green;
-  color: white;
-  padding: 15px 25px;
-  border-radius: 10px;
-  display: none;
-  z-index: 1000;
-  font-weight: bold;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  font-size: 1em;
-}
+    <script type="text/javascript">
+        (function(){
+            emailjs.init("akSFncjRjnQQHb9iK"); 
+        })();
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="icon" type="image/png" href="Logo.png">
+    <style>
+        #successPopup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: green;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: none;
+            z-index: 1000;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            font-size: 1em;
+        }
 
-body { margin:0; font-family: Arial, sans-serif; color:#0a2e6d; background: linear-gradient(to bottom, #f0f4ff, #ffffff);}
-nav { background:#0a2e6d; padding:15px 30px; display:flex; justify-content:space-between; align-items:center;}
-nav a { color:#ffc600; margin:0 12px; cursor:pointer; text-decoration:none; font-weight:500;}
-nav a:hover { color:#5ea8ff; transition:0.3s; }
-.hero { background: linear-gradient(135deg,#0a2e6d,#5ea8ff); color:white; text-align:center; padding:80px 20px; border-bottom-left-radius:50px; border-bottom-right-radius:50px; display:flex; justify-content:space-between; align-items:center;}
-.hero h1 { font-size:3em; margin:10px 0 0 0; display:flex; align-items:center; }
-.hero img.title-img { max-width:80px; height:auto; margin-right:15px; }
-.hero-img { max-width:200px; height:auto; border-radius:10px; object-fit:cover; align-self:flex-start; }
-.section { display:none; padding:50px 20px; }
-.active { display:block; }
-.grid { display:grid; grid-template-columns: repeat(2,1fr); gap:25px; margin-top:30px; }
-.card { background:white; padding:20px; border-radius:15px; box-shadow:0 6px 15px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; width:75%; margin:auto;}
-.card:hover { transform: translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.15); }
-.product-img { width: 100%; max-width: 200px; height: auto; display: block; margin: 10px auto; border-radius: 10px; object-fit: cover; }
-input, select, textarea { width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:8px; }
-input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-input[type=number] { -moz-appearance:textfield; }
-button { background:#0a2e6d; color:white; padding:12px; border:none; width:100%; border-radius:8px; cursor:pointer; font-weight:600; transition: background 0.3s; }
-button:hover { background:#5ea8ff; }
-.remove-btn {
-  background: #ff4c4c;
-  color: white;
-  border: none;
-  padding: 2px 6px;      /* small padding = compact size */
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.8em;
-  display: inline-block; /* ensures it only takes needed width */
-  width: auto;           /* prevents stretching */
-  margin-left: 5px;      /* small space from text */
-}
-.cart-box { background:white; padding:25px; border-radius:15px; box-shadow:0 6px 15px rgba(0,0,0,0.1); }
-.btn-group { display:flex; justify-content:center; gap:20px; margin-top:20px; }
-.btn-group button { width:50%; max-width:200px; }
-.contact-img { width:96px; height:96px; margin:5px 10px 0 0; cursor:pointer; object-fit:contain; }
-#emptyCartMessage { display:none; text-align:center; margin-top:20px; }
-.price-note { color:red; font-style:italic; font-size:0.9em; margin-bottom:10px; }
-#productsPage ul li { margin-bottom:1in; font-weight:500; cursor:pointer; position:relative;}
-#productsPage ul li:hover { color:#5ea8ff; }
-#productsPage ul li span.desc { display:none; position:absolute; left:0; top:25px; background:white; padding:10px; border-radius:10px; box-shadow:0 6px 15px rgba(0,0,0,0.1); width:300px; z-index:10;}
-#productsPage ul li:hover span.desc { display:block; }
-#popup { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:25px; border-radius:15px; box-shadow:0 8px 25px rgba(0,0,0,0.3); display:none; z-index:1000; width:300px; text-align:center; }
-#popup button { width:120px; margin:10px 5px 0 5px; }
+        body { margin:0; font-family: Arial, sans-serif; color:#0a2e6d; background: linear-gradient(to bottom, #f0f4ff, #ffffff);}
+        nav { background:#0a2e6d; padding:15px 30px; display:flex; justify-content:space-between; align-items:center;}
+        nav a { color:#ffc600; margin:0 12px; cursor:pointer; text-decoration:none; font-weight:500;}
+        nav a:hover { color:#5ea8ff; transition:0.3s; }
+        .hero { background: linear-gradient(135deg,#0a2e6d,#5ea8ff); color:white; text-align:center; padding:80px 20px; border-bottom-left-radius:50px; border-bottom-right-radius:50px; display:flex; justify-content:space-between; align-items:center;}
+        .hero h1 { font-size:3em; margin:10px 0 0 0; display:flex; align-items:center; }
+        .hero img.title-img { max-width:80px; height:auto; margin-right:15px; }
+        .hero-img { max-width:200px; height:auto; border-radius:10px; object-fit:cover; align-self:flex-start; }
+        .section { display:none; padding:50px 20px; }
+        .active { display:block; }
+        .grid { display:grid; grid-template-columns: repeat(2,1fr); gap:25px; margin-top:30px; }
+        .card { background:white; padding:20px; border-radius:15px; box-shadow:0 6px 15px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; width:75%; margin:auto;}
+        .card:hover { transform: translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.15); }
+        .product-img { width: 100%; max-width: 200px; height: auto; display: block; margin: 10px auto; border-radius: 10px; object-fit: cover; }
+        input, select, textarea { width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:8px; }
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance:textfield; }
+        button { background:#0a2e6d; color:white; padding:12px; border:none; width:100%; border-radius:8px; cursor:pointer; font-weight:600; transition: background 0.3s; }
+        button:hover { background:#5ea8ff; }
+        .remove-btn {
+            background: #ff4c4c;
+            color: white;
+            border: none;
+            padding: 2px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            display: inline-block;
+            width: auto;
+            margin-left: 5px;
+        }
+        .cart-box { background:white; padding:25px; border-radius:15px; box-shadow:0 6px 15px rgba(0,0,0,0.1); }
+        .btn-group { display:flex; justify-content:center; gap:20px; margin-top:20px; }
+        .btn-group button { width:50%; max-width:200px; }
+        #emptyCartMessage { display:none; text-align:center; margin-top:20px; }
+        .price-note { color:red; font-style:italic; font-size:0.9em; margin-bottom:10px; }
+        #productsPage ul li { margin-bottom:1in; font-weight:500; cursor:pointer; position:relative;}
+        #productsPage ul li:hover { color:#5ea8ff; }
+        #productsPage ul li span.desc { display:none; position:absolute; left:0; top:25px; background:white; padding:10px; border-radius:10px; box-shadow:0 6px 15px rgba(0,0,0,0.1); width:300px; z-index:10;}
+        #productsPage ul li:hover span.desc { display:block; }
+        
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background-color: #25D366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.whatsapp-float {
-  position: fixed;
-  width: 60px;
-  height: 60px;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
-  border-radius: 50%;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  background-color: #25D366;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+        .whatsapp-float img { width: 35px; height: 35px; }
+        .whatsapp-float:hover { transform: scale(1.1); transition: 0.3s; }
 
-.whatsapp-float img {
-  width: 35px;
-  height: 35px;
-}
+        .order-btn { background: orange; color: white; font-weight: bold; }
+        .order-btn:hover { background: darkorange; }
 
-.whatsapp-float:hover {
-  transform: scale(1.1);
-  transition: 0.3s;
-}
+        #orderPopup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #0a2e6d;
+            color: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            display: none;
+            z-index: 2000;
+            text-align: center;
+            font-size: 1.1em;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            width: 80%;
+            max-width: 400px;
+        }
 
-.order-btn {
-  background: orange;
-  color: white;
-  font-weight: bold;
-}
+        #about { padding: 50px 20px; line-height: 1.6; color: #0a2e6d; }
+        .subheading { font-size: 1.5em; font-weight: 400; margin-top: 5px; color: #ffc600; font-style: italic; }
+        nav img.title-img {
+            width: 96px;
+            height: 96px;
+            object-fit: contain;
+            margin-right: 12px;
+            vertical-align: middle;
+            border-radius: 4px;
+        }
 
-.order-btn:hover {
-  background: darkorange;
-}
-
-#orderPopup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #0a2e6d;
-  color: white;
-  padding: 25px 30px;
-  border-radius: 12px;
-  display: none;
-  z-index: 2000;
-  text-align: center;
-  font-size: 1.1em;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-}
-
-#about {
-  padding: 50px 20px;
-  line-height: 1.6;
-  color: #0a2e6d;
-}
-#about h2 {
-  margin-bottom: 20px;
-  font-size: 2em;
-}
-#about h3 {
-  margin-top: 20px;
-  font-size: 1.3em;
-}
-#about ul {
-  margin-left: 20px;
-  margin-bottom: 20px;
-}
-
-.subheading {
-  font-size: 1.5em;      /* slightly smaller than main title */
-  font-weight: 400;      /* lighter than main title */
-  margin-top: 5px;       /* space between main title and subheading */
-  color: #ffc600;        /* golden color to match nav links, optional */
-  font-style: italic;    /* optional styling */
-}
-  /* Update this in your <style> section */
-nav img.title-img {
-    width: 96px;         /* Standard 1-inch width */
-    height: 96px;        /* Standard 1-inch height */
-    object-fit: contain; /* Prevents the hawk from stretching */
-    margin-right: 12px;
-    vertical-align: middle;
-    border-radius: 4px;  /* Optional: slight rounding if the image has sharp edges */
-}
-
-/* Mobile Tweak: If the screen is very small, we scale it down slightly 
-   so the navigation links still fit on one line. */
-@media (max-width: 480px) {
-    nav img.title-img {
-        width: 60px;
-        height: 60px;
-    }
-    nav div {
-        font-size: 1.1em !important; /* Adjusts the "BlueHawks" text size */
-    }
-}
-</style>
+        @media (max-width: 480px) {
+            nav img.title-img { width: 60px; height: 60px; }
+            .grid { grid-template-columns: 1fr; }
+            .card { width: 90%; }
+        }
+    </style>
 </head>
+
+<body>
 
 <a href="https://wa.me/254790333932" target="_blank" class="whatsapp-float">
   <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
 </a>
 
-<div id="orderPopup">
-  <p>Your order has been received via email.</p>
-  <p>Would you like to also send your order via WhatsApp?</p>
+<div id="orderPopup"></div>
 
-  <button onclick="sendWhatsApp()">Yes</button>
-  <button onclick="closePopup()">No</button>
-</div>
-
-<body>
-
-<!-- NAV -->
 <nav>
   <div style="display: flex; align-items: center;">
     <img src="images/Bluehawk.png" class="title-img" alt="Blue Hawk Logo">
   </div>
-
   <div>
     <a onclick="show('home')">Home</a>
-    <a onclick="show('about')">About Us</a>
-    <a onclick="show('productsPage')">Our Products</a>
-<a onclick="show('cart')">
-  My Cart <span id="cartCount" style="background: #ffc600; color: #0a2e6d; padding: 2px 6px; border-radius: 50%; font-size: 0.8em; margin-left: 5px; font-weight: bold;">0</span>
-</a>
-    <a onclick="show('contact')">Contact Us</a>
+    <a onclick="show('about')">About</a>
+    <a onclick="show('productsPage')">Products</a>
+    <a onclick="show('cart')">Cart <span id="cartCount" style="background: #ffc600; color: #0a2e6d; padding: 2px 6px; border-radius: 50%; font-size: 0.8em; font-weight: bold;">0</span></a>
+    <a onclick="show('contact')">Contact</a>
   </div>
 </nav>
 
-<!-- HOME -->
-
-<div id="home" class="section active"> <!-- Add 'active' to show by default -->
+<div id="home" class="section active">
   <div class="hero">
       <div>
          <h1>BlueHawks Stationers</h1>
          <h2 class="subheading">Elevating Institutional Identity</h2>
       </div>
       <img src="images/Exercise books.png" class="hero-img" alt="Exercise Books">
-  
+  </div>
+
+  <h2>Order Products</h2>
+  <div class="grid">
+    <div class="card" id="a5">
+      <h3>A5 Exercise Books</h3>
+      <img src="images/A5 Exercise book.png" class="product-img">
+      <p id="a5price">Normal: 50 (Offer: 45) MOQ: 350</p>
+      <select id="a5pages" onchange="updatePrice('a5')">
+        <option value="80">80 Pages</option>
+        <option value="120">120 Pages</option>
+        <option value="200">200 Pages</option>
+      </select>
+      <select id="a5type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
+      <input type="number" id="a5qty" placeholder="Quantity" oninput="updatePrice('a5')">
+      <p>Total: KES <span id="a5total">0</span></p>
+      <button onclick="addA5()">Add to Cart</button>
+    </div>
+
+    <div class="card" id="a4">
+      <h3>A4 Exercise Books</h3>
+      <img src="images/A4 Exercise book.png" class="product-img">
+      <p id="a4price">Normal: 100 (Offer: 95) MOQ: 240</p>
+      <select id="a4pages" onchange="updatePrice('a4')">
+        <option value="120">120 Pages</option>
+        <option value="200">200 Pages</option>
+      </select>
+      <select id="a4type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
+      <input type="number" id="a4qty" placeholder="Quantity" oninput="updatePrice('a4')">
+      <p>Total: KES <span id="a4total">0</span></p>
+      <button onclick="addA4()">Add to Cart</button>
+    </div>
+
+    <div class="card" id="diary">
+      <h3>School Diaries</h3>
+      <img src="images/School Diary.png" class="product-img">
+      <p>Normal: 100 (Offer: 90) MOQ: 100</p>
+      <input type="number" id="dqty" placeholder="Quantity" oninput="updatePrice('d')">
+      <p>Total: KES <span id="dtotal">0</span></p>
+      <button onclick="addItem('Diary','d')">Add to Cart</button>
+    </div>
+
+    <div class="card" id="assessment">
+      <h3>Assessment Books</h3>
+      <img src="images/Assesment book.png" class="product-img">
+      <p>Normal: 100 (Offer: 90) MOQ: 100</p>
+      <input type="number" id="aqty" placeholder="Quantity" oninput="updatePrice('a')">
+      <p>Total: KES <span id="atotal">0</span></p>
+      <button onclick="addItem('Assessment','a')">Add to Cart</button>
+    </div>
+  </div>
 </div>
 
-<h2>Order Products</h2>
-<div class="grid">
-<!-- A5 -->
-<div class="card" id="a5">
-<h3>A5 Exercise Books</h3>
-<img src="images/A5 Exercise book.png" class="product-img">
-<p id="a5price">Normal: 50 (Offer: 45) MOQ: 350</p>
-<p class="price-note">Select pages to see prices</p>
-<select id="a5pages" onchange="updatePrice('a5')">
-<option value="80">80 Pages</option>
-<option value="120">120 Pages</option>
-<option value="200">200 Pages</option>
-</select>
-<select id="a5type">
-  <option value="Ruled">Ruled</option>
-  <option value="Square">Square</option> <option value="Drawing">Drawing</option>
-</select>
-<input type="number" id="a5qty" placeholder="Quantity" oninput="updatePrice('a5')">
-<p>Total Amount: KES <span id="a5total">0</span></p>
-<button onclick="addA5()">Add to Cart</button>
-</div>
-
-<!-- A4 -->
-<div class="card" id="a4">
-<h3>A4 Exercise Books</h3>
-<img src="images/A4 Exercise book.png" class="product-img">
-<p id="a4price">Normal: 100 (Offer: 95) MOQ: 240</p>
-<p class="price-note">Select pages to see prices</p>
-<select id="a4pages" onchange="updatePrice('a4')">
-<option value="120">120 Pages</option>
-<option value="200">200 Pages</option>
-</select>
-<select id="a4type">
-  <option value="Ruled">Ruled</option>
-  <option value="Square">Square</option> <option value="Drawing">Drawing</option>
-</select>
-<input type="number" id="a4qty" placeholder="Quantity" oninput="updatePrice('a4')">
-<p>Total Amount: KES <span id="a4total">0</span></p>
-<button onclick="addA4()">Add to Cart</button>
-</div>
-
-<!-- School Diary -->
-<div class="card" id="diary">
-<h3>School Diaries</h3>
-<img src="images/School Diary.png" class="product-img">
-<p>Normal: 100 (Offer: 90) MOQ: 100</p>
-<input type="number" id="dqty" placeholder="Quantity" oninput="updatePrice('d')">
-<p>Total Amount: KES <span id="dtotal">0</span></p>
-<button onclick="addItem('Diary','d')">Add to Cart</button>
-</div>
-
-<!-- Assessment Books -->
-<div class="card" id="assessment">
-<h3>Assessment Books</h3>
-<img src="images/Assesment book.png" class="product-img">
-<p>Normal: 100 (Offer: 90) MOQ: 100</p>
-<input type="number" id="aqty" placeholder="Quantity" oninput="updatePrice('a')">
-<p>Total Amount: KES <span id="atotal">0</span></p>
-<button onclick="addItem('Assessment','a')">Add to Cart</button>
-</div>
-</div>
-</div>
-
-<!-- ABOUT US -->
 <div id="about" class="section">
   <h2>BlueHawk Stationers: Elevating Institutional Identity</h2>
-  <p>A proud subsidiary of BlueHawks Investments, BlueHawk Stationers is a premier provider of high-quality, customized educational stationery. We specialize in transforming standard school supplies into powerful symbols of institutional pride.</p>
-
-  <h3>Our Core Offerings</h3>
-  <ul>
-    <li><b>Custom Exercise Books:</b> Available in both A4 and A5 formats.</li>
-    <li><b>School Diaries:</b> Designed to streamline student organization and communication.</li>
-    <li><b>Assessment Books:</b> Structured to meet specific grading and tracking requirements.</li>
-  </ul>
-
-  <h3>The "BlueHawk" Advantage</h3>
-  <p>We believe that administrators should focus on education, not graphic design. Our full-service artwork support means the process is effortless for our clients:</p>
-  <ul>
-    <li><b>You Provide:</b> Your school logo, motto, vision statement, or any specific imagery.</li>
-    <li><b>We Create:</b> Our design team handles the layout and aesthetics to ensure a professional, cohesive look.</li>
-    <li><b>We Deliver:</b> High-quality, durable stationery that reflects the excellence of your institution.</li>
-  </ul>
-
-  <p><i>"Your Vision, Our Design." At BlueHawk Stationers, we don't just supply books; we help schools build their brand, one page at a time.</i></p>
+  <p>A proud subsidiary of BlueHawks Investments, specializing in high-quality, customized educational stationery.</p>
 </div>
 
-<!-- OUR PRODUCTS PAGE -->
 <div id="productsPage" class="section">
-<h2>Our Products</h2>
-<ul>
-<li><a href="#" onclick="goToProduct('a5')">A5 Exercise Books</a>
-  <span class="desc">Pages: 80, 120, 200. Delivery: 5 days. Payment: after delivery.</span>
-</li>
-<li><a href="#" onclick="goToProduct('a4')">A4 Exercise Books</a>
-  <span class="desc">Pages: 120, 200. Delivery: 5 days. Payment: after delivery.</span>
-</li>
-<li><a href="#" onclick="goToProduct('a')">Assessment Books</a>
-  <span class="desc">Normal:100, Offer:90. Delivery: 5 days. Payment: after delivery.</span>
-</li>
-<li><a href="#" onclick="goToProduct('diary')">School Diaries</a>
-  <span class="desc">Normal:100, Offer:90. Delivery: 5 days. Payment: after delivery.</span>
-</li>
-</ul>
+  <h2>Our Products</h2>
+  <ul>
+    <li><a href="#" onclick="goToProduct('a5')">A5 Exercise Books</a></li>
+    <li><a href="#" onclick="goToProduct('a4')">A4 Exercise Books</a></li>
+    <li><a href="#" onclick="goToProduct('assessment')">Assessment Books</a></li>
+    <li><a href="#" onclick="goToProduct('diary')">School Diaries</a></li>
+  </ul>
 </div>
 
-<!-- CART -->
 <div id="cart" class="section">
   <h2>My Cart</h2>
   <div class="cart-box">
-
     <div id="emptyCartMessage">
       <p><b>Your Cart is Empty</b></p>
-      <button onclick="show('home')">Go Back to Shopping</button>
+      <button onclick="show('home')">Go Shopping</button>
     </div>
-
     <div id="cartContent">
       <div style="margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px;">
-        <h4 style="margin-bottom:10px;">Order Contact Details</h4>
-        <input id="cartPhone" type="text" maxlength="10" placeholder="Phone Number (e.g. 0712345678)*" required>
-        <input id="cartEmail" type="email" placeholder="Email Address*" required>
+        <input id="cartPhone" type="text" maxlength="10" placeholder="Phone Number (07...)*">
+        <input id="cartEmail" type="email" placeholder="Email Address*">
       </div>
-
       <ul id="cartList"></ul>
       <p><b>Total: KES <span id="total">0</span></b></p>
-      
       <div class="btn-group">
         <button onclick="generatePDF()">Download Proforma</button>
         <button class="order-btn" onclick="placeOrder()">Place Order</button>
@@ -356,49 +251,19 @@ nav img.title-img {
   </div>
 </div>
 
+<div id="contact" class="section">
+    <h2>Contact Us</h2>
+    <input id="school" placeholder="School Name*">
+    <input id="email" type="email" placeholder="Email*">
+    <input id="phone" type="text" maxlength="10" placeholder="Phone*">
+    <textarea id="message" placeholder="Message"></textarea>
+    <button onclick="sendQuote()">Request Quote</button>
+</div>
+
 <div id="successPopup"></div>
 
-
-
-<!-- CONTACT -->
-<div id="contact" class="section">
-  <h2>Contact Us</h2>
-  <h3 style="text-decoration: underline; font-size:1.2em;">Request a Quote</h3>
-
-  <input id="school" placeholder="School Name*" required>
-  
-  <input id="email" type="email" placeholder="Email*" required oninput="validateEmail()">
-  <span id="emailError" style="color:red; font-size:0.9em; display:none;">Invalid Email</span>
-
-  <div style="position:relative;">
-    <input id="phone" type="text" maxlength="10" placeholder="0701234567*" oninput="validatePhone()">
-    <span id="phoneError" style="color:red; font-size:0.8em; display:none;">Phone must be 10 digits</span>
-  </div>
-
-  <textarea id="message" maxlength="250" placeholder="Enter your message (max 250 characters)"></textarea>
-
-  <div style="text-align:center; margin-top:10px;">
-    <button style="width:50%; max-width:200px;" onclick="sendQuote()" id="quoteBtn">Request Quote</button>
-  </div>
-
-  <div class="contact-methods" style="margin-top:40px; display:flex; gap:30px; justify-content:center;">
-    
-    <a href="mailto:bluehawksinvestment@gmail.com" style="text-decoration:none; text-align:center; color:#0a2e6d;">
-      <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Email Us" style="width:50px; height:50px;">
-      <div style="font-weight:bold; margin-top:5px;">Email Us</div>
-    </a>
-
-    <a href="tel:+254790333932" style="text-decoration:none; text-align:center; color:#0a2e6d;">
-      <img src="https://cdn-icons-png.flaticon.com/512/159/159832.png" alt="Call Us" style="width:50px; height:50px;">
-      <div style="font-weight:bold; margin-top:5px;">Call Us</div>
-    </a>
-
-  </div>
-</div>
-  
-  <script>
-// --- DATA & STATE ---
-  let cart = {};
+<script>
+let cart = {};
 let total = 0;
 window.whatsappMessage = "";
 
@@ -409,351 +274,63 @@ const pricing = {
   assessment:{normal:100,offer:90,moq:100}
 };
 
-// --- NAVIGATION ---
 function show(id){ 
     document.querySelectorAll(".section").forEach(s=>s.classList.remove("active")); 
     document.getElementById(id).classList.add("active"); 
 }
-function goToProduct(id) {
-    show('home'); // First switch to the home tab
-    setTimeout(() => {
-        const element = document.getElementById(id);
-        if(element) {
-            element.scrollIntoView({behavior: "smooth"});
-            // Add a temporary highlight effect so the user sees which one it is
-            element.style.border = "2px solid #ffc600";
-            setTimeout(() => { element.style.border = "none"; }, 2000);
-        }
-    }, 100);
-}
 
-function showSuccessPopup(text){
-  const popup = document.getElementById("successPopup");
-  popup.innerText = text;
-  popup.style.display = "block";
-  setTimeout(() => { popup.style.display = "none"; }, 3000);
-}
-
-// --- CART & PRICING ---
 function updatePrice(type){
   let qty=0, priceData, priceToUse;
-  if(type==="a5"){ 
-      qty=parseInt(document.getElementById("a5qty").value)||0; 
-      priceData=pricing.a5[document.getElementById("a5pages").value]; 
-  }
-  else if(type==="a4"){ 
-      qty=parseInt(document.getElementById("a4qty").value)||0; 
-      priceData=pricing.a4[document.getElementById("a4pages").value]; 
-  }
+  if(type==="a5"){ qty=parseInt(document.getElementById("a5qty").value)||0; priceData=pricing.a5[document.getElementById("a5pages").value]; }
+  else if(type==="a4"){ qty=parseInt(document.getElementById("a4qty").value)||0; priceData=pricing.a4[document.getElementById("a4pages").value]; }
   else if(type==="d"){ qty=parseInt(document.getElementById("dqty").value)||0; priceData=pricing.diary; }
   else if(type==="a"){ qty=parseInt(document.getElementById("aqty").value)||0; priceData=pricing.assessment; }
 
   priceToUse = qty >= priceData.moq ? priceData.offer : priceData.normal;
-
-  if(type==="a5"){ 
-      document.getElementById("a5total").textContent = qty*priceToUse; 
-      document.getElementById("a5price").textContent = `Normal: ${priceData.normal} (Offer: ${priceData.offer}) MOQ: ${priceData.moq}`; 
-  }
-  if(type==="a4"){ 
-      document.getElementById("a4total").textContent = qty*priceToUse; 
-      document.getElementById("a4price").textContent = `Normal: ${priceData.normal} (Offer: ${priceData.offer}) MOQ: ${priceData.moq}`; 
-  }
-  if(type==="d"){ document.getElementById("dtotal").textContent = qty*priceToUse; }
-  if(type==="a"){ document.getElementById("atotal").textContent = qty*priceToUse; }
+  if(type==="a5") document.getElementById("a5total").textContent = qty*priceToUse;
+  if(type==="a4") document.getElementById("a4total").textContent = qty*priceToUse;
+  if(type==="d") document.getElementById("dtotal").textContent = qty*priceToUse;
+  if(type==="a") document.getElementById("atotal").textContent = qty*priceToUse;
 }
 
-function addA5(){ 
-    let qty=parseInt(document.getElementById("a5qty").value)||0; 
-    if(!qty) return alert("Enter quantity"); 
+function addA5(){
+    let qty=parseInt(document.getElementById("a5qty").value)||0;
+    if(!qty) return alert("Enter quantity");
     let pages = document.getElementById("a5pages").value;
     let type = document.getElementById("a5type").value;
-    let key = `A5 (${pages} Pages - ${type})`; // Added Type here
-    cart[key]=(cart[key]||0)+qty; 
-    updateCart(); 
-    showSuccessPopup(`${qty} ${key} added to cart`);
+    let key = `A5 (${pages} Pages - ${type})`;
+    cart[key]=(cart[key]||0)+qty;
+    updateCart();
 }
 
-function addA4(){ 
-    let qty=parseInt(document.getElementById("a4qty").value)||0; 
-    if(!qty) return alert("Enter quantity"); 
+function addA4(){
+    let qty=parseInt(document.getElementById("a4qty").value)||0;
+    if(!qty) return alert("Enter quantity");
     let pages = document.getElementById("a4pages").value;
     let type = document.getElementById("a4type").value;
-    let key = `A4 (${pages} Pages - ${type})`; // Added Type here
-    cart[key]=(cart[key]||0)+qty; 
-    updateCart(); 
-    showSuccessPopup(`${qty} ${key} added to cart`);
+    let key = `A4 (${pages} Pages - ${type})`;
+    cart[key]=(cart[key]||0)+qty;
+    updateCart();
 }
 
-function addItem(name,type){ 
-    let qty=parseInt(document.getElementById(type+'qty').value)||0; 
-    if(!qty) return alert("Enter quantity"); 
-    cart[name]=(cart[name]||0)+qty; 
-    updateCart(); 
-    showSuccessPopup(`${qty} ${name} added to cart`);
+function addItem(name,type){
+    let qty=parseInt(document.getElementById(type+'qty').value)||0;
+    if(!qty) return alert("Enter quantity");
+    cart[name]=(cart[name]||0)+qty;
+    updateCart();
 }
+
 function updateCart() {
     let list = document.getElementById("cartList");
-    let emptyMsg = document.getElementById("emptyCartMessage");
-    let cartContent = document.getElementById("cartContent");
-    let cartCountElement = document.getElementById("cartCount"); 
-    
     list.innerHTML = "";
     total = 0;
-    let entryCount = 0; // This counts the number of rows/entries
+    let entryCount = 0;
 
     for (let key in cart) {
-        entryCount++; // Increment for each unique product entry
-        
+        entryCount++;
         let qty = cart[key];
         let priceData = null;
         let priceToUse = 100;
-
-        // 1. Identify Pricing Logic
-        if (key.includes("A5")) {
-            if (key.includes("80")) priceData = pricing.a5[80];
-            else if (key.includes("120")) priceData = pricing.a5[120];
-            else if (key.includes("200")) priceData = pricing.a5[200];
-        } 
-        else if (key.includes("A4")) {
-            if (key.includes("120")) priceData = pricing.a4[120];
-            else if (key.includes("200")) priceData = pricing.a4[200];
-        } 
-        else if (key === "Diary") { priceData = pricing.diary; } 
-        else if (key === "Assessment") { priceData = pricing.assessment; }
-
-        if (priceData) {
-            priceToUse = qty >= priceData.moq ? priceData.offer : priceData.normal;
-        }
-
-        let itemTotal = priceToUse * qty;
-        total += itemTotal;
-
-        // 2. Build the visual list item
-        let li = document.createElement("li");
-        li.style.padding = "8px 0";
-        li.style.borderBottom = "1px solid #eee";
-        li.innerHTML = `
-            <strong>${key}</strong> <br>
-            ${qty} units @ KES ${priceToUse} = <strong>KES ${itemTotal}</strong>
-            <button class="remove-btn" onclick="removeItem('${key}')" style="margin-left:10px;">Remove</button>
-        `;
-        list.appendChild(li);
-    }
-
-    // 3. Update the Nav Bar Counter
-    if (cartCountElement) {
-        cartCountElement.textContent = entryCount;
-    }
-
-    // 4. Update Total and Visibility
-    document.getElementById("total").textContent = total.toLocaleString();
-    if (total === 0) {
-        emptyMsg.style.display = "block";
-        cartContent.style.display = "none";
-    } else {
-        emptyMsg.style.display = "none";
-        cartContent.style.display = "block";
-    }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-function removeItem(key){ delete cart[key]; updateCart(); }
-
-// --- AUTOMATED EMAILS ---
-function sendQuote() {
-    // 1. Get the values from the Contact Section inputs
-    let school = document.getElementById("school").value.trim();
-    let email = document.getElementById("email").value.trim();
-    let phone = document.getElementById("phone").value.trim();
-    let message = document.getElementById("message").value.trim();
-
-    // 2. Validation Check
-    if (!school || !email || !phone) {
-        alert("Please fill in all required fields (School Name, Email, and Phone).");
-        return;
-    }
-
-    // 3. Prepare the Variables (Must match your EmailJS Template exactly)
-    const templateParams = {
-        school_name: school,
-        customer_email: email,
-        customer_phone: phone,
-        message: message || "No specific message provided."
-    };
-
-    // 4. Send via EmailJS
-    // REPLACE 'YOUR_ENQUIRY_TEMPLATE_ID' with your actual Template ID
-    emailjs.send('service_grbq937', 'template_rfcn2bc', templateParams)
-        .then(() => {
-            alert("Your quote request has been sent successfully!");
-            // Clear the form after success
-            document.getElementById("school").value = "";
-            document.getElementById("email").value = "";
-            document.getElementById("phone").value = "";
-            document.getElementById("message").value = "";
-        }, (error) => {
-            console.error("Quote Error:", error);
-            alert("Failed to send automatically. Opening your email app...");
-            // Fallback to mailto link
-            window.location.href = `mailto:bluehawksinvestment@gmail.com?subject=Quote Request - ${school}&body=${encodeURIComponent(message)}`;
-        });
-}
-
-
-// --- HELPER: VALIDATE CART CONTACTS ---
-function validateCartContacts() {
-    let phone = document.getElementById("cartPhone").value.trim();
-    let email = document.getElementById("cartEmail").value.trim();
-    
-    if (phone.length !== 10) {
-        alert("Please enter a valid 10-digit phone number.");
-        return false;
-    }
-    if (!email.includes("@") || !email.includes(".")) {
-        alert("Please enter a valid email address.");
-        return false;
-    }
-    return { phone, email };
-}
-
-// --- UPDATED PLACE ORDER ---
-function placeOrder() {
-    if (Object.keys(cart).length === 0) return alert("Cart is empty");
-    
-    let contacts = validateCartContacts();
-    if (!contacts) return;
-
-    // --- GENERATE UNIQUE TIMESTAMP ORDER ID ---
-    let now = new Date();
-    let year = now.getFullYear().toString().slice(-2); // "26"
-    let month = (now.getMonth() + 1).toString().padStart(2, '0'); // "03"
-    let day = now.getDate().toString().padStart(2, '0'); // "19"
-    let hours = now.getHours().toString().padStart(2, '0'); // "11"
-    let mins = now.getMinutes().toString().padStart(2, '0'); // "25"
-    
-    // Result Format: SC2603191125
-    let orderID = `SC${year}${month}${day}${hours}${mins}`;
-
-    // Prepare Summary
-    let orderSummary = `Order ID: ${orderID}\nCustomer: ${contacts.email} (${contacts.phone})\n\nItems:\n`;
-    for (let key in cart) { 
-        orderSummary += `- ${key} x${cart[key]}\n`; 
-    }
-    
-    const templateParams = {
-        order_id: orderID,
-        customer_phone: contacts.phone,
-        customer_email: contacts.email,
-        order_details: orderSummary,
-        total_price: total.toLocaleString()
-    };
-
-    // Send via EmailJS
-    emailjs.send('service_grbq937', 'template_cqywzot', templateParams)
-    .then(() => {
-        window.whatsappMessage = `New Order ${orderID}:\n${orderSummary}\nTotal: KES ${total.toLocaleString()}`;
-        
-        // Update the popup message to show the Unique Order ID
-        document.getElementById("orderPopup").innerHTML = `
-            <p>Order <strong>${orderID}</strong> has been received via email.</p>
-            <p>Would you like to also send your order via WhatsApp?</p>
-            <button onclick="sendWhatsApp()">Yes</button>
-            <button onclick="closePopup()">No</button>
-        `;
-        document.getElementById("orderPopup").style.display = "block";
-    }, (err) => {
-        console.error("Order Error:", err);
-        // Fallback to mailto
-        window.location.href = `mailto:bluehawksinvestment@gmail.com?subject=Order ${orderID}&body=${encodeURIComponent(orderSummary)}`;
-    });
-}
-
-// --- UPDATED PROFORMA INVOICE ---
-function generatePDF() {
-    if (Object.keys(cart).length === 0) return alert("Cart is empty");
-    let contacts = validateCartContacts();
-    if (!contacts) return;
-
-    // --- GENERATE ORDER ID ---
-    let now = new Date();
-    let year = now.getFullYear().toString().slice(-2);
-    let month = (now.getMonth() + 1).toString().padStart(2, '0');
-    let day = now.getDate().toString().padStart(2, '0');
-    let hours = now.getHours().toString().padStart(2, '0');
-    let mins = now.getMinutes().toString().padStart(2, '0');
-    let orderID = `SC${year}${month}${day}${hours}${mins}`;
-
-    const { jsPDF } = window.jspdf;
-    let doc = new jsPDF();
-    let y = 20;
-
-    // --- HEADER ---
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.setTextColor(10, 46, 109);
-    doc.text("PROFORMA INVOICE", 20, y);
-    
-    // NEW: Order Number above Date of Issue
-    y += 15;
-    doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Order Number: ${orderID}`, 20, y); 
-    
-    y += 7;
-    const today = new Date().toLocaleDateString('en-GB');
-    doc.text(`Date of Issue: ${today}`, 20, y);
-
-    // --- HEADER & COMPANY INFO (Top Right) ---
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.setTextColor(10, 46, 109); // BlueHawks Navy Blue
-    doc.text("PROFORMA INVOICE", 20, y);
-    
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(0, 0, 0); // Black
-    doc.text("BlueHawks Stationers", 140, y);
-    doc.text("bluehawksinvestment@gmail.com", 140, y + 5);
-    doc.text("Phone: +254 790 333 932", 140, y + 10);
-    
-    // --- DATE & BILLING ADDRESS (Top Left) ---
-    y += 25;
-    const today = new Date().toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
-    doc.setFont("helvetica", "bold");
-    doc.text(`Date of Issue: ${today}`, 20, y);
-    
-    y += 10;
-    doc.text("BILL TO:", 20, y);
-    doc.setFont("helvetica", "normal");
-    doc.text(`Email: ${contacts.email}`, 20, y + 5);
-    doc.text(`Phone: ${contacts.phone}`, 20, y + 10);
-
-    // --- MAIN TABLE HEADERS ---
-    y += 25;
-    doc.setDrawColor(10, 46, 109); // Navy Blue line color
-    doc.setLineWidth(1); // Thick line
-    doc.line(20, y, 190, y); // Top border of table
-    
-    y += 7;
-    doc.setFont("helvetica", "bold");
-    doc.text("Item Description", 22, y);
-    doc.text("Qty", 110, y);
-    doc.text("Cost/Pc", 135, y);
-    doc.text("Total (KES)", 165, y);
-    
-    y += 3;
-    doc.line(20, y, 190, y); // Bottom border of header
-    y += 10;
-
-    // --- ITEMS LOOP WITH BLUE LINES ---
-    doc.setFont("helvetica", "normal");
-    doc.setLineWidth(0.5); // Slightly thinner for rows
-    
-    for (let key in cart) {
-        let qty = cart[key];
-        let priceData = null;
-        let unitPrice = 100;
 
         if (key.includes("A5")) {
             if (key.includes("80")) priceData = pricing.a5[80];
@@ -762,56 +339,146 @@ function generatePDF() {
         } else if (key.includes("A4")) {
             if (key.includes("120")) priceData = pricing.a4[120];
             else if (key.includes("200")) priceData = pricing.a4[200];
-        } else if (key === "Diary") { priceData = pricing.diary; }
-        else if (key === "Assessment") { priceData = pricing.assessment; }
+        } else if (key === "Diary") priceData = pricing.diary;
+        else if (key === "Assessment") priceData = pricing.assessment;
 
-        if (priceData) unitPrice = qty >= priceData.moq ? priceData.offer : priceData.normal;
-        let itemTotal = unitPrice * qty;
+        if (priceData) priceToUse = qty >= priceData.moq ? priceData.offer : priceData.normal;
+        let itemTotal = priceToUse * qty;
+        total += itemTotal;
 
-        doc.text(key, 22, y, { maxWidth: 85 });
-        doc.text(qty.toString(), 110, y);
-        doc.text(unitPrice.toLocaleString(), 135, y);
-        doc.text(itemTotal.toLocaleString(), 165, y);
-        
-        y += 5;
-        doc.setDrawColor(10, 46, 109);
-        doc.line(20, y, 190, y); // Row Line
+        let li = document.createElement("li");
+        li.innerHTML = `${key} x ${qty} = KES ${itemTotal} <button class="remove-btn" onclick="removeItem('${key}')">X</button>`;
+        list.appendChild(li);
+    }
+    document.getElementById("cartCount").textContent = entryCount;
+    document.getElementById("total").textContent = total.toLocaleString();
+    document.getElementById("emptyCartMessage").style.display = total === 0 ? "block" : "none";
+    document.getElementById("cartContent").style.display = total === 0 ? "none" : "block";
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function removeItem(key){ delete cart[key]; updateCart(); }
+
+function validateCartContacts() {
+    let phone = document.getElementById("cartPhone").value.trim();
+    let email = document.getElementById("cartEmail").value.trim();
+    if (phone.length !== 10 || !email.includes("@")) {
+        alert("Valid 10-digit phone and email required");
+        return false;
+    }
+    return { phone, email };
+}
+
+// --- CORE LOGIC UPDATE ---
+
+function getNewOrderID() {
+    let now = new Date();
+    let year = now.getFullYear().toString().slice(-2);
+    let month = (now.getMonth() + 1).toString().padStart(2, '0');
+    let day = now.getDate().toString().padStart(2, '0');
+    let hrs = now.getHours().toString().padStart(2, '0');
+    let mins = now.getMinutes().toString().padStart(2, '0');
+    return `SC${year}${month}${day}${hrs}${mins}`;
+}
+
+function generatePDF() {
+    if (Object.keys(cart).length === 0) return alert("Cart is empty");
+    let contacts = validateCartContacts();
+    if (!contacts) return null;
+
+    let orderID = getNewOrderID();
+    const { jsPDF } = window.jspdf;
+    let doc = new jsPDF();
+    let y = 20;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.setTextColor(10, 46, 109);
+    doc.text("PROFORMA INVOICE", 20, y);
+    
+    // Position Update: Order Number above Date of Issue
+    y += 15;
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Order Number: ${orderID}`, 20, y);
+    
+    y += 7;
+    doc.text(`Date of Issue: ${new Date().toLocaleDateString('en-GB')}`, 20, y);
+
+    // Business Info
+    doc.text("BlueHawks Stationers", 140, 35);
+    doc.setFontSize(9);
+    doc.text("bluehawksinvestment@gmail.com", 140, 40);
+
+    y += 20;
+    doc.text("BILL TO:", 20, y);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Email: ${contacts.email}`, 20, y+5);
+    doc.text(`Phone: ${contacts.phone}`, 20, y+10);
+
+    y += 25;
+    doc.line(20, y, 190, y);
+    y += 7;
+    doc.text("Item", 22, y); doc.text("Qty", 110, y); doc.text("Total", 165, y);
+    y += 3; doc.line(20, y, 190, y); y += 10;
+
+    for (let key in cart) {
+        doc.text(key, 22, y);
+        doc.text(cart[key].toString(), 110, y);
         y += 10;
     }
-
-    // --- GRAND TOTAL ---
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.text(`GRAND TOTAL: KES ${total.toLocaleString()}`, 130, y);
+    doc.text(`TOTAL: KES ${total.toLocaleString()}`, 140, y + 10);
 
-    // --- SIGNATURE SECTION (3cm below Total) ---
-    let signatureY = y + 30; 
-    doc.setFontSize(10);
-    doc.text("Prepared by:", 140, signatureY);
-    doc.setFont("helvetica", "normal");
-    doc.text("Nicholas Ndegwa", 140, signatureY + 7);
-    doc.setFont("times", "italic");
-    doc.setFontSize(15);
-    doc.text("Nicholas", 140, signatureY + 16);
-    doc.setLineWidth(0.2);
-    doc.line(140, signatureY + 18, 175, signatureY + 18);
+    doc.save(`Proforma_${orderID}.pdf`);
+    return orderID;
+}
 
-    // --- FOOTER SECTION ---
-    doc.setDrawColor(10, 46, 109);
-    doc.setLineWidth(1.5);
-    doc.line(20, 275, 190, 275); // Thick Blue Line above footer
+function placeOrder() {
+    if (Object.keys(cart).length === 0) return;
+    let contacts = validateCartContacts();
+    if (!contacts) return;
 
-    doc.setFont("helvetica", "italic");
-    doc.setFontSize(8);
-    doc.setTextColor(100, 100, 100); // Grey color for disclaimer
-    doc.text("Disclaimer: This is not a tax invoice. The proforma invoice is valid for 30 days upon the date of issuance.", 105, 282, { align: "center" });
+    let orderID = generatePDF(); 
+    if(!orderID) return;
 
-    doc.save(`Proforma_BlueHawks_${contacts.phone}.pdf`);
+    let orderSummary = `Order ID: ${orderID}\nItems:\n`;
+    for (let key in cart) { orderSummary += `- ${key} x${cart[key]}\n`; }
+    
+    const params = {
+        order_id: orderID,
+        customer_phone: contacts.phone,
+        customer_email: contacts.email,
+        order_details: orderSummary,
+        total_price: total.toLocaleString()
+    };
+
+    emailjs.send('service_grbq937', 'template_cqywzot', params)
+    .then(() => {
+        window.whatsappMessage = `Order ${orderID}:\n${orderSummary}\nTotal: KES ${total.toLocaleString()}`;
+        document.getElementById("orderPopup").innerHTML = `
+            <p>Order <strong>${orderID}</strong> received!</p>
+            <p>Your proforma has been downloaded. Send via WhatsApp for faster processing?</p>
+            <button onclick="sendWhatsApp()">Yes, WhatsApp Us</button>
+            <button onclick="showFinalSuccess()">No</button>
+        `;
+        document.getElementById("orderPopup").style.display = "block";
+    });
+}
+
+function showFinalSuccess() {
+    document.getElementById("orderPopup").innerHTML = `
+        <div style="padding:10px;">
+            <p style="color:#ffc600; font-weight:bold;">Order Placed Successfully!</p>
+            <p>The details have been shared to your email.</p>
+            <p>Note that we will contact you shortly to confirm your artwork and order.</p>
+            <button onclick="closePopup()">Close</button>
+        </div>
+    `;
 }
 
 function sendWhatsApp(){
-  let phoneNumber = "254790333932";
-  window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(window.whatsappMessage)}`, "_blank");
+  window.open(`https://wa.me/254790333932?text=${encodeURIComponent(window.whatsappMessage)}`, "_blank");
   closePopup();
 }
 
@@ -822,10 +489,9 @@ function closePopup(){
   updateCart();
 }
 
-// --- INIT ---
 window.onload = function(){
-  let savedCart = localStorage.getItem("cart");
-  if(savedCart){ cart = JSON.parse(savedCart); updateCart(); }
+  let saved = localStorage.getItem("cart");
+  if(saved){ cart = JSON.parse(saved); updateCart(); }
 };
 </script>
 </body>
