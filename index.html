@@ -204,7 +204,9 @@ nav img.title-img {
     <a onclick="show('home')">Home</a>
     <a onclick="show('about')">About Us</a>
     <a onclick="show('productsPage')">Our Products</a>
-    <a onclick="show('cart')">My Cart</a>
+<a onclick="show('cart')">
+  My Cart <span id="cartCount" style="background: #ffc600; color: #0a2e6d; padding: 2px 6px; border-radius: 50%; font-size: 0.8em; margin-left: 5px; font-weight: bold;">0</span>
+</a>
     <a onclick="show('contact')">Contact Us</a>
   </div>
 </nav>
@@ -551,7 +553,37 @@ function updateCart() {
     }
     localStorage.setItem("cart", JSON.stringify(cart));
 }
+function updateCart() {
+    let list = document.getElementById("cartList");
+    let emptyMsg = document.getElementById("emptyCartMessage");
+    let cartContent = document.getElementById("cartContent");
+    let cartCountElement = document.getElementById("cartCount"); // Get the counter element
+    
+    list.innerHTML = "";
+    total = 0;
+    let itemCount = 0; // Initialize item counter
 
+    for (let key in cart) {
+        let qty = cart[key];
+        itemCount += qty; // Add the quantity of this item to the total count
+        
+        // ... (keep all your existing pricing logic here) ...
+        
+        // (existing code to build the list item)
+        let li = document.createElement("li");
+        // ... rest of your item building code ...
+        list.appendChild(li);
+    }
+
+    // Update the counter on the navigation bar
+    if (cartCountElement) {
+        cartCountElement.textContent = itemCount;
+    }
+
+    // ... (rest of your existing total and visibility logic) ...
+    document.getElementById("total").textContent = total;
+    // ...
+}
 function removeItem(key){ delete cart[key]; updateCart(); }
 
 // --- AUTOMATED EMAILS ---
