@@ -622,39 +622,87 @@ function placeOrder() {
     if (Object.keys(cart).length === 0) return alert("Cart is empty");
     
     let contacts = validateCartContacts();
-    if (!contacts) return; // Stop if validation fails
+    if (!contacts) return;
 
-    let orderSummary = `Customer: ${contacts.email} (${contacts.phone})\n\nItems:\n`;
+    // --- GENERATE UNIQUE TIMESTAMP ORDER ID ---
+    let now = new Date();
+    let year = now.getFullYear().toString().slice(-2); // "26"
+    let month = (now.getMonth() + 1).toString().padStart(2, '0'); // "03"
+    let day = now.getDate().toString().padStart(2, '0'); // "19"
+    let hours = now.getHours().toString().padStart(2, '0'); // "11"
+    let mins = now.getMinutes().toString().padStart(2, '0'); // "25"
+    
+    // Result Format: SC2603191125
+    let orderID = `SC${year}${month}${day}${hours}${mins}`;
+
+    // Prepare Summary
+    let orderSummary = `Order ID: ${orderID}\nCustomer: ${contacts.email} (${contacts.phone})\n\nItems:\n`;
     for (let key in cart) { 
         orderSummary += `- ${key} x${cart[key]}\n`; 
     }
     
     const templateParams = {
+        order_id: orderID,
         customer_phone: contacts.phone,
         customer_email: contacts.email,
         order_details: orderSummary,
         total_price: total.toLocaleString()
     };
 
+    // Send via EmailJS
     emailjs.send('service_grbq937', 'template_cqywzot', templateParams)
     .then(() => {
-        window.whatsappMessage = `New Order:\n${orderSummary}\nTotal: KES ${total.toLocaleString()}`;
+        window.whatsappMessage = `New Order ${orderID}:\n${orderSummary}\nTotal: KES ${total.toLocaleString()}`;
+        
+        // Update the popup message to show the Unique Order ID
+        document.getElementById("orderPopup").innerHTML = `
+            <p>Order <strong>${orderID}</strong> has been received via email.</p>
+            <p>Would you like to also send your order via WhatsApp?</p>
+            <button onclick="sendWhatsApp()">Yes</button>
+            <button onclick="closePopup()">No</button>
+        `;
         document.getElementById("orderPopup").style.display = "block";
     }, (err) => {
-        window.location.href = `mailto:bluehawksinvestment@gmail.com?subject=New Order&body=${encodeURIComponent(orderSummary)}`;
+        console.error("Order Error:", err);
+        // Fallback to mailto
+        window.location.href = `mailto:bluehawksinvestment@gmail.com?subject=Order ${orderID}&body=${encodeURIComponent(orderSummary)}`;
     });
 }
 
 // --- UPDATED PROFORMA INVOICE ---
 function generatePDF() {
     if (Object.keys(cart).length === 0) return alert("Cart is empty");
-    
     let contacts = validateCartContacts();
     if (!contacts) return;
+
+    // --- GENERATE ORDER ID ---
+    let now = new Date();
+    let year = now.getFullYear().toString().slice(-2);
+    let month = (now.getMonth() + 1).toString().padStart(2, '0');
+    let day = now.getDate().toString().padStart(2, '0');
+    let hours = now.getHours().toString().padStart(2, '0');
+    let mins = now.getMinutes().toString().padStart(2, '0');
+    let orderID = `SC${year}${month}${day}${hours}${mins}`;
 
     const { jsPDF } = window.jspdf;
     let doc = new jsPDF();
     let y = 20;
+
+    // --- HEADER ---
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.setTextColor(10, 46, 109);
+    doc.text("PROFORMA INVOICE", 20, y);
+    
+    // NEW: Order Number above Date of Issue
+    y += 15;
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Order Number: ${orderID}`, 20, y); 
+    
+    y += 7;
+    const today = new Date().toLocaleDateString('en-GB');
+    doc.text(`Date of Issue: ${today}`, 20, y);
 
     // --- HEADER & COMPANY INFO (Top Right) ---
     doc.setFont("helvetica", "bold");
