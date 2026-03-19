@@ -363,18 +363,25 @@ function updatePrice(type) {
 }
 
 // Initializing the tiers on load
+// --- Combined Initialization ---
+  
 window.onload = function() {
+    // 1. Recover Cart Data
     let s = localStorage.getItem("cart");
-    if (s) { cart = JSON.parse(s); updateCart(); }
+    if (s) { 
+        cart = JSON.parse(s); 
+        updateCart(); 
+    }
     
-    // Initialize dropdowns for exercise books
+    // 2. Initialize dropdowns for exercise books
     syncTiers('a5');
     syncTiers('a4');
     
-    // Initialize totals for Diary and Assessment
+    // 3. Initialize totals for Diary and Assessment
     updatePrice('d');
     updatePrice('a');
 };
+  
 function addA5(){ 
     let qty=parseInt(document.getElementById("a5qty").value)||0; if(!qty) return alert("Enter quantity");
     let key = `A5 (${document.getElementById("a5pages").value} Pages - ${document.getElementById("a5type").value})`;
@@ -543,25 +550,6 @@ function sendQuote() {
   emailjs.send('service_grbq937', 'template_rfcn2bc', { school_name: s, customer_email: document.getElementById("email").value, customer_phone: document.getElementById("phone").value, message: document.getElementById("message").value })
   .then(() => alert("Quote request sent!"));
 }
-
-// This combined function handles both the cart recovery and the dropdown initialization
-window.onload = function() {
-    // 1. Recover Cart Data
-    let s = localStorage.getItem("cart");
-    if (s) { 
-        cart = JSON.parse(s); 
-        updateCart(); 
-    }
-    
-    // 2. Initialize dropdowns for exercise books
-    // This ensures they aren't blank when the page first loads
-    syncTiers('a5');
-    syncTiers('a4');
-    
-    // 3. Initialize totals for Diary and Assessment
-    updatePrice('d');
-    updatePrice('a');
-};
 </script>
 </body>
 </html>
