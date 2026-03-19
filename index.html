@@ -92,6 +92,21 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
     nav { padding: 10px; }
     nav img.title-img { width: 60px; height: 60px; }
 }
+#orderPopup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  z-index: 2000;
+  text-align: center;
+  border: 2px solid #0a2e6d;
+}
+  
   .image-gallery-container {
   position: relative;
   width: 100%;
@@ -484,29 +499,33 @@ function showFinalSuccess() {
     </div>
   `;
 }
-
-  function showImg(productId, originalPath, dotIndex) {
+  function validateCartContacts() {
+  let p = document.getElementById("cartPhone") ? document.getElementById("cartPhone").value.trim() : "";
+  let e = document.getElementById("cartEmail") ? document.getElementById("cartEmail").value.trim() : "";
+  if (p.length !== 10 || !e.includes("@")) { 
+    alert("Please enter a valid 10-digit phone number and email in the cart."); 
+    return false; 
+  }
+  return { phone: p, email: e };
+}
+ function showImg(productId, originalPath, dotIndex) {
   const imgElement = document.getElementById(`img-${productId}`);
-  let newSrc = originalPath;
+  if (!imgElement) return;
 
-  // If the second dot (index 1) is clicked, add 'b' suffix
+  // Logic to handle the 'b' suffix
+  let newSrc = originalPath;
   if (dotIndex === 1) {
+    // This turns "images/A5.png" into "images/A5b.png"
     newSrc = originalPath.replace(".png", "b.png");
   }
 
-  // Prevent redundant loading if already on this image
-  if (imgElement.src.includes(newSrc)) return;
-
-  // Animation: Fade out, swap, fade in
+  // Visual update
   imgElement.style.opacity = '0';
-
-  // Update dots UI
+  
   const dotsContainer = document.getElementById(`dots-${productId}`);
-  const allDots = dotsContainer.getElementsByClassName("dot");
-  for (let i = 0; i < allDots.length; i++) {
-    allDots[i].classList.remove("active");
-  }
-  allDots[dotIndex].classList.add("active");
+  const dots = dotsContainer.querySelectorAll('.dot');
+  dots.forEach(d => d.classList.remove('active'));
+  dots[dotIndex].classList.add('active');
 
   setTimeout(() => {
     imgElement.src = newSrc;
