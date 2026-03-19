@@ -280,17 +280,16 @@ window.whatsappMessage = "";
 
 const pricing = {
   a5: {
-    80: { normal: 50, offer: 45, moq: 350 },
-    120: { normal: 65, offer: 60, moq: 250 },
-    200: { normal: 80, offer: 75, moq: 150 }
+    80: { normal: 50, offer: 45, moq: 500, normalMoq: 350 },
+    120: { normal: 65, offer: 60, moq: 435, normalMoq: 250 },
+    200: { normal: 80, offer: 75, moq: 200, normalMoq: 150 }
   },
   a4: {
-    120: { normal: 100, offer: 95, moq: 240 },
-    200: { normal: 130, offer: 125, moq: 144 }
+    120: { normal: 100, offer: 95, moq: 360, normalMoq: 240 },
+    200: { normal: 130, offer: 125, moq: 216, normalMoq: 144 }
   },
-  // Assessment now mirrors Diary pricing [cite: 7]
-  diary: { normal: 100, offer: 90, moq: 100 },
-  assessment: { normal: 100, offer: 90, moq: 100 }
+  diary: { normal: 100, offer: 90, moq: 200, normalMoq: 100 },
+  assessment: { normal: 100, offer: 90, moq: 200, normalMoq: 100 }
 };
 
 function show(id){ 
@@ -310,63 +309,72 @@ function syncTiers(id) {
     const tierSelect = document.getElementById(id + 'tier');
     const data = pricing[id][pages];
     
+    // This populates the dropdown dynamically based on the selected pages
     tierSelect.innerHTML = `
-      <option value="normal">Normal Tier (Min ${data.normal === 50 ? 350 : data.normal === 65 ? 250 : 150})</option>
+      <option value="normal">Normal Tier (Min ${data.normalMoq})</option>
       <option value="offer">Offer Tier (Min ${data.moq})</option>
     `;
     updatePrice(id);
 }
 
 function updatePrice(type) {
-    let qty = 0, dataSet, tierSelect, warning;
+    let qty = 0, dataSet, tierSelect, warning, totalSpan;
 
-    // Route data based on type
     if (type === "a5" || type === "a4") {
         const pages = document.getElementById(type + "pages").value;
         qty = parseInt(document.getElementById(type + "qty").value) || 0;
         tierSelect = document.getElementById(type + "tier");
         dataSet = pricing[type][pages];
         warning = document.getElementById(type + "warning");
+        totalSpan = document.getElementById(type + "total");
     } else {
         qty = parseInt(document.getElementById(type + "qty").value) || 0;
-        tierSelect = document.getElementById(type + "tier");
+        tierSelect = document.getElementById(type === "d" ? "dtier" : "atier");
         dataSet = type === "d" ? pricing.diary : pricing.assessment;
-        warning = document.getElementById(type + "warning");
+        warning = document.getElementById(type === "d" ? "dwarning" : "awarning");
+        totalSpan = document.getElementById(type + "total");
     }
 
     let currentTier = tierSelect.value;
 
-    // AUTO-CORRECTION: If qty qualifies for Offer, switch the dropdown automatically
+    // --- AUTO-CORRECTION LOGIC ---
     if (qty >= dataSet.moq && currentTier === "normal") {
         tierSelect.value = "offer";
         currentTier = "offer";
+        
+        // Visual Highlight: Flash green when auto-corrected to discount
+        totalSpan.parentElement.style.transition = "background 0.3s";
+        totalSpan.parentElement.style.background = "#d4edda"; 
+        setTimeout(() => { totalSpan.parentElement.style.background = "transparent"; }, 1000);
     }
 
     const priceToUse = currentTier === "offer" ? dataSet.offer : dataSet.normal;
+    const minRequired = currentTier === "offer" ? dataSet.moq : dataSet.normalMoq;
 
-    // SMART MOQ ENFORCEMENT: Show warning if below tier minimum
-    // Note: Normal tiers have specific MOQs based on the PDF 
-    const minRequired = currentTier === "offer" ? dataSet.moq : 0; 
-    
+    // --- SMART MOQ ENFORCEMENT ---
     if (qty > 0 && qty < minRequired) {
-        warning.innerText = `Min order for Offer price is ${dataSet.moq}`;
+        warning.innerText = `Minimum order for this tier is ${minRequired} units.`;
         warning.style.display = "block";
     } else {
         warning.style.display = "none";
     }
 
-    document.getElementById(type + "total").textContent = (qty * priceToUse).toLocaleString();
+    totalSpan.textContent = (qty * priceToUse).toLocaleString();
 }
 
 // Initializing the tiers on load
 window.onload = function() {
     let s = localStorage.getItem("cart");
     if (s) { cart = JSON.parse(s); updateCart(); }
+    
+    // Initialize dropdowns for exercise books
     syncTiers('a5');
     syncTiers('a4');
+    
+    // Initialize totals for Diary and Assessment
+    updatePrice('d');
+    updatePrice('a');
 };
-
-
 function addA5(){ 
     let qty=parseInt(document.getElementById("a5qty").value)||0; if(!qty) return alert("Enter quantity");
     let key = `A5 (${document.getElementById("a5pages").value} Pages - ${document.getElementById("a5type").value})`;
