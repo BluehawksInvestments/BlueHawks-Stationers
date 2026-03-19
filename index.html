@@ -650,36 +650,57 @@ function generatePDF() {
     let doc = new jsPDF();
     let y = 20;
 
-    // --- HEADER & COMPANY INFO ---
+    // --- HEADER & COMPANY INFO (Top Right) ---
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
+    doc.setTextColor(10, 46, 109); // BlueHawks Navy Blue
     doc.text("PROFORMA INVOICE", 20, y);
     
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
+    doc.setTextColor(0, 0, 0); // Black
     doc.text("BlueHawks Stationers", 140, y);
     doc.text("bluehawksinvestment@gmail.com", 140, y + 5);
     doc.text("Phone: +254 790 333 932", 140, y + 10);
     
-    // --- MAIN TABLE ---
-    y += 40;
+    // --- DATE & BILLING ADDRESS (Top Left) ---
+    y += 25;
+    const today = new Date().toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
     doc.setFont("helvetica", "bold");
-    doc.text("Item Description", 20, y);
+    doc.text(`Date of Issue: ${today}`, 20, y);
+    
+    y += 10;
+    doc.text("BILL TO:", 20, y);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Email: ${contacts.email}`, 20, y + 5);
+    doc.text(`Phone: ${contacts.phone}`, 20, y + 10);
+
+    // --- MAIN TABLE HEADERS ---
+    y += 25;
+    doc.setDrawColor(10, 46, 109); // Navy Blue line color
+    doc.setLineWidth(1); // Thick line
+    doc.line(20, y, 190, y); // Top border of table
+    
+    y += 7;
+    doc.setFont("helvetica", "bold");
+    doc.text("Item Description", 22, y);
     doc.text("Qty", 110, y);
     doc.text("Cost/Pc", 135, y);
     doc.text("Total (KES)", 165, y);
     
-    y += 5;
-    doc.line(20, y, 190, y);
+    y += 3;
+    doc.line(20, y, 190, y); // Bottom border of header
     y += 10;
 
+    // --- ITEMS LOOP WITH BLUE LINES ---
     doc.setFont("helvetica", "normal");
+    doc.setLineWidth(0.5); // Slightly thinner for rows
+    
     for (let key in cart) {
         let qty = cart[key];
         let priceData = null;
         let unitPrice = 100;
 
-        // Logic for pricing remains the same
         if (key.includes("A5")) {
             if (key.includes("80")) priceData = pricing.a5[80];
             else if (key.includes("120")) priceData = pricing.a5[120];
@@ -693,35 +714,43 @@ function generatePDF() {
         if (priceData) unitPrice = qty >= priceData.moq ? priceData.offer : priceData.normal;
         let itemTotal = unitPrice * qty;
 
-        doc.text(key, 20, y, { maxWidth: 85 });
+        doc.text(key, 22, y, { maxWidth: 85 });
         doc.text(qty.toString(), 110, y);
         doc.text(unitPrice.toLocaleString(), 135, y);
         doc.text(itemTotal.toLocaleString(), 165, y);
+        
+        y += 5;
+        doc.setDrawColor(10, 46, 109);
+        doc.line(20, y, 190, y); // Row Line
         y += 10;
     }
 
     // --- GRAND TOTAL ---
     doc.setFont("helvetica", "bold");
-    doc.text(`GRAND TOTAL: KES ${total.toLocaleString()}`, 135, y + 10);
+    doc.setFontSize(12);
+    doc.text(`GRAND TOTAL: KES ${total.toLocaleString()}`, 130, y);
 
-    // --- SIGNATURE SECTION (3cm / 30mm below Grand Total) ---
-    let signatureY = y + 40; 
-
+    // --- SIGNATURE SECTION (3cm below Total) ---
+    let signatureY = y + 30; 
     doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
     doc.text("Prepared by:", 140, signatureY);
-    
     doc.setFont("helvetica", "normal");
     doc.text("Nicholas Ndegwa", 140, signatureY + 7);
-    
-    // Artistic Signature
     doc.setFont("times", "italic");
     doc.setFontSize(15);
     doc.text("Nicholas", 140, signatureY + 16);
-    
-    // Signature underline
     doc.setLineWidth(0.2);
     doc.line(140, signatureY + 18, 175, signatureY + 18);
+
+    // --- FOOTER SECTION ---
+    doc.setDrawColor(10, 46, 109);
+    doc.setLineWidth(1.5);
+    doc.line(20, 275, 190, 275); // Thick Blue Line above footer
+
+    doc.setFont("helvetica", "italic");
+    doc.setFontSize(8);
+    doc.setTextColor(100, 100, 100); // Grey color for disclaimer
+    doc.text("Disclaimer: This is not a tax invoice. The proforma invoice is valid for 30 days upon the date of issuance.", 105, 282, { align: "center" });
 
     doc.save(`Proforma_BlueHawks_${contacts.phone}.pdf`);
 }
