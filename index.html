@@ -34,7 +34,21 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   font-size: 1em;
 }
-
+  /* Add this to your existing <style> block */
+.moq-warning { 
+  color: #ff4c4c; 
+  font-size: 0.85em; 
+  display: none; 
+  margin: 5px 0; 
+  font-weight: bold;
+}
+.price-display { 
+  background: #eef4ff; 
+  padding: 8px; 
+  border-radius: 8px; 
+  margin: 10px 0; 
+  font-weight: bold; 
+}
 body { margin:0; font-family: Arial, sans-serif; color:#0a2e6d; background: linear-gradient(to bottom, #f0f4ff, #ffffff);}
 nav { background:#0a2e6d; padding:15px 30px; display:flex; justify-content:space-between; align-items:center;}
 nav a { color:#ffc600; margin:0 12px; cursor:pointer; text-decoration:none; font-weight:500;}
@@ -136,56 +150,61 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
   </div>
 
   <h2>Order Products</h2>
-  <div class="grid">
-    <div class="card" id="a5">
-      <h3>A5 Exercise Books</h3>
-      <img src="images/A5 Exercise book.png" class="product-img">
-      <p id="a5price">Normal: 50 (Offer: 45) MOQ: 350</p>
-      <p class="price-note">Select pages to see prices</p>
-      <select id="a5pages" onchange="updatePrice('a5')">
-        <option value="80">80 Pages</option>
-        <option value="120">120 Pages</option>
-        <option value="200">200 Pages</option>
-      </select>
-      <select id="a5type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
-      <input type="number" id="a5qty" placeholder="Quantity" oninput="updatePrice('a5')">
-      <p>Total Amount: KES <span id="a5total">0</span></p>
-      <button onclick="addA5()">Add to Cart</button>
-    </div>
+  <div class="card" id="a5">
+  <h3>A5 Exercise Books</h3>
+  <img src="images/A5 Exercise book.png" class="product-img">
+  <select id="a5pages" onchange="syncTiers('a5')">
+    <option value="80">80 Pages</option>
+    <option value="120">120 Pages</option>
+    <option value="200">200 Pages</option>
+  </select>
+  <select id="a5tier" onchange="updatePrice('a5')"></select>
+  <select id="a5type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
+  <input type="number" id="a5qty" placeholder="Quantity" oninput="updatePrice('a5')">
+  <div id="a5warning" class="moq-warning" style="color:red; font-size:0.8em; display:none;"></div>
+  <p>Total: KES <span id="a5total">0</span></p>
+  <button onclick="addA5()">Add to Cart</button>
+</div>
 
-    <div class="card" id="a4">
-      <h3>A4 Exercise Books</h3>
-      <img src="images/A4 Exercise book.png" class="product-img">
-      <p id="a4price">Normal: 100 (Offer: 95) MOQ: 240</p>
-      <p class="price-note">Select pages to see prices</p>
-      <select id="a4pages" onchange="updatePrice('a4')">
-        <option value="120">120 Pages</option>
-        <option value="200">200 Pages</option>
-      </select>
-      <select id="a4type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
-      <input type="number" id="a4qty" placeholder="Quantity" oninput="updatePrice('a4')">
-      <p>Total Amount: KES <span id="a4total">0</span></p>
-      <button onclick="addA4()">Add to Cart</button>
-    </div>
+<div class="card" id="a4">
+  <h3>A4 Exercise Books</h3>
+  <img src="images/A4 Exercise book.png" class="product-img">
+  <select id="a4pages" onchange="syncTiers('a4')">
+    <option value="120">120 Pages</option>
+    <option value="200">200 Pages</option>
+  </select>
+  <select id="a4tier" onchange="updatePrice('a4')"></select>
+  <select id="a4type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
+  <input type="number" id="a4qty" placeholder="Quantity" oninput="updatePrice('a4')">
+  <div id="a4warning" class="moq-warning" style="color:red; font-size:0.8em; display:none;"></div>
+  <p>Total: KES <span id="a4total">0</span></p>
+  <button onclick="addA4()">Add to Cart</button>
+</div>
 
-    <div class="card" id="diary">
-      <h3>School Diaries</h3>
-      <img src="images/School Diary.png" class="product-img">
-      <p>Normal: 100 (Offer: 90) MOQ: 100</p>
-      <input type="number" id="dqty" placeholder="Quantity" oninput="updatePrice('d')">
-      <p>Total Amount: KES <span id="dtotal">0</span></p>
-      <button onclick="addItem('Diary','d')">Add to Cart</button>
-    </div>
+<div class="card" id="diary">
+  <h3>School Diaries</h3>
+  <img src="images/School Diary.png" class="product-img">
+  <select id="dtier" onchange="updatePrice('d')">
+    <option value="normal">Normal Tier (Min 100)</option>
+    <option value="offer">Offer Tier (Min 200)</option>
+  </select>
+  <input type="number" id="dqty" placeholder="Quantity" oninput="updatePrice('d')">
+  <div id="dwarning" class="moq-warning" style="color:red; font-size:0.8em; display:none;"></div>
+  <p>Total: KES <span id="dtotal">0</span></p>
+  <button onclick="addItem('Diary','d')">Add to Cart</button>
+</div>
 
-    <div class="card" id="assessment">
-      <h3>Assessment Books</h3>
-      <img src="images/Assesment book.png" class="product-img">
-      <p>Normal: 100 (Offer: 90) MOQ: 100</p>
-      <input type="number" id="aqty" placeholder="Quantity" oninput="updatePrice('a')">
-      <p>Total Amount: KES <span id="atotal">0</span></p>
-      <button onclick="addItem('Assessment','a')">Add to Cart</button>
-    </div>
-  </div>
+<div class="card" id="assessment">
+  <h3>Assessment Books</h3>
+  <img src="images/Assesment book.png" class="product-img">
+  <select id="atier" onchange="updatePrice('a')">
+    <option value="normal">Normal Tier (Min 100)</option>
+    <option value="offer">Offer Tier (Min 200)</option>
+  </select>
+  <input type="number" id="aqty" placeholder="Quantity" oninput="updatePrice('a')">
+  <div id="awarning" class="moq-warning" style="color:red; font-size:0.8em; display:none;"></div>
+  <p>Total: KES <span id="atotal">0</span></p>
+  <button onclick="addItem('Assessment','a')">Add to Cart</button>
 </div>
 
 <div id="about" class="section">
@@ -260,10 +279,18 @@ let total = 0;
 window.whatsappMessage = "";
 
 const pricing = {
-  a5:{80:{normal:50,offer:45,moq:350},120:{normal:65,offer:60,moq:250},200:{normal:80,offer:75,moq:150}},
-  a4:{120:{normal:100,offer:95,moq:240},200:{normal:130,offer:125,moq:144}},
-  diary:{normal:100,offer:90,moq:100},
-  assessment:{normal:100,offer:90,moq:100}
+  a5: {
+    80: { normal: 50, offer: 45, moq: 350 },
+    120: { normal: 65, offer: 60, moq: 250 },
+    200: { normal: 80, offer: 75, moq: 150 }
+  },
+  a4: {
+    120: { normal: 100, offer: 95, moq: 240 },
+    200: { normal: 130, offer: 125, moq: 144 }
+  },
+  // Assessment now mirrors Diary pricing [cite: 7]
+  diary: { normal: 100, offer: 90, moq: 100 },
+  assessment: { normal: 100, offer: 90, moq: 100 }
 };
 
 function show(id){ 
@@ -278,21 +305,67 @@ function goToProduct(id) {
         if(element) element.scrollIntoView({behavior: "smooth"});
     }, 100);
 }
-
-function updatePrice(type){
-  let qty=0, priceData, priceToUse;
-  if(type==="a5"){ qty=parseInt(document.getElementById("a5qty").value)||0; priceData=pricing.a5[document.getElementById("a5pages").value]; }
-  else if(type==="a4"){ qty=parseInt(document.getElementById("a4qty").value)||0; priceData=pricing.a4[document.getElementById("a4pages").value]; }
-  else if(type==="d"){ qty=parseInt(document.getElementById("dqty").value)||0; priceData=pricing.diary; }
-  else if(type==="a"){ qty=parseInt(document.getElementById("aqty").value)||0; priceData=pricing.assessment; }
-
-  priceToUse = qty >= priceData.moq ? priceData.offer : priceData.normal;
-
-  if(type==="a5") { document.getElementById("a5total").textContent = qty*priceToUse; document.getElementById("a5price").textContent = `Normal: ${priceData.normal} (Offer: ${priceData.offer}) MOQ: ${priceData.moq}`; }
-  if(type==="a4") { document.getElementById("a4total").textContent = qty*priceToUse; document.getElementById("a4price").textContent = `Normal: ${priceData.normal} (Offer: ${priceData.offer}) MOQ: ${priceData.moq}`; }
-  if(type==="d") document.getElementById("dtotal").textContent = qty*priceToUse;
-  if(type==="a") document.getElementById("atotal").textContent = qty*priceToUse;
+function syncTiers(id) {
+    const pages = document.getElementById(id + 'pages').value;
+    const tierSelect = document.getElementById(id + 'tier');
+    const data = pricing[id][pages];
+    
+    tierSelect.innerHTML = `
+      <option value="normal">Normal Tier (Min ${data.normal === 50 ? 350 : data.normal === 65 ? 250 : 150})</option>
+      <option value="offer">Offer Tier (Min ${data.moq})</option>
+    `;
+    updatePrice(id);
 }
+
+function updatePrice(type) {
+    let qty = 0, dataSet, tierSelect, warning;
+
+    // Route data based on type
+    if (type === "a5" || type === "a4") {
+        const pages = document.getElementById(type + "pages").value;
+        qty = parseInt(document.getElementById(type + "qty").value) || 0;
+        tierSelect = document.getElementById(type + "tier");
+        dataSet = pricing[type][pages];
+        warning = document.getElementById(type + "warning");
+    } else {
+        qty = parseInt(document.getElementById(type + "qty").value) || 0;
+        tierSelect = document.getElementById(type + "tier");
+        dataSet = type === "d" ? pricing.diary : pricing.assessment;
+        warning = document.getElementById(type + "warning");
+    }
+
+    let currentTier = tierSelect.value;
+
+    // AUTO-CORRECTION: If qty qualifies for Offer, switch the dropdown automatically
+    if (qty >= dataSet.moq && currentTier === "normal") {
+        tierSelect.value = "offer";
+        currentTier = "offer";
+    }
+
+    const priceToUse = currentTier === "offer" ? dataSet.offer : dataSet.normal;
+
+    // SMART MOQ ENFORCEMENT: Show warning if below tier minimum
+    // Note: Normal tiers have specific MOQs based on the PDF 
+    const minRequired = currentTier === "offer" ? dataSet.moq : 0; 
+    
+    if (qty > 0 && qty < minRequired) {
+        warning.innerText = `Min order for Offer price is ${dataSet.moq}`;
+        warning.style.display = "block";
+    } else {
+        warning.style.display = "none";
+    }
+
+    document.getElementById(type + "total").textContent = (qty * priceToUse).toLocaleString();
+}
+
+// Initializing the tiers on load
+window.onload = function() {
+    let s = localStorage.getItem("cart");
+    if (s) { cart = JSON.parse(s); updateCart(); }
+    syncTiers('a5');
+    syncTiers('a4');
+};
+
 
 function addA5(){ 
     let qty=parseInt(document.getElementById("a5qty").value)||0; if(!qty) return alert("Enter quantity");
