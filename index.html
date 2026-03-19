@@ -1,39 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="BlueHawks">
-  <meta name="theme-color" content="#002147">
-  <link rel="apple-touch-icon" href="Logo.png">
-  <title>BlueHawks Stationers</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BlueHawks">
+  <meta name="theme-color" content="#002147">
+  <link rel="apple-touch-icon" href="Logo.png">
+  <title>BlueHawks Stationers</title>
 
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <script type="text/javascript">
-    (function(){
-      emailjs.init("akSFncjRjnQQHb9iK"); 
-    })();
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <link rel="icon" type="image/png" href="Logo.png">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function(){
+      emailjs.init("akSFncjRjnQQHb9iK"); 
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="icon" type="image/png" href="Logo.png">
 
 <style>
 /* 1. GLOBAL & POPUPS */
 #successPopup {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: green;
-  color: white;
-  padding: 15px 25px;
-  border-radius: 10px;
-  display: none;
-  z-index: 1000;
-  font-weight: bold;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  font-size: 1em;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: green;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 10px;
+  display: none;
+  z-index: 1000;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  font-size: 1em;
 }
 
 body { margin:0; font-family: Arial, sans-serif; color:#0a2e6d; background: linear-gradient(to bottom, #f0f4ff, #ffffff);}
@@ -42,16 +42,16 @@ nav a { color:#ffc600; margin:0 12px; cursor:pointer; text-decoration:none; font
 nav a:hover { color:#5ea8ff; transition:0.3s; }
 
 /* 2. HERO SECTION (Aligned Top-Left) */
-.hero { 
-  background: linear-gradient(135deg,#0a2e6d,#5ea8ff); 
-  color:white; 
-  padding: 40px 30px; 
-  border-bottom-left-radius:50px; 
-  border-bottom-right-radius:50px; 
-  display:flex; 
-  justify-content:space-between; 
-  align-items: flex-start; 
-  text-align: left; 
+.hero { 
+  background: linear-gradient(135deg,#0a2e6d,#5ea8ff); 
+  color:white; 
+  padding: 40px 30px; 
+  border-bottom-left-radius:50px; 
+  border-bottom-right-radius:50px; 
+  display:flex; 
+  justify-content:space-between; 
+  align-items: flex-start; 
+  text-align: left; 
 }
 .hero-text-container { display: flex; flex-direction: column; align-items: flex-start; }
 .hero h1 { font-size:3em; margin: 0; line-height: 1.1; }
@@ -83,64 +83,14 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
 
 /* 6. MOBILE RESPONSIVENESS (Keep this at the bottom) */
 @media (max-width: 480px) {
-    .hero { flex-direction: column; padding: 20px; }
-    .hero h1 { font-size: 2.2em; }
-    .hero .promo-statement { margin-top: 35px; }
-    .hero-img { margin-top: 30px; max-width: 100%; }
-    .grid { grid-template-columns: 1fr; }
-    .card { width: 90%; }
-    nav { padding: 10px; }
-    nav img.title-img { width: 60px; height: 60px; }
-}
-#orderPopup {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  z-index: 2000;
-  text-align: center;
-  border: 2px solid #0a2e6d;
-}
-  
-  .image-gallery-container {
-  position: relative;
-  width: 100%;
-  margin: 10px auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.gallery-dots {
-  position: absolute;
-  bottom: 10px;
-  display: flex;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.5);
-  padding: 5px 10px;
-  border-radius: 15px;
-}
-
-.dot {
-  width: 10px;
-  height: 10px;
-  background-color: #bbb; /* Grey */
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.dot.active {
-  background-color: #0a2e6d; /* BlueHawks Blue */
-}
-
-.product-img {
-  transition: opacity 0.3s ease-in-out;
+    .hero { flex-direction: column; padding: 20px; }
+    .hero h1 { font-size: 2.2em; }
+    .hero .promo-statement { margin-top: 35px; }
+    .hero-img { margin-top: 30px; max-width: 100%; }
+    .grid { grid-template-columns: 1fr; }
+    .card { width: 90%; }
+    nav { padding: 10px; }
+    nav img.title-img { width: 60px; height: 60px; }
 }
 </style>
 </head>
@@ -148,160 +98,149 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
 <body>
 
 <a href="https://wa.me/254790333932" target="_blank" class="whatsapp-float">
-  <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+  <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
 </a>
 
 <div id="orderPopup"></div>
 
 <nav>
-  <div style="display: flex; align-items: center;">
-    <img src="images/Bluehawk.png" class="title-img" alt="Blue Hawk Logo">
-  </div>
-  <div>
-    <a onclick="show('home')">Home</a>
-    <a onclick="show('about')">About Us</a>
-    <a onclick="show('productsPage')">Our Products</a>
-    <a onclick="show('cart')">My Cart <span id="cartCount" style="background: #ffc600; color: #0a2e6d; padding: 2px 6px; border-radius: 50%; font-size: 0.8em; margin-left: 5px; font-weight: bold;">0</span></a>
-    <a onclick="show('contact')">Contact Us</a>
-  </div>
+  <div style="display: flex; align-items: center;">
+    <img src="images/Bluehawk.png" class="title-img" alt="Blue Hawk Logo">
+  </div>
+  <div>
+    <a onclick="show('home')">Home</a>
+    <a onclick="show('about')">About Us</a>
+    <a onclick="show('productsPage')">Our Products</a>
+    <a onclick="show('cart')">My Cart <span id="cartCount" style="background: #ffc600; color: #0a2e6d; padding: 2px 6px; border-radius: 50%; font-size: 0.8em; margin-left: 5px; font-weight: bold;">0</span></a>
+    <a onclick="show('contact')">Contact Us</a>
+  </div>
 </nav>
 
 <div id="home" class="section active">
-  <div class="hero">
-      <div class="hero-text-container">
-         <h1>BlueHawks Stationers</h1>
-         <h2 class="subheading">Elevating Institutional Identity</h2>
-         
-         <p class="promo-statement">Customized exercise books!</p>
-      </div>
-      <img src="images/Exercise books.png" class="hero-img" alt="Exercise Books">
-  </div>
-  
-  <h2>Order Products</h2>
-  <div class="grid">
-  <div class="card" id="a5">
-    <h3>A5 Exercise Books</h3>
-    <div class="image-gallery-container">
-      <img src="images/A5 Exercise book.png" id="img-a5" class="product-img">
-      <div class="gallery-dots" id="dots-a5">
-        <div class="dot active" onclick="showImg('a5', 'images/A5 Exercise book.png', 0)"></div>
-        <div class="dot" onclick="showImg('a5', 'images/A5 Exercise book.png', 1)"></div>
-      </div>
-    </div>
-    <p id="a5price">Normal: 50 (Offer: 45) MOQ: 350</p>
-    <p class="price-note">Select pages to see prices</p>
-    <select id="a5pages" onchange="updatePrice('a5')">
-      <option value="80">80 Pages</option>
-      <option value="120">120 Pages</option>
-      <option value="200">200 Pages</option>
-    </select>
-    <select id="a5type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
-    <input type="number" id="a5qty" placeholder="Quantity" oninput="updatePrice('a5')">
-    <p>Total Amount: KES <span id="a5total">0</span></p>
-    <button onclick="addA5()">Add to Cart</button>
-  </div>
+  <div class="hero">
+      <div class="hero-text-container">
+         <h1>BlueHawks Stationers</h1>
+         <h2 class="subheading">Elevating Institutional Identity</h2>
+         
+         <p class="promo-statement">Customized exercise books!</p>
+      </div>
+      <img src="images/Exercise books.png" class="hero-img" alt="Exercise Books">
+  </div>
+  
+  <h2>Order Products</h2>
+  <div class="grid">
+    <div class="card" id="a5">
+      <h3>A5 Exercise Books</h3>
+      <img src="images/A5 Exercise book.png" class="product-img">
+      <p id="a5price">Normal: 50 (Offer: 45) MOQ: 350</p>
+      <p class="price-note">Select pages to see prices</p>
+      <select id="a5pages" onchange="updatePrice('a5')">
+        <option value="80">80 Pages</option>
+        <option value="120">120 Pages</option>
+        <option value="200">200 Pages</option>
+      </select>
+      <select id="a5type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
+      <input type="number" id="a5qty" placeholder="Quantity" oninput="updatePrice('a5')">
+      <p>Total Amount: KES <span id="a5total">0</span></p>
+      <button onclick="addA5()">Add to Cart</button>
+    </div>
 
-  <div class="card" id="a4">
-    <h3>A4 Exercise Books</h3>
-    <div class="image-gallery-container">
-      <img src="images/A4 Exercise book.png" id="img-a4" class="product-img">
-      <div class="gallery-dots" id="dots-a4">
-        <div class="dot active" onclick="showImg('a4', 'images/A4 Exercise book.png', 0)"></div>
-        <div class="dot" onclick="showImg('a4', 'images/A4 Exercise book.png', 1)"></div>
-      </div>
-    </div>
-    <p id="a4price">Normal: 100 (Offer: 95) MOQ: 240</p>
-    <p class="price-note">Select pages to see prices</p>
-    <select id="a4pages" onchange="updatePrice('a4')">
-      <option value="120">120 Pages</option>
-      <option value="200">200 Pages</option>
-    </select>
-    <select id="a4type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
-    <input type="number" id="a4qty" placeholder="Quantity" oninput="updatePrice('a4')">
-    <p>Total Amount: KES <span id="a4total">0</span></p>
-    <button onclick="addA4()">Add to Cart</button>
-  </div>
+    <div class="card" id="a4">
+      <h3>A4 Exercise Books</h3>
+      <img src="images/A4 Exercise book.png" class="product-img">
+      <p id="a4price">Normal: 100 (Offer: 95) MOQ: 240</p>
+      <p class="price-note">Select pages to see prices</p>
+      <select id="a4pages" onchange="updatePrice('a4')">
+        <option value="120">120 Pages</option>
+        <option value="200">200 Pages</option>
+      </select>
+      <select id="a4type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
+      <input type="number" id="a4qty" placeholder="Quantity" oninput="updatePrice('a4')">
+      <p>Total Amount: KES <span id="a4total">0</span></p>
+      <button onclick="addA4()">Add to Cart</button>
+    </div>
 
-  <div class="card" id="diary">
-    <h3>School Diaries</h3>
-    <img src="images/School Diary.png" class="product-img">
-    <p>Normal: 100 (Offer: 90) MOQ: 100</p>
-    <input type="number" id="dqty" placeholder="Quantity" oninput="updatePrice('d')">
-    <p>Total Amount: KES <span id="dtotal">0</span></p>
-    <button onclick="addItem('Diary','d')">Add to Cart</button>
-  </div>
+    <div class="card" id="diary">
+      <h3>School Diaries</h3>
+      <img src="images/School Diary.png" class="product-img">
+      <p>Normal: 100 (Offer: 90) MOQ: 100</p>
+      <input type="number" id="dqty" placeholder="Quantity" oninput="updatePrice('d')">
+      <p>Total Amount: KES <span id="dtotal">0</span></p>
+      <button onclick="addItem('Diary','d')">Add to Cart</button>
+    </div>
 
-  <div class="card" id="assessment">
-    <h3>Assessment Books</h3>
-    <img src="images/Assesment book.png" class="product-img">
-    <p>Normal: 100 (Offer: 90) MOQ: 100</p>
-    <input type="number" id="aqty" placeholder="Quantity" oninput="updatePrice('a')">
-    <p>Total Amount: KES <span id="atotal">0</span></p>
-    <button onclick="addItem('Assessment','a')">Add to Cart</button>
-  </div>
+    <div class="card" id="assessment">
+      <h3>Assessment Books</h3>
+      <img src="images/Assesment book.png" class="product-img">
+      <p>Normal: 100 (Offer: 90) MOQ: 100</p>
+      <input type="number" id="aqty" placeholder="Quantity" oninput="updatePrice('a')">
+      <p>Total Amount: KES <span id="atotal">0</span></p>
+      <button onclick="addItem('Assessment','a')">Add to Cart</button>
+    </div>
+  </div>
 </div>
 
 <div id="about" class="section">
-  <h2>BlueHawk Stationers: Elevating Institutional Identity</h2>
-  <p>A proud subsidiary of BlueHawks Investments, BlueHawk Stationers is a premier provider of high-quality, customized educational stationery.</p>
-  <h3>Our Core Offerings</h3>
-  <ul>
-    <li><b>Custom Exercise Books:</b> Available in A4 and A5 formats.</li>
-    <li><b>School Diaries:</b> Streamlined student organization.</li>
-    <li><b>Assessment Books:</b> Structured grading requirements.</li>
-  </ul>
-  <p><i>"Your Vision, Our Design." We help schools build their brand, one page at a time.</i></p>
+  <h2>BlueHawk Stationers: Elevating Institutional Identity</h2>
+  <p>A proud subsidiary of BlueHawks Investments, BlueHawk Stationers is a premier provider of high-quality, customized educational stationery.</p>
+  <h3>Our Core Offerings</h3>
+  <ul>
+    <li><b>Custom Exercise Books:</b> Available in A4 and A5 formats.</li>
+    <li><b>School Diaries:</b> Streamlined student organization.</li>
+    <li><b>Assessment Books:</b> Structured grading requirements.</li>
+  </ul>
+  <p><i>"Your Vision, Our Design." We help schools build their brand, one page at a time.</i></p>
 </div>
 
 <div id="productsPage" class="section">
-  <h2>Our Products</h2>
-  <ul>
-    <li><a href="#" onclick="goToProduct('a5')">A5 Exercise Books</a>
-      <span class="desc">Pages: 80, 120, 200. Delivery: 5 days. Payment: after delivery.</span>
-    </li>
-    <li><a href="#" onclick="goToProduct('a4')">A4 Exercise Books</a>
-      <span class="desc">Pages: 120, 200. Delivery: 5 days. Payment: after delivery.</span>
-    </li>
-   <li><a href="#" onclick="goToProduct('assessment')">Assessment Books</a>
-      <span class="desc">Normal: 100, Offer: 90. Delivery: 5 days. Payment: after delivery.</span>
-    </li>
-    <li><a href="#" onclick="goToProduct('diary')">School Diaries</a>
-      <span class="desc">Normal: 100, Offer: 90. Delivery: 5 days. Payment: after delivery.</span>
-    </li>
-  </ul>
+  <h2>Our Products</h2>
+  <ul>
+    <li><a href="#" onclick="goToProduct('a5')">A5 Exercise Books</a>
+      <span class="desc">Pages: 80, 120, 200. Delivery: 5 days. Payment: after delivery.</span>
+    </li>
+    <li><a href="#" onclick="goToProduct('a4')">A4 Exercise Books</a>
+      <span class="desc">Pages: 120, 200. Delivery: 5 days. Payment: after delivery.</span>
+    </li>
+   <li><a href="#" onclick="goToProduct('assessment')">Assessment Books</a>
+      <span class="desc">Normal: 100, Offer: 90. Delivery: 5 days. Payment: after delivery.</span>
+    </li>
+    <li><a href="#" onclick="goToProduct('diary')">School Diaries</a>
+      <span class="desc">Normal: 100, Offer: 90. Delivery: 5 days. Payment: after delivery.</span>
+    </li>
+  </ul>
 </div>
 
 <div id="cart" class="section">
-  <h2>My Cart</h2>
-  <div class="cart-box">
-    <div id="emptyCartMessage">
-      <p><b>Your Cart is Empty</b></p>
-      <button onclick="show('home')">Go Back to Shopping</button>
-    </div>
-    <div id="cartContent">
-      <div style="margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px;">
-        <h4 style="margin-bottom:10px;">Order Contact Details</h4>
-        <input id="cartPhone" type="text" maxlength="10" placeholder="Phone Number (e.g. 0712345678)*">
-        <input id="cartEmail" type="email" placeholder="Email Address*">
-      </div>
-      <ul id="cartList"></ul>
-      <p><b>Total: KES <span id="total">0</span></b></p>
-      <div class="btn-group">
-        <button onclick="generatePDF()">Download Proforma</button>
-        <button class="order-btn" onclick="placeOrder()">Place Order</button>
-      </div>
-    </div>
-  </div>
+  <h2>My Cart</h2>
+  <div class="cart-box">
+    <div id="emptyCartMessage">
+      <p><b>Your Cart is Empty</b></p>
+      <button onclick="show('home')">Go Back to Shopping</button>
+    </div>
+    <div id="cartContent">
+      <div style="margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px;">
+        <h4 style="margin-bottom:10px;">Order Contact Details</h4>
+        <input id="cartPhone" type="text" maxlength="10" placeholder="Phone Number (e.g. 0712345678)*">
+        <input id="cartEmail" type="email" placeholder="Email Address*">
+      </div>
+      <ul id="cartList"></ul>
+      <p><b>Total: KES <span id="total">0</span></b></p>
+      <div class="btn-group">
+        <button onclick="generatePDF()">Download Proforma</button>
+        <button class="order-btn" onclick="placeOrder()">Place Order</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="contact" class="section">
-  <h2>Contact Us</h2>
-  <h3 style="text-decoration: underline; font-size:1.2em;">Request a Quote</h3>
-  <input id="school" placeholder="School Name*" required>
-  <input id="email" type="email" placeholder="Email*" required>
-  <input id="phone" type="text" maxlength="10" placeholder="0701234567*" required>
-  <textarea id="message" maxlength="250" placeholder="Enter your message..."></textarea>
-  <button onclick="sendQuote()">Request Quote</button>
+  <h2>Contact Us</h2>
+  <h3 style="text-decoration: underline; font-size:1.2em;">Request a Quote</h3>
+  <input id="school" placeholder="School Name*" required>
+  <input id="email" type="email" placeholder="Email*" required>
+  <input id="phone" type="text" maxlength="10" placeholder="0701234567*" required>
+  <textarea id="message" maxlength="250" placeholder="Enter your message..."></textarea>
+  <button onclick="sendQuote()">Request Quote</button>
 </div>
 
 <div id="successPopup"></div>
@@ -313,83 +252,83 @@ let total = 0;
 window.whatsappMessage = "";
 
 const pricing = {
-  a5:{80:{normal:50,offer:45,moq:350},120:{normal:65,offer:60,moq:250},200:{normal:80,offer:75,moq:150}},
-  a4:{120:{normal:100,offer:95,moq:240},200:{normal:130,offer:125,moq:144}},
-  diary:{normal:100,offer:90,moq:100},
-  assessment:{normal:100,offer:90,moq:100}
+  a5:{80:{normal:50,offer:45,moq:350},120:{normal:65,offer:60,moq:250},200:{normal:80,offer:75,moq:150}},
+  a4:{120:{normal:100,offer:95,moq:240},200:{normal:130,offer:125,moq:144}},
+  diary:{normal:100,offer:90,moq:100},
+  assessment:{normal:100,offer:90,moq:100}
 };
 
-function show(id){ 
-  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active")); 
-  document.getElementById(id).classList.add("active"); 
+function show(id){ 
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active")); 
+  document.getElementById(id).classList.add("active"); 
 }
 
 function goToProduct(id) {
-    show('home');
-    setTimeout(() => {
-        const element = document.getElementById(id);
-        if(element) element.scrollIntoView({behavior: "smooth"});
-    }, 100);
+    show('home');
+    setTimeout(() => {
+        const element = document.getElementById(id);
+        if(element) element.scrollIntoView({behavior: "smooth"});
+    }, 100);
 }
 
 function updatePrice(type){
-  let qty=0, priceData, priceToUse;
-  if(type==="a5"){ qty=parseInt(document.getElementById("a5qty").value)||0; priceData=pricing.a5[document.getElementById("a5pages").value]; }
-  else if(type==="a4"){ qty=parseInt(document.getElementById("a4qty").value)||0; priceData=pricing.a4[document.getElementById("a4pages").value]; }
-  else if(type==="d"){ qty=parseInt(document.getElementById("dqty").value)||0; priceData=pricing.diary; }
-  else if(type==="a"){ qty=parseInt(document.getElementById("aqty").value)||0; priceData=pricing.assessment; }
+  let qty=0, priceData, priceToUse;
+  if(type==="a5"){ qty=parseInt(document.getElementById("a5qty").value)||0; priceData=pricing.a5[document.getElementById("a5pages").value]; }
+  else if(type==="a4"){ qty=parseInt(document.getElementById("a4qty").value)||0; priceData=pricing.a4[document.getElementById("a4pages").value]; }
+  else if(type==="d"){ qty=parseInt(document.getElementById("dqty").value)||0; priceData=pricing.diary; }
+  else if(type==="a"){ qty=parseInt(document.getElementById("aqty").value)||0; priceData=pricing.assessment; }
 
-  priceToUse = qty >= priceData.moq ? priceData.offer : priceData.normal;
+  priceToUse = qty >= priceData.moq ? priceData.offer : priceData.normal;
 
-  if(type==="a5") { document.getElementById("a5total").textContent = qty*priceToUse; document.getElementById("a5price").textContent = `Normal: ${priceData.normal} (Offer: ${priceData.offer}) MOQ: ${priceData.moq}`; }
-  if(type==="a4") { document.getElementById("a4total").textContent = qty*priceToUse; document.getElementById("a4price").textContent = `Normal: ${priceData.normal} (Offer: ${priceData.offer}) MOQ: ${priceData.moq}`; }
-  if(type==="d") document.getElementById("dtotal").textContent = qty*priceToUse;
-  if(type==="a") document.getElementById("atotal").textContent = qty*priceToUse;
+  if(type==="a5") { document.getElementById("a5total").textContent = qty*priceToUse; document.getElementById("a5price").textContent = `Normal: ${priceData.normal} (Offer: ${priceData.offer}) MOQ: ${priceData.moq}`; }
+  if(type==="a4") { document.getElementById("a4total").textContent = qty*priceToUse; document.getElementById("a4price").textContent = `Normal: ${priceData.normal} (Offer: ${priceData.offer}) MOQ: ${priceData.moq}`; }
+  if(type==="d") document.getElementById("dtotal").textContent = qty*priceToUse;
+  if(type==="a") document.getElementById("atotal").textContent = qty*priceToUse;
 }
 
-function addA5(){ 
-    let qty=parseInt(document.getElementById("a5qty").value)||0; if(!qty) return alert("Enter quantity");
-    let key = `A5 (${document.getElementById("a5pages").value} Pages - ${document.getElementById("a5type").value})`;
-    cart[key]=(cart[key]||0)+qty; updateCart(); showSuccessPopup(`${qty} added to cart`);
+function addA5(){ 
+    let qty=parseInt(document.getElementById("a5qty").value)||0; if(!qty) return alert("Enter quantity");
+    let key = `A5 (${document.getElementById("a5pages").value} Pages - ${document.getElementById("a5type").value})`;
+    cart[key]=(cart[key]||0)+qty; updateCart(); showSuccessPopup(`${qty} added to cart`);
 }
-function addA4(){ 
-    let qty=parseInt(document.getElementById("a4qty").value)||0; if(!qty) return alert("Enter quantity");
-    let key = `A4 (${document.getElementById("a4pages").value} Pages - ${document.getElementById("a4type").value})`;
-    cart[key]=(cart[key]||0)+qty; updateCart(); showSuccessPopup(`${qty} added to cart`);
+function addA4(){ 
+    let qty=parseInt(document.getElementById("a4qty").value)||0; if(!qty) return alert("Enter quantity");
+    let key = `A4 (${document.getElementById("a4pages").value} Pages - ${document.getElementById("a4type").value})`;
+    cart[key]=(cart[key]||0)+qty; updateCart(); showSuccessPopup(`${qty} added to cart`);
 }
-function addItem(name,type){ 
-    let qty=parseInt(document.getElementById(type+'qty').value)||0; if(!qty) return alert("Enter quantity");
-    cart[name]=(cart[name]||0)+qty; updateCart(); showSuccessPopup(`${qty} added to cart`);
+function addItem(name,type){ 
+    let qty=parseInt(document.getElementById(type+'qty').value)||0; if(!qty) return alert("Enter quantity");
+    cart[name]=(cart[name]||0)+qty; updateCart(); showSuccessPopup(`${qty} added to cart`);
 }
 
 function updateCart() {
-  let list = document.getElementById("cartList");
-  list.innerHTML = ""; total = 0; let entryCount = 0;
-  for (let key in cart) {
-    entryCount++;
-    let qty = cart[key]; let priceData = null;
-    if (key.includes("A5")) {
-      if (key.includes("80")) priceData = pricing.a5[80];
-      else if (key.includes("120")) priceData = pricing.a5[120];
-      else if (key.includes("200")) priceData = pricing.a5[200];
-    } else if (key.includes("A4")) {
-      if (key.includes("120")) priceData = pricing.a4[120];
-      else if (key.includes("200")) priceData = pricing.a4[200];
-    } else if (key === "Diary") priceData = pricing.diary;
-    else if (key === "Assessment") priceData = pricing.assessment;
+  let list = document.getElementById("cartList");
+  list.innerHTML = ""; total = 0; let entryCount = 0;
+  for (let key in cart) {
+    entryCount++;
+    let qty = cart[key]; let priceData = null;
+    if (key.includes("A5")) {
+      if (key.includes("80")) priceData = pricing.a5[80];
+      else if (key.includes("120")) priceData = pricing.a5[120];
+      else if (key.includes("200")) priceData = pricing.a5[200];
+    } else if (key.includes("A4")) {
+      if (key.includes("120")) priceData = pricing.a4[120];
+      else if (key.includes("200")) priceData = pricing.a4[200];
+    } else if (key === "Diary") priceData = pricing.diary;
+    else if (key === "Assessment") priceData = pricing.assessment;
 
-    let up = priceData ? (qty >= priceData.moq ? priceData.offer : priceData.normal) : 100;
-    let itemTotal = up * qty; total += itemTotal;
-    let li = document.createElement("li");
-    li.style.padding = "8px 0"; li.style.borderBottom = "1px solid #eee";
-    li.innerHTML = `<strong>${key}</strong> <br> ${qty} units @ KES ${up} = <strong>KES ${itemTotal}</strong> <button class="remove-btn" onclick="removeItem('${key}')">Remove</button>`;
-    list.appendChild(li);
-  }
-  document.getElementById("cartCount").textContent = entryCount;
-  document.getElementById("total").textContent = total.toLocaleString();
-  document.getElementById("emptyCartMessage").style.display = total === 0 ? "block" : "none";
-  document.getElementById("cartContent").style.display = total === 0 ? "none" : "block";
-  localStorage.setItem("cart", JSON.stringify(cart));
+    let up = priceData ? (qty >= priceData.moq ? priceData.offer : priceData.normal) : 100;
+    let itemTotal = up * qty; total += itemTotal;
+    let li = document.createElement("li");
+    li.style.padding = "8px 0"; li.style.borderBottom = "1px solid #eee";
+    li.innerHTML = `<strong>${key}</strong> <br> ${qty} units @ KES ${up} = <strong>KES ${itemTotal}</strong> <button class="remove-btn" onclick="removeItem('${key}')">Remove</button>`;
+    list.appendChild(li);
+  }
+  document.getElementById("cartCount").textContent = entryCount;
+  document.getElementById("total").textContent = total.toLocaleString();
+  document.getElementById("emptyCartMessage").style.display = total === 0 ? "block" : "none";
+  document.getElementById("cartContent").style.display = total === 0 ? "none" : "block";
+  localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 function removeItem(key){ delete cart[key]; updateCart(); }
@@ -397,156 +336,123 @@ function showSuccessPopup(text){ const p = document.getElementById("successPopup
 
 // --- ORDER ID & PDF LOGIC ---
 function getOrderID() {
-  let n = new Date();
-  return `SC${n.getFullYear().toString().slice(-2)}${(n.getMonth()+1).toString().padStart(2,'0')}${n.getDate().toString().padStart(2,'0')}${n.getHours().toString().padStart(2,'0')}${n.getMinutes().toString().padStart(2,'0')}`;
+  let n = new Date();
+  return `SC${n.getFullYear().toString().slice(-2)}${(n.getMonth()+1).toString().padStart(2,'0')}${n.getDate().toString().padStart(2,'0')}${n.getHours().toString().padStart(2,'0')}${n.getMinutes().toString().padStart(2,'0')}`;
 }
 function generatePDF() {
-  if (Object.keys(cart).length === 0) return alert("Cart is empty");
-  let contacts = validateCartContacts(); if (!contacts) return null;
-  
-  let orderID = getOrderID();
-  const { jsPDF } = window.jspdf; 
-  let doc = new jsPDF();
+  if (Object.keys(cart).length === 0) return alert("Cart is empty");
+  let contacts = validateCartContacts(); if (!contacts) return null;
+  
+  let orderID = getOrderID();
+  const { jsPDF } = window.jspdf; 
+  let doc = new jsPDF();
 
-  // --- HEADER & COMPANY INFO ---
-  doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(10, 46, 109);
-  doc.text("PROFORMA INVOICE", 20, 20);
-  doc.setFontSize(11); doc.setTextColor(0,0,0);
-  doc.text(`Order Number: ${orderID}`, 20, 35);
-  doc.text(`Date of Issue: ${new Date().toLocaleDateString('en-GB')}`, 20, 42);
-  doc.text("BlueHawks Stationers", 140, 20);
-  doc.setFont("helvetica", "normal"); doc.setFontSize(9);
-  doc.text("bluehawksinvestment@gmail.com", 140, 25);
-  doc.text("Phone: +254 790 333 932", 140, 30);
+  // --- HEADER & COMPANY INFO ---
+  doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(10, 46, 109);
+  doc.text("PROFORMA INVOICE", 20, 20);
+  doc.setFontSize(11); doc.setTextColor(0,0,0);
+  doc.text(`Order Number: ${orderID}`, 20, 35);
+  doc.text(`Date of Issue: ${new Date().toLocaleDateString('en-GB')}`, 20, 42);
+  doc.text("BlueHawks Stationers", 140, 20);
+  doc.setFont("helvetica", "normal"); doc.setFontSize(9);
+  doc.text("bluehawksinvestment@gmail.com", 140, 25);
+  doc.text("Phone: +254 790 333 932", 140, 30);
 
-  // --- BILL TO ---
-  doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.text("BILL TO:", 20, 55);
-  doc.setFont("helvetica", "normal"); doc.text(`Email: ${contacts.email}`, 20, 60);
-  doc.text(`Phone: ${contacts.phone}`, 20, 65);
+  // --- BILL TO ---
+  doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.text("BILL TO:", 20, 55);
+  doc.setFont("helvetica", "normal"); doc.text(`Email: ${contacts.email}`, 20, 60);
+  doc.text(`Phone: ${contacts.phone}`, 20, 65);
 
-  // --- TABLE HEADER ---
-  let y = 80; doc.setDrawColor(10, 46, 109); doc.setLineWidth(0.5); doc.line(20, y, 190, y);
-  y += 7; doc.setFont("helvetica", "bold"); doc.text("Item Description", 22, y); doc.text("Qty", 110, y); doc.text("Total (KES)", 165, y);
-  y += 3; doc.line(20, y, 190, y); y += 10;
-  
-  // --- TABLE ITEMS ---
-  doc.setFont("helvetica", "normal");
-  let summaryForAdmin = ""; 
-  for (let key in cart) {
-    doc.text(key, 22, y); doc.text(cart[key].toString(), 110, y);
-    summaryForAdmin += `- ${key} x${cart[key]}\n`;
-    y += 10; doc.line(20, y-2, 190, y-2);
-  }
-  doc.setFont("helvetica", "bold"); doc.text(`GRAND TOTAL: KES ${total.toLocaleString()}`, 130, y+10);
+  // --- TABLE HEADER ---
+  let y = 80; doc.setDrawColor(10, 46, 109); doc.setLineWidth(0.5); doc.line(20, y, 190, y);
+  y += 7; doc.setFont("helvetica", "bold"); doc.text("Item Description", 22, y); doc.text("Qty", 110, y); doc.text("Total (KES)", 165, y);
+  y += 3; doc.line(20, y, 190, y); y += 10;
+  
+  // --- TABLE ITEMS ---
+  doc.setFont("helvetica", "normal");
+  let summaryForAdmin = ""; 
+  for (let key in cart) {
+    doc.text(key, 22, y); doc.text(cart[key].toString(), 110, y);
+    summaryForAdmin += `- ${key} x${cart[key]}\n`;
+    y += 10; doc.line(20, y-2, 190, y-2);
+  }
+  doc.setFont("helvetica", "bold"); doc.text(`GRAND TOTAL: KES ${total.toLocaleString()}`, 130, y+10);
 
-  // --- SIGNATURE AREA ---
-  let sigY = y+40; 
-  if (sigY > 250) { doc.addPage(); sigY = 30; } // Prevent signature from falling off the page
-  doc.text("Prepared by:", 140, sigY);
-  doc.setFont("helvetica", "normal"); doc.text("Nicholas Ndegwa", 140, sigY+7);
-  doc.setFont("times", "italic"); doc.setFontSize(15); doc.text("Nicholas", 140, sigY+16);
-  doc.line(140, sigY+18, 175, sigY+18);
+  // --- SIGNATURE AREA ---
+  let sigY = y+40; 
+  if (sigY > 250) { doc.addPage(); sigY = 30; } // Prevent signature from falling off the page
+  doc.text("Prepared by:", 140, sigY);
+  doc.setFont("helvetica", "normal"); doc.text("Nicholas Ndegwa", 140, sigY+7);
+  doc.setFont("times", "italic"); doc.setFontSize(15); doc.text("Nicholas", 140, sigY+16);
+  doc.line(140, sigY+18, 175, sigY+18);
 
-  // --- RESTORED DISCLAIMER FOOTER ---
-  doc.setFont("helvetica", "italic"); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
-  const footerY = 280; // Fixed position at the bottom of the page
-  doc.text("Note: This proforma is valid for 30 days from the date of issue.", 20, footerY);
-  doc.text("Prices are subject to change based on market fluctuations and final artwork specifications.", 20, footerY + 5);
+  // --- RESTORED DISCLAIMER FOOTER ---
+  doc.setFont("helvetica", "italic"); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
+  const footerY = 280; // Fixed position at the bottom of the page
+  doc.text("Note: This proforma is valid for 30 days from the date of issue.", 20, footerY);
+  doc.text("Prices are subject to change based on market fluctuations and final artwork specifications.", 20, footerY + 5);
 
-  // Trigger Download
-  doc.save(`Proforma_${orderID}.pdf`);
+  // Trigger Download
+  doc.save(`Proforma_${orderID}.pdf`);
 
-  // --- ADMIN NOTIFICATION ---
-  emailjs.send('service_grbq937', 'template_rfcn2bc', {
-    order_id: orderID,
-    customer_email: contacts.email,
-    customer_phone: contacts.phone,
-    items: summaryForAdmin,
-    total: total.toLocaleString(),
-    action: "Downloaded Proforma Invoice"
-  });
+  // --- ADMIN NOTIFICATION ---
+  emailjs.send('service_grbq937', 'template_rfcn2bc', {
+    order_id: orderID,
+    customer_email: contacts.email,
+    customer_phone: contacts.phone,
+    items: summaryForAdmin,
+    total: total.toLocaleString(),
+    action: "Downloaded Proforma Invoice"
+  });
 
-  return orderID;
+  return orderID;
 }
 
 function placeOrder() {
-  let contacts = validateCartContacts(); if (!contacts) return;
-  let orderID = generatePDF(); if(!orderID) return;
+  let contacts = validateCartContacts(); if (!contacts) return;
+  let orderID = generatePDF(); if(!orderID) return;
 
-  let summary = `Order ID: ${orderID}\nItems:\n`;
-  for (let key in cart) summary += `- ${key} x${cart[key]}\n`;
-  
-  emailjs.send('service_grbq937', 'template_cqywzot', {
-    order_id: orderID, customer_phone: contacts.phone, customer_email: contacts.email, order_details: summary, total_price: total.toLocaleString()
-  }).then(() => {
-    window.whatsappMessage = `Order ${orderID}:\n${summary}\nTotal: KES ${total.toLocaleString()}`;
-    document.getElementById("orderPopup").innerHTML = `
-      <p>Order <strong>${orderID}</strong> received!</p>
-      <p>Your proforma has been downloaded. Send via WhatsApp for faster processing?</p>
-      <button onclick="sendWhatsApp()">Yes, WhatsApp Us</button>
-      <button onclick="showFinalSuccess()">No</button>
-    `;
-    document.getElementById("orderPopup").style.display = "block";
-  });
+  let summary = `Order ID: ${orderID}\nItems:\n`;
+  for (let key in cart) summary += `- ${key} x${cart[key]}\n`;
+  
+  emailjs.send('service_grbq937', 'template_cqywzot', {
+    order_id: orderID, customer_phone: contacts.phone, customer_email: contacts.email, order_details: summary, total_price: total.toLocaleString()
+  }).then(() => {
+    window.whatsappMessage = `Order ${orderID}:\n${summary}\nTotal: KES ${total.toLocaleString()}`;
+    document.getElementById("orderPopup").innerHTML = `
+      <p>Order <strong>${orderID}</strong> received!</p>
+      <p>Your proforma has been downloaded. Send via WhatsApp for faster processing?</p>
+      <button onclick="sendWhatsApp()">Yes, WhatsApp Us</button>
+      <button onclick="showFinalSuccess()">No</button>
+    `;
+    document.getElementById("orderPopup").style.display = "block";
+  });
 }
 
 function showFinalSuccess() {
-  document.getElementById("orderPopup").innerHTML = `
-    <div style="padding:10px;">
-      <p style="color:#ffc600; font-weight:bold;">Order Placed Successfully!</p>
-      <p>Details shared via email. We will contact you shortly to confirm your artwork.</p>
-      <button onclick="closePopup()">Close</button>
-    </div>
-  `;
-}
-  function validateCartContacts() {
-  let p = document.getElementById("cartPhone") ? document.getElementById("cartPhone").value.trim() : "";
-  let e = document.getElementById("cartEmail") ? document.getElementById("cartEmail").value.trim() : "";
-  if (p.length !== 10 || !e.includes("@")) { 
-    alert("Please enter a valid 10-digit phone number and email in the cart."); 
-    return false; 
-  }
-  return { phone: p, email: e };
-}
- function showImg(productId, originalPath, dotIndex) {
-  const imgElement = document.getElementById(`img-${productId}`);
-  if (!imgElement) return;
-
-  // Logic to handle the 'b' suffix
-  let newSrc = originalPath;
-  if (dotIndex === 1) {
-    // This turns "images/A5.png" into "images/A5b.png"
-    newSrc = originalPath.replace(".png", "b.png");
-  }
-
-  // Visual update
-  imgElement.style.opacity = '0';
-  
-  const dotsContainer = document.getElementById(`dots-${productId}`);
-  const dots = dotsContainer.querySelectorAll('.dot');
-  dots.forEach(d => d.classList.remove('active'));
-  dots[dotIndex].classList.add('active');
-
-  setTimeout(() => {
-    imgElement.src = newSrc;
-    imgElement.style.opacity = '1';
-  }, 300);
+  document.getElementById("orderPopup").innerHTML = `
+    <div style="padding:10px;">
+      <p style="color:#ffc600; font-weight:bold;">Order Placed Successfully!</p>
+      <p>Details shared via email. We will contact you shortly to confirm your artwork.</p>
+      <button onclick="closePopup()">Close</button>
+    </div>
+  `;
 }
 
 function validateCartContacts() {
-  let p = document.getElementById("cartPhone").value.trim();
-  let e = document.getElementById("cartEmail").value.trim();
-  if (p.length !== 10 || !e.includes("@")) { alert("Valid 10-digit phone and email required"); return false; }
-  return { phone: p, email: e };
+  let p = document.getElementById("cartPhone").value.trim();
+  let e = document.getElementById("cartEmail").value.trim();
+  if (p.length !== 10 || !e.includes("@")) { alert("Valid 10-digit phone and email required"); return false; }
+  return { phone: p, email: e };
 }
 
 function sendWhatsApp(){ window.open(`https://wa.me/254790333932?text=${encodeURIComponent(window.whatsappMessage)}`, "_blank"); closePopup(); }
 function closePopup(){ document.getElementById("orderPopup").style.display = "none"; cart = {}; updateCart(); }
 
 function sendQuote() {
-  let s = document.getElementById("school").value;
-  emailjs.send('service_grbq937', 'template_rfcn2bc', { school_name: s, customer_email: document.getElementById("email").value, customer_phone: document.getElementById("phone").value, message: document.getElementById("message").value })
-  .then(() => alert("Quote request sent!"));
+  let s = document.getElementById("school").value;
+  emailjs.send('service_grbq937', 'template_rfcn2bc', { school_name: s, customer_email: document.getElementById("email").value, customer_phone: document.getElementById("phone").value, message: document.getElementById("message").value })
+  .then(() => alert("Quote request sent!"));
 }
 
 window.onload = function(){ let s = localStorage.getItem("cart"); if(s){ cart = JSON.parse(s); updateCart(); } };
