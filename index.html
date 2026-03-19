@@ -39,10 +39,63 @@ body { margin:0; font-family: Arial, sans-serif; color:#0a2e6d; background: line
 nav { background:#0a2e6d; padding:15px 30px; display:flex; justify-content:space-between; align-items:center;}
 nav a { color:#ffc600; margin:0 12px; cursor:pointer; text-decoration:none; font-weight:500;}
 nav a:hover { color:#5ea8ff; transition:0.3s; }
-.hero { background: linear-gradient(135deg,#0a2e6d,#5ea8ff); color:white; text-align:center; padding:80px 20px; border-bottom-left-radius:50px; border-bottom-right-radius:50px; display:flex; justify-content:space-between; align-items:center;}
-.hero h1 { font-size:3em; margin:10px 0 0 0; display:flex; align-items:center; }
-.hero img.title-img { max-width:80px; height:auto; margin-right:15px; }
-.hero-img { max-width:200px; height:auto; border-radius:10px; object-fit:cover; align-self:flex-start; }
+/* Updated Hero CSS for Top-Left Alignment */
+.hero { 
+  background: linear-gradient(135deg,#0a2e6d,#5ea8ff); 
+  color:white; 
+  padding: 40px 30px; /* Provides the 1cm (approx 40px) top/side gap */
+  border-bottom-left-radius:50px; 
+  border-bottom-right-radius:50px; 
+  display:flex; 
+  justify-content:space-between; 
+  align-items: flex-start; /* Aligns content to the top */
+  text-align: left; /* Ensures left alignment */
+}
+
+.hero-text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.hero h1 { 
+  font-size:3em; 
+  margin: 0; 
+  line-height: 1.1;
+}
+
+.hero .subheading { 
+  font-size: 1.5em; 
+  font-weight: 400; 
+  margin: 5px 0 0 0; 
+  color: #ffc600; 
+  font-style: italic; 
+}
+
+/* 2cm (approx 75px) gap for the new statement */
+.hero .promo-statement {
+  margin-top: 75px; 
+  font-size: 1.3em;
+  font-style: italic;
+  font-weight: 300;
+  color: #ffffff;
+  opacity: 0.9;
+}
+
+.hero-img { 
+  max-width:250px; 
+  height:auto; 
+  border-radius:15px; 
+  object-fit:cover; 
+  margin-top: 20px;
+}
+
+@media (max-width: 480px) {
+    .hero { flex-direction: column; padding: 20px; }
+    .hero h1 { font-size: 2em; }
+    .hero .promo-statement { margin-top: 30px; }
+    .hero-img { margin-top: 30px; max-width: 100%; }
+  
 .section { display:none; padding:50px 20px; }
 .active { display:block; }
 .grid { display:grid; grid-template-columns: repeat(2,1fr); gap:25px; margin-top:30px; }
@@ -97,10 +150,6 @@ button:hover { background:#5ea8ff; }
 
 /* Navigation Logo Logic */
 nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right: 12px; vertical-align: middle; border-radius: 4px; }
-
-@media (max-width: 480px) {
-    nav img.title-img { width: 60px; height: 60px; }
-    .grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -128,13 +177,15 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
 
 <div id="home" class="section active">
   <div class="hero">
-      <div>
+      <div class="hero-text-container">
          <h1>BlueHawks Stationers</h1>
          <h2 class="subheading">Elevating Institutional Identity</h2>
+         
+         <p class="promo-statement">Customized exercise books!</p>
       </div>
       <img src="images/Exercise books.png" class="hero-img" alt="Exercise Books">
   </div>
-
+  
   <h2>Order Products</h2>
   <div class="grid">
     <div class="card" id="a5">
