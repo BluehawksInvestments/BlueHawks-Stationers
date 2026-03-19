@@ -128,9 +128,11 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
 <div id="orderPopup"></div>
 
 <nav>
-  <div style="display: flex; align-items: center;">
-    <img src="images/Bluehawk.png" class="title-img" alt="Blue Hawk Logo">
+  <div style="display: flex; align-items: center; cursor: pointer;" onclick="show('home')">
+    <img src="images/Bluehawk.png" class="title-img" alt="Logo">
   </div>
+  </nav>
+  <nav>
   <div>
     <a onclick="show('home')">Home</a>
     <a onclick="show('about')">About Us</a>
@@ -402,9 +404,23 @@ function addA4(){
     let key = `A4 (${document.getElementById("a4pages").value} Pages - ${document.getElementById("a4type").value})`;
     cart[key]=(cart[key]||0)+qty; updateCart(); showSuccessPopup(`${qty} added to cart`);
 }
-function addItem(name,type){ 
-    let qty=parseInt(document.getElementById(type+'qty').value)||0; if(!qty) return alert("Enter quantity");
-    cart[name]=(cart[name]||0)+qty; updateCart(); showSuccessPopup(`${qty} added to cart`);
+function addItem(name, type) {
+    // 'type' will be 'd' for diary or 'a' for assessment
+    let qty = parseInt(document.getElementById(type + 'qty').value) || 0;
+    if (qty <= 0) return alert("Please enter a valid quantity.");
+    
+    // Check MOQ before adding
+    let dataSet = type === 'd' ? pricing.diary : pricing.assessment;
+    let tier = document.getElementById(type + 'tier').value;
+    let minReq = tier === 'offer' ? dataSet.moq : dataSet.normalMoq;
+    
+    if (qty < minReq) {
+        return alert(`Minimum order for this item is ${minReq} units.`);
+    }
+
+    cart[name] = (cart[name] || 0) + qty;
+    updateCart();
+    showSuccessPopup(`${qty} ${name} added to cart`);
 }
 
 function updateCart() {
