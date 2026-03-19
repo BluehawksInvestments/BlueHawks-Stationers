@@ -351,21 +351,21 @@ function getOrderID() {
 function generatePDF() {
   if (Object.keys(cart).length === 0) return alert("Cart is empty");
   let contacts = validateCartContacts(); if (!contacts) return null;
+  
   let orderID = getOrderID();
-  const { jsPDF } = window.jspdf; let doc = new jsPDF();
+  const { jsPDF } = window.jspdf; 
+  let doc = new jsPDF();
 
+  // --- PDF GENERATION LOGIC (Preserved) ---
   doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(10, 46, 109);
   doc.text("PROFORMA INVOICE", 20, 20);
-  
   doc.setFontSize(11); doc.setTextColor(0,0,0);
   doc.text(`Order Number: ${orderID}`, 20, 35);
   doc.text(`Date of Issue: ${new Date().toLocaleDateString('en-GB')}`, 20, 42);
-
   doc.text("BlueHawks Stationers", 140, 20);
   doc.setFont("helvetica", "normal"); doc.setFontSize(9);
   doc.text("bluehawksinvestment@gmail.com", 140, 25);
   doc.text("Phone: +254 790 333 932", 140, 30);
-
   doc.setFont("helvetica", "bold"); doc.text("BILL TO:", 20, 55);
   doc.setFont("helvetica", "normal"); doc.text(`Email: ${contacts.email}`, 20, 60);
   doc.text(`Phone: ${contacts.phone}`, 20, 65);
@@ -375,9 +375,10 @@ function generatePDF() {
   y += 3; doc.line(20, y, 190, y); y += 10;
   
   doc.setFont("helvetica", "normal");
+  let summaryForAdmin = ""; // Track items for the admin email
   for (let key in cart) {
     doc.text(key, 22, y); doc.text(cart[key].toString(), 110, y);
-    // (Math logic active in background)
+    summaryForAdmin += `- ${key} x${cart[key]}\n`;
     y += 10; doc.line(20, y-2, 190, y-2);
   }
   doc.setFont("helvetica", "bold"); doc.text(`GRAND TOTAL: KES ${total.toLocaleString()}`, 130, y+10);
@@ -387,7 +388,22 @@ function generatePDF() {
   doc.setFont("times", "italic"); doc.setFontSize(15); doc.text("Nicholas", 140, sigY+16);
   doc.line(140, sigY+18, 175, sigY+18);
 
+  // Trigger Download
   doc.save(`Proforma_${orderID}.pdf`);
+
+  // --- NEW: SEND ADMIN NOTIFICATION ---
+  // This sends an email to YOU informing you a proforma was generated
+  emailjs.send('service_grbq937', 'template_admin_notice', {
+    order_id: orderID,
+    customer_email: contacts.email,
+    customer_phone: contacts.phone,
+    items: summaryForAdmin,
+    total: total.toLocaleString(),
+    action: "Downloaded Proforma Invoice"
+  }).then(() => {
+    console.log("Admin notified of PDF download.");
+  });
+
   return orderID;
 }
 
