@@ -815,18 +815,20 @@ function fixMOQ(type, min) {
     const input = document.getElementById(type + "qty");
     const tierSelect = document.getElementById(type + "tier");
 
-    if (input) {
-        input.value = min;
-    }
+    suppressPopup = true; // 🚫 stop popup from re-triggering
 
-    if (tierSelect) {
-        tierSelect.value = "normal"; // Force switch to Normal price list
-    }
+    if (input) input.value = min;
+    if (tierSelect) tierSelect.value = "normal";
 
     updatePrice(type);
 
     const popup = document.getElementById("valPopup");
     if (popup) popup.remove();
+
+    // Re-enable after short delay
+    setTimeout(() => {
+        suppressPopup = false;
+    }, 300);
 }
 function useNormalPrice(type) {
     document.getElementById(type + "tier").value = "normal";
