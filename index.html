@@ -660,8 +660,6 @@ emailjs.send('service_grbq937', 'template_rfcn2bc', {
     action: "Downloaded Proforma Invoice",
     to_email: "bluehawksinvestment@gmail.com" // Explicitly target your email
   });
-
-  doc.save(`Proforma_${orderID}.pdf`);
   return orderID;
 }
 
