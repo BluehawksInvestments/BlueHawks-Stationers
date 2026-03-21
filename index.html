@@ -34,6 +34,28 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   font-size: 1em;
 }
+
+  /* Add to your <style> section */
+.contact-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1in; 
+    height: 1in;
+    background: #0a2e6d;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.contact-icon-btn img {
+    width: 60%;
+    height: 60%;
+}
+.contact-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
   /* Add this to your existing <style> block */
 .moq-warning { 
   color: #ff4c4c; 
@@ -59,22 +81,32 @@ nav a:hover { color:#5ea8ff; transition:0.3s; }
 .hero-img { max-width:200px; height:auto; border-radius:10px; object-fit:cover; align-self:flex-start; }
 .section { display:none; padding:50px 20px; }
 .active { display:block; }
-.grid { display:grid; grid-template-columns: repeat(2,1fr); gap:25px; margin-top:30px; }
-.card { background:white; padding:20px; border-radius:15px; box-shadow:0 6px 15px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; width:75%; margin:auto;}
-.card:hover { transform: translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.15); }
-.product-img { width: 100%; max-width: 200px; height: auto; display: block; margin: 10px auto; border-radius: 10px; object-fit: cover; }
-input, select, textarea { width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:8px; }
-input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-input[type=number] { -moz-appearance:textfield; }
-button { background:#0a2e6d; color:white; padding:12px; border:none; width:100%; border-radius:8px; cursor:pointer; font-weight:600; transition: background 0.3s; }
-button:hover { background:#5ea8ff; }
-.remove-btn { background: #ff4c4c; color: white; border: none; padding: 2px 6px; border-radius: 4px; cursor: pointer; font-size: 0.8em; display: inline-block; width: auto; margin-left: 5px; }
-.cart-box { background:white; padding:25px; border-radius:15px; box-shadow:0 6px 15px rgba(0,0,0,0.1); }
-.btn-group { display:flex; justify-content:center; gap:20px; margin-top:20px; }
-.btn-group button { width:50%; max-width:200px; }
-#emptyCartMessage { display:none; text-align:center; margin-top:20px; }
-.price-note { color:red; font-style:italic; font-size:0.9em; margin-bottom:10px; }
+.grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+.card { 
+    display: flex; 
+    flex-direction: row; 
+    width: 95%; 
+    align-items: flex-start; 
+    padding: 15px; 
+}
+.product-left { flex: 1; text-align: left; }
+.product-right { flex: 1; padding-left: 15px; }
+.product-img-half { width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px; }
+.label-blue { color: #0a2e6d; font-weight: bold; font-size: 0.85em; margin-top: 5px; display: block; }
+.calc-msg { color: red; font-style: italic; font-size: 0.75em; margin-top: 5px; display: block; }
+.instruction-red { color: red; font-style: italic; font-size: 0.8em; display: block; margin-bottom: 5px; }
 
+/* Popup style for validation */
+#validationPopup {
+    position: absolute;
+    background: #fff3cd; /* Amber */
+    border: 1px solid #ffeeba;
+    padding: 15px;
+    z-index: 100;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: none;
+}
 /* Product Descriptions Hover Logic */
 #productsPage ul li { margin-bottom:1in; font-weight:500; cursor:pointer; position:relative;}
 #productsPage ul li:hover { color:#5ea8ff; }
@@ -152,63 +184,109 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
   </div>
 
   <h2>Order Products</h2>
+<div class="grid">
   <div class="card" id="a5">
-  <h3>A5 Exercise Books</h3>
-  <img src="images/A5 Exercise book.png" class="product-img">
-  <select id="a5pages" onchange="syncTiers('a5')">
-    <option value="80">80 Pages</option>
-    <option value="120">120 Pages</option>
-    <option value="200">200 Pages</option>
-  </select>
-  <select id="a5tier" onchange="updatePrice('a5')"></select>
-  <select id="a5type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
-  <input type="number" id="a5qty" placeholder="Quantity" oninput="updatePrice('a5')">
-  <div id="a5warning" class="moq-warning" style="color:red; font-size:0.8em; display:none;"></div>
-  <p>Total: KES <span id="a5total">0</span></p>
-  <button onclick="addA5()">Add to Cart</button>
-</div>
+    <div class="product-left">
+      <h3>A5 Exercise Books</h3>
+      <img src="images/A5 Exercise book.png" class="product-img-half">
+      <p>Total: KES <span id="a5total" style="font-weight:bold;">0</span></p>
+      <div id="a5_msg_area"></div>
+    </div>
+    <div class="product-right">
+      <span class="label-blue">Pages</span>
+      <select id="a5pages" onchange="syncTiers('a5')">
+        <option value="80">80 Pages</option>
+        <option value="120">120 Pages</option>
+        <option value="200">200 Pages</option>
+      </select>
+      <span class="instruction-red">Select pages above to get the best price. (note the minimum order quantity for each price).</span>
+      <span class="label-blue">Price list</span>
+      <select id="a5tier" onchange="updatePrice('a5')"></select>
+      <span class="label-blue">Type</span>
+      <select id="a5type">
+        <option value="Ruled">Ruled</option>
+        <option value="Square">Square</option>
+        <option value="Drawing">Drawing</option>
+      </select>
+      <span class="label-blue">Quantity</span>
+      <input type="number" id="a5qty" placeholder="Quantity" onblur="validateMOQLogic('a5')">
+      <span class="calc-msg">Click outside the box to calculate the total cost.</span>
+      <button onclick="addA5()" style="margin-top:10px;">Add to Cart</button>
+    </div>
+  </div>
 
-<div class="card" id="a4">
-  <h3>A4 Exercise Books</h3>
-  <img src="images/A4 Exercise book.png" class="product-img">
-  <select id="a4pages" onchange="syncTiers('a4')">
-    <option value="120">120 Pages</option>
-    <option value="200">200 Pages</option>
-  </select>
-  <select id="a4tier" onchange="updatePrice('a4')"></select>
-  <select id="a4type"><option value="Ruled">Ruled</option><option value="Square">Square</option><option value="Drawing">Drawing</option></select>
-  <input type="number" id="a4qty" placeholder="Quantity" oninput="updatePrice('a4')">
-  <div id="a4warning" class="moq-warning" style="color:red; font-size:0.8em; display:none;"></div>
-  <p>Total: KES <span id="a4total">0</span></p>
-  <button onclick="addA4()">Add to Cart</button>
-</div>
+  <div class="card" id="a4">
+    <div class="product-left">
+      <h3>A4 Exercise Books</h3>
+      <img src="images/A4 Exercise book.png" class="product-img-half">
+      <p>Total: KES <span id="a4total" style="font-weight:bold;">0</span></p>
+      <div id="a4_msg_area"></div>
+    </div>
+    <div class="product-right">
+      <span class="label-blue">Pages</span>
+      <select id="a4pages" onchange="syncTiers('a4')">
+        <option value="120">120 Pages</option>
+        <option value="200">200 Pages</option>
+      </select>
+      <span class="instruction-red">Select pages above to get the best price. (note the minimum order quantity for each price).</span>
+      <span class="label-blue">Price list</span>
+      <select id="a4tier" onchange="updatePrice('a4')"></select>
+      <span class="label-blue">Type</span>
+      <select id="a4type">
+        <option value="Ruled">Ruled</option>
+        <option value="Square">Square</option>
+        <option value="Drawing">Drawing</option>
+      </select>
+      <span class="label-blue">Quantity</span>
+      <input type="number" id="a4qty" placeholder="Quantity" onblur="validateMOQLogic('a4')">
+      <span class="calc-msg">Click outside the box to calculate the total cost.</span>
+      <button onclick="addA4()" style="margin-top:10px;">Add to Cart</button>
+    </div>
+  </div>
 
-<div class="card" id="diary">
-  <h3>School Diaries</h3>
-  <img src="images/School Diary.png" class="product-img">
-  <select id="dtier" onchange="updatePrice('d')">
-    <option value="normal">Normal Tier (Min 100)</option>
-    <option value="offer">Offer Tier (Min 200)</option>
-  </select>
-  <input type="number" id="dqty" placeholder="Quantity" oninput="updatePrice('d')">
-  <div id="dwarning" class="moq-warning" style="color:red; font-size:0.8em; display:none;"></div>
-  <p>Total: KES <span id="dtotal">0</span></p>
-  <button onclick="addItem('Diary','d')">Add to Cart</button>
-</div>
+  <div class="card" id="diary">
+    <div class="product-left">
+      <h3>School Diaries</h3>
+      <img src="images/School Diary.png" class="product-img-half">
+      <p>Total: KES <span id="dtotal" style="font-weight:bold;">0</span></p>
+      <div id="d_msg_area"></div>
+    </div>
+    <div class="product-right">
+      <span class="instruction-red">Select tier below to get the best price. (note the minimum order quantity for each price).</span>
+      <span class="label-blue">Price list</span>
+      <select id="dtier" onchange="updatePrice('d')">
+        <option value="normal">Normal Tier (Min 100)</option>
+        <option value="offer">Offer Tier (Min 200)</option>
+      </select>
+      <span class="label-blue">Quantity</span>
+      <input type="number" id="dqty" placeholder="Quantity" onblur="validateMOQLogic('d')">
+      <span class="calc-msg">Click outside the box to calculate the total cost.</span>
+      <button onclick="addItem('Diary','d')" style="margin-top:10px;">Add to Cart</button>
+    </div>
+  </div>
 
-<div class="card" id="assessment">
-  <h3>Assessment Books</h3>
-  <img src="images/Assesment book.png" class="product-img">
-  <select id="atier" onchange="updatePrice('a')">
-    <option value="normal">Normal Tier (Min 100)</option>
-    <option value="offer">Offer Tier (Min 200)</option>
-  </select>
-  <input type="number" id="aqty" placeholder="Quantity" oninput="updatePrice('a')">
-  <div id="awarning" class="moq-warning" style="color:red; font-size:0.8em; display:none;"></div>
-  <p>Total: KES <span id="atotal">0</span></p>
-  <button onclick="addItem('Assessment','a')">Add to Cart</button>
+  <div class="card" id="assessment">
+    <div class="product-left">
+      <h3>Assessment Books</h3>
+      <img src="images/Assesment book.png" class="product-img-half">
+      <p>Total: KES <span id="atotal" style="font-weight:bold;">0</span></p>
+      <div id="a_msg_area"></div>
+    </div>
+    <div class="product-right">
+      <span class="instruction-red">Select tier below to get the best price. (note the minimum order quantity for each price).</span>
+      <span class="label-blue">Price list</span>
+      <select id="atier" onchange="updatePrice('a')">
+        <option value="normal">Normal Tier (Min 100)</option>
+        <option value="offer">Offer Tier (Min 200)</option>
+      </select>
+      <span class="label-blue">Quantity</span>
+      <input type="number" id="aqty" placeholder="Quantity" onblur="validateMOQLogic('a')">
+      <span class="calc-msg">Click outside the box to calculate the total cost.</span>
+      <button onclick="addItem('Assessment','a')" style="margin-top:10px;">Add to Cart</button>
+    </div>
+  </div>
 </div>
-</div>  
+  
 <div id="about" class="section">
   <h2>BlueHawk Stationers: Elevating Institutional Identity</h2>
   <p>A proud subsidiary of BlueHawks Investments, BlueHawk Stationers is a premier provider of high-quality, customized educational stationery.</p>
@@ -264,11 +342,21 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
 
 <div id="contact" class="section">
   <h2>Contact Us</h2>
+  
+  <div class="contact-row">
+    <a href="mailto:bluehawksinvestment@gmail.com" class="contact-icon-btn">
+      <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Email">
+    </a>
+    <a href="tel:+254790333932" class="contact-icon-btn">
+      <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Call">
+    </a>
+  </div>
+
   <h3 style="text-decoration: underline; font-size:1.2em;">Request a Quote</h3>
-  <input id="school" placeholder="School Name*" required>
-  <input id="email" type="email" placeholder="Email*" required>
-  <input id="phone" type="text" maxlength="10" placeholder="0701234567*" required>
-  <textarea id="message" maxlength="250" placeholder="Enter your message..."></textarea>
+  <input id="school" placeholder="School Name*" style="width:100%; box-sizing:border-box;">
+  <input id="email" type="email" placeholder="Email*" style="width:100%; box-sizing:border-box;">
+  <input id="phone" type="text" maxlength="10" placeholder="0701234567*" style="width:100%; box-sizing:border-box;">
+  <textarea id="message" maxlength="250" placeholder="Enter your message..." style="width:100%; box-sizing:border-box;"></textarea>
   <button onclick="sendQuote()">Request Quote</button>
 </div>
 
@@ -462,8 +550,12 @@ function getOrderID() {
   return `SC${n.getFullYear().toString().slice(-2)}${(n.getMonth()+1).toString().padStart(2,'0')}${n.getDate().toString().padStart(2,'0')}${n.getHours().toString().padStart(2,'0')}${n.getMinutes().toString().padStart(2,'0')}`;
 }
 function generatePDF() {
-  if (Object.keys(cart).length === 0) return alert("Cart is empty");
-  let contacts = validateCartContacts(); if (!contacts) return null;
+if (Object.keys(cart).length === 0) {
+    return alert("Warning: Your cart is empty. Please add items before downloading a proforma.");
+  }
+  
+  let contacts = validateCartContacts(); 
+  if (!contacts) return null;
   
   let orderID = getOrderID();
   const { jsPDF } = window.jspdf; 
@@ -518,15 +610,17 @@ function generatePDF() {
   doc.save(`Proforma_${orderID}.pdf`);
 
   // --- ADMIN NOTIFICATION ---
-  emailjs.send('service_grbq937', 'template_rfcn2bc', {
+emailjs.send('service_grbq937', 'template_rfcn2bc', {
     order_id: orderID,
     customer_email: contacts.email,
     customer_phone: contacts.phone,
     items: summaryForAdmin,
     total: total.toLocaleString(),
-    action: "Downloaded Proforma Invoice"
+    action: "Downloaded Proforma Invoice",
+    to_email: "bluehawksinvestment@gmail.com" // Explicitly target your email
   });
 
+  doc.save(`Proforma_${orderID}.pdf`);
   return orderID;
 }
 
@@ -567,14 +661,89 @@ function validateCartContacts() {
   if (p.length !== 10 || !e.includes("@")) { alert("Valid 10-digit phone and email required"); return false; }
   return { phone: p, email: e };
 }
+  
+function validateMOQLogic(type) {
+    const qtyInput = document.getElementById(type + "qty");
+    const qty = parseInt(qtyInput.value) || 0;
+    const pages = (type === 'a5' || type === 'a4') ? document.getElementById(type + "pages").value : null;
+    const dataSet = (type === 'a5' || type === 'a4') ? pricing[type][pages] : (type === 'd' ? pricing.diary : pricing.assessment);
+    const tierSelect = document.getElementById(type + (type === 'd' ? 'tier' : (type === 'a' ? 'tier' : 'tier')));
+    const currentTier = tierSelect.value;
 
+    // Case A: Normal selected but quantity qualifies for Offer
+    if (currentTier === "normal" && qty >= dataSet.moq) {
+        tierSelect.value = "offer";
+        updatePrice(type);
+        const msg = document.getElementById(type + "_msg_area");
+        msg.innerHTML = `<div style="color:green; font-size:0.8em;">Price list updated! Discount applied.</div>`;
+        setTimeout(() => { msg.innerHTML = ""; }, 4000);
+    }
+
+    // Case B & C: Below required MOQs
+    const minNormal = dataSet.normalMoq;
+    const minOffer = dataSet.moq;
+
+    if (qty > 0 && ((currentTier === "offer" && qty < minOffer) || (qty < minNormal))) {
+        showAmberPopup(type, qty, dataSet, currentTier);
+    } else {
+        updatePrice(type);
+    }
+}
+
+function showAmberPopup(type, qty, dataSet, tier) {
+    const isBelowAbsoluteMin = qty < dataSet.normalMoq;
+    const message = isBelowAbsoluteMin 
+        ? `Quantity is below Minimum Order Quantity (${dataSet.normalMoq}).` 
+        : `Items do not qualify for Offer pricelist (Min ${dataSet.moq}).`;
+
+    // Implementation of the Amber Popup with 2 buttons
+    const popup = document.createElement("div");
+    popup.id = "valPopup";
+    popup.style = "position:fixed; top:30%; left:50%; transform:translate(-50%, -50%); background:#ffbf00; padding:20px; border-radius:10px; z-index:9999; text-align:center; border:2px solid #b58900;";
+    popup.innerHTML = `
+        <p><strong>${message}</strong></p>
+        <button onclick="fixMOQ('${type}', ${dataSet.moq})">Add more items</button>
+        <button onclick="useNormalPrice('${type}')" style="margin-top:10px; background:#444;">Use Normal Pricelist</button>
+    `;
+    document.body.appendChild(popup);
+}
+
+function fixMOQ(type, min) {
+    document.getElementById(type + "qty").value = min;
+    document.getElementById("valPopup").remove();
+    updatePrice(type);
+}
+
+function useNormalPrice(type) {
+    document.getElementById(type + "tier").value = "normal";
+    document.getElementById("valPopup").remove();
+    updatePrice(type);
+}
+  
+  
 function sendWhatsApp(){ window.open(`https://wa.me/254790333932?text=${encodeURIComponent(window.whatsappMessage)}`, "_blank"); closePopup(); }
 function closePopup(){ document.getElementById("orderPopup").style.display = "none"; cart = {}; updateCart(); }
 
 function sendQuote() {
-  let s = document.getElementById("school").value;
-  emailjs.send('service_grbq937', 'template_rfcn2bc', { school_name: s, customer_email: document.getElementById("email").value, customer_phone: document.getElementById("phone").value, message: document.getElementById("message").value })
-  .then(() => alert("Quote request sent!"));
+  const s = document.getElementById("school").value.trim();
+  const e = document.getElementById("email").value.trim();
+  const p = document.getElementById("phone").value.trim();
+  const m = document.getElementById("message").value.trim();
+
+  if (!s || !e || !p || !m) {
+    return alert("Please fill in all fields (School, Email, Phone, and Message) before proceeding.");
+  }
+
+  emailjs.send('service_grbq937', 'template_rfcn2bc', { 
+    school_name: s, 
+    customer_email: e, 
+    customer_phone: p, 
+    message: m 
+  }).then(() => {
+    alert("Quote request sent successfully!");
+    // Clear fields
+    ["school", "email", "phone", "message"].forEach(id => document.getElementById(id).value = "");
+  });
 }
 </script>
 </body>
