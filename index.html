@@ -560,10 +560,10 @@ function addA5() {
     const data = pricing.a5[pages];
     const minRequired = (tier === "offer") ? data.moq : data.normalMoq;
 
+    // ❌ Removed alert → ✅ Use amber popup
     if (qty < minRequired) {
-        alert(`Action Required: The minimum order for the ${tier.toUpperCase()} price list is ${minRequired} units. Please adjust your quantity.`);
-        qtyInput.focus();
-        return; 
+        validateMOQLogic('a5');
+        return;
     }
 
     let key = `A5 (${pages} Pages - ${document.getElementById("a5type").value})`;
@@ -580,9 +580,9 @@ function addA4() {
     const data = pricing.a4[pages];
     const minRequired = (tier === "offer") ? data.moq : data.normalMoq;
 
+    // ❌ Removed alert → ✅ Use amber popup
     if (qty < minRequired) {
-        alert(`Action Required: The minimum order for the ${tier.toUpperCase()} price list is ${minRequired} units. Please adjust your quantity.`);
-        qtyInput.focus();
+        validateMOQLogic('a4');
         return;
     }
 
@@ -591,7 +591,6 @@ function addA4() {
     updateCart();
     showSuccessPopup(`${qty} units added to cart!`);
 }
-
 function addItem(name, type) {
     const qtyInput = document.getElementById(type + 'qty');
     const qty = parseInt(qtyInput.value) || 0;
@@ -599,9 +598,9 @@ function addItem(name, type) {
     const dataSet = (type === 'd') ? pricing.diary : pricing.assessment;
     const minRequired = (tier === 'offer') ? dataSet.moq : dataSet.normalMoq;
 
+    // ❌ Removed alert → ✅ Use amber popup
     if (qty < minRequired) {
-        alert(`Action Required: The minimum order for the ${tier.toUpperCase()} price list is ${minRequired} units. Please adjust your quantity.`);
-        qtyInput.focus();
+        validateMOQLogic(type);
         return;
     }
 
@@ -609,6 +608,7 @@ function addItem(name, type) {
     updateCart();
     showSuccessPopup(`${qty} ${name} added to cart!`);
 }
+  
 function updateCart() {
   let list = document.getElementById("cartList");
   list.innerHTML = ""; total = 0; let entryCount = 0;
