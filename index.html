@@ -491,7 +491,6 @@ function syncTiers(id) {
     const tierSelect = document.getElementById(id + 'tier');
     const data = pricing[id][pages];
     
-    // Updated Labels and added dynamic KES unit prices
     tierSelect.innerHTML = `
       <option value="normal">Normal Price list (Min ${data.normalMoq}) - KES ${data.normal}</option>
       <option value="offer">Offer Price list (Min ${data.moq}) - KES ${data.offer}</option>
@@ -597,7 +596,33 @@ function addItem(name, type) {
     updateCart();
     showSuccessPopup(`${qty} ${name} added to cart!`);
 }
-  
+  function updatePrice(type) {
+    let dataSet, tierSelect, totalSpan, qtyInput;
+    
+    // 1. Correctly map the data source
+    if (type === "a5" || type === "a4") {
+        const pages = document.getElementById(type + "pages").value;
+        dataSet = pricing[type][pages];
+    } else {
+        // Map 'd' to 'diary' and 'a' to 'assessment'
+        dataSet = (type === "d") ? pricing.diary : pricing.assessment;
+    }
+
+    // 2. Target the correct UI elements
+    tierSelect = document.getElementById(type + "tier");
+    totalSpan = document.getElementById(type + "total");
+    qtyInput = document.getElementById(type + "qty");
+
+    if (!tierSelect || !totalSpan || !qtyInput) return;
+
+    // 3. Calculate
+    const qty = parseInt(qtyInput.value) || 0;
+    const unitPrice = (tierSelect.value === "offer") ? dataSet.offer : dataSet.normal;
+    const total = qty * unitPrice;
+
+    // 4. Update Display
+    totalSpan.textContent = total.toLocaleString();
+}
 function updateCart() {
   let list = document.getElementById("cartList");
   list.innerHTML = ""; total = 0; let entryCount = 0;
@@ -810,32 +835,32 @@ function showAmberPopup(type, qty, dataSet, tier) {
 
     document.body.appendChild(popup);
 }
-
 function fixMOQ(type, min) {
     const input = document.getElementById(type + "qty");
     const tierSelect = document.getElementById(type + "tier");
 
-    suppressPopup = true; // 🚫 stop popup from re-triggering
-
     if (input) input.value = min;
-    if (tierSelect) tierSelect.value = "normal";
+    // If they clicked "Update to MOQ", set to normal; 
+    // if they clicked "Add more for discount", you might set to offer.
+    if (tierSelect) tierSelect.value = (min >= pricing[type === 'd' ? 'diary' : (type === 'a' ? 'assessment' : type)].moq) ? "offer" : "normal";
 
     updatePrice(type);
 
+    // THIS IS THE FIX: Remove the popup from the screen
+    const popup = document.getElementById("valPopup");
+    if (popup) {
+        popup.remove();
+    }
+}
+
+
+function useNormalPrice(type) {
+    const tierSelect = document.getElementById(type + "tier");
+    if (tierSelect) tierSelect.value = "normal";
+    updatePrice(type);
     const popup = document.getElementById("valPopup");
     if (popup) popup.remove();
-
-    // Re-enable after short delay
-    setTimeout(() => {
-        suppressPopup = false;
-    }, 300);
 }
-function useNormalPrice(type) {
-    document.getElementById(type + "tier").value = "normal";
-    document.getElementById("valPopup").remove();
-    updatePrice(type);
-}
-  
   
 function sendWhatsApp(){ window.open(`https://wa.me/254790333932?text=${encodeURIComponent(window.whatsappMessage)}`, "_blank"); closePopup(); }
 function closePopup(){ document.getElementById("orderPopup").style.display = "none"; cart = {}; updateCart(); }
