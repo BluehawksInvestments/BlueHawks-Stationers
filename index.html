@@ -91,6 +91,8 @@ nav a:hover { color:#5ea8ff; transition:0.3s; }
 /* This class handles the visibility toggle */
 .section.active { 
     display: block !important; 
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 .grid { 
     display: grid; 
@@ -181,8 +183,6 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
   <div style="display: flex; align-items: center; cursor: pointer;" onclick="show('home')">
     <img src="images/Bluehawk.png" class="title-img" alt="Logo">
   </div>
-  </nav>
-  <nav>
   <div>
     <a onclick="show('home')">Home</a>
     <a onclick="show('about')">About Us</a>
@@ -323,16 +323,16 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
 <div id="productsPage" class="section">
   <h2>Our Products</h2>
   <ul>
-    <li><a href="#" onclick="goToProduct('a5')">A5 Exercise Books</a>
+    <li><a style="cursor:pointer; color:#0a2e6d; text-decoration:underline;" onclick="goToProduct('a5')">A5 Exercise Books</a>
       <span class="desc">Pages: 80, 120, 200. Delivery: 5 days. Payment: after delivery.</span>
     </li>
-    <li><a href="#" onclick="goToProduct('a4')">A4 Exercise Books</a>
+    <li><a style="cursor:pointer; color:#0a2e6d; text-decoration:underline;" onclick="goToProduct('a4')">A4 Exercise Books</a>
       <span class="desc">Pages: 120, 200. Delivery: 5 days. Payment: after delivery.</span>
     </li>
-    <li><a href="#" onclick="goToProduct('assessment')">Assessment Books</a>
+    <li><a style="cursor:pointer; color:#0a2e6d; text-decoration:underline;" onclick="goToProduct('assessment')">Assessment Books</a>
       <span class="desc">Normal: 100, Offer: 90. Delivery: 5 days. Payment: after delivery.</span>
     </li>
-    <li><a href="#" onclick="goToProduct('diary')">School Diaries</a>
+    <li><a style="cursor:pointer; color:#0a2e6d; text-decoration:underline;" onclick="goToProduct('diary')">School Diaries</a>
       <span class="desc">Normal: 100, Offer: 90. Delivery: 5 days. Payment: after delivery.</span>
     </li>
   </ul>
