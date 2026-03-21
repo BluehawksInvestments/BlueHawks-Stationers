@@ -64,12 +64,15 @@
   margin: 5px 0; 
   font-weight: bold;
 }
-.price-display { 
-  background: #eef4ff; 
-  padding: 8px; 
-  border-radius: 8px; 
-  margin: 10px 0; 
-  font-weight: bold; 
+.price-display {
+    background: #eef4ff;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 15px 0 5px 0;
+    font-weight: bold;
+    color: #0a2e6d;
+    border: 1px solid #5ea8ff;
+    text-align: center;
 }
 body { margin:0; font-family: Arial, sans-serif; color:#0a2e6d; background: linear-gradient(to bottom, #f0f4ff, #ffffff);}
 nav { background:#0a2e6d; padding:15px 30px; display:flex; justify-content:space-between; align-items:center;}
@@ -81,7 +84,13 @@ nav a:hover { color:#5ea8ff; transition:0.3s; }
 .hero-img { max-width:200px; height:auto; border-radius:10px; object-fit:cover; align-self:flex-start; }
 .section { display:none; padding:50px 20px; }
 .active { display:block; }
-.grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+.grid { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px; 
+    padding: 10px;
+}
+  
 .card { 
     display: flex; 
     flex-direction: row; 
@@ -144,9 +153,10 @@ nav a:hover { color:#5ea8ff; transition:0.3s; }
 /* Navigation Logo Logic */
 nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right: 12px; vertical-align: middle; border-radius: 4px; }
 
-@media (max-width: 480px) {
-    nav img.title-img { width: 60px; height: 60px; }
+@media (max-width: 768px) {
     .grid { grid-template-columns: 1fr; }
+    .card { flex-direction: column; width: 100%; }
+    .product-right { padding-left: 0; padding-top: 15px; }
 }
 </style>
 </head>
@@ -189,7 +199,6 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
     <div class="product-left">
       <h3>A5 Exercise Books</h3>
       <img src="images/A5 Exercise book.png" class="product-img-half">
-      <p>Total: KES <span id="a5total" style="font-weight:bold;">0</span></p>
       <div id="a5_msg_area"></div>
     </div>
     <div class="product-right">
@@ -199,18 +208,22 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
         <option value="120">120 Pages</option>
         <option value="200">200 Pages</option>
       </select>
-      <span class="instruction-red">Select pages above to get the best price. (note the minimum order quantity for each price).</span>
+      
       <span class="label-blue">Price list</span>
       <select id="a5tier" onchange="updatePrice('a5')"></select>
+      
       <span class="label-blue">Type</span>
       <select id="a5type">
         <option value="Ruled">Ruled</option>
         <option value="Square">Square</option>
         <option value="Drawing">Drawing</option>
       </select>
+      
       <span class="label-blue">Quantity</span>
-      <input type="number" id="a5qty" placeholder="Quantity" onblur="validateMOQLogic('a5')">
-      <span class="calc-msg">Click outside the box to calculate the total cost.</span>
+      <input type="number" id="a5qty" placeholder="Quantity" oninput="updatePrice('a5')" onblur="validateMOQLogic('a5')">
+      <span class="instruction-red">Select pages above to get the best price. (note the minimum order quantity for each price).</span>
+      
+      <div class="price-display">Total: KES <span id="a5total">0</span></div>
       <button onclick="addA5()" style="margin-top:10px;">Add to Cart</button>
     </div>
   </div>
@@ -219,7 +232,6 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
     <div class="product-left">
       <h3>A4 Exercise Books</h3>
       <img src="images/A4 Exercise book.png" class="product-img-half">
-      <p>Total: KES <span id="a4total" style="font-weight:bold;">0</span></p>
       <div id="a4_msg_area"></div>
     </div>
     <div class="product-right">
@@ -228,18 +240,22 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
         <option value="120">120 Pages</option>
         <option value="200">200 Pages</option>
       </select>
-      <span class="instruction-red">Select pages above to get the best price. (note the minimum order quantity for each price).</span>
+      
       <span class="label-blue">Price list</span>
       <select id="a4tier" onchange="updatePrice('a4')"></select>
+      
       <span class="label-blue">Type</span>
       <select id="a4type">
         <option value="Ruled">Ruled</option>
         <option value="Square">Square</option>
         <option value="Drawing">Drawing</option>
       </select>
+      
       <span class="label-blue">Quantity</span>
-      <input type="number" id="a4qty" placeholder="Quantity" onblur="validateMOQLogic('a4')">
-      <span class="calc-msg">Click outside the box to calculate the total cost.</span>
+      <input type="number" id="a4qty" placeholder="Quantity" oninput="updatePrice('a4')" onblur="validateMOQLogic('a4')">
+      <span class="instruction-red">Select pages above to get the best price. (note the minimum order quantity for each price).</span>
+      
+      <div class="price-display">Total: KES <span id="a4total">0</span></div>
       <button onclick="addA4()" style="margin-top:10px;">Add to Cart</button>
     </div>
   </div>
@@ -248,19 +264,18 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
     <div class="product-left">
       <h3>School Diaries</h3>
       <img src="images/School Diary.png" class="product-img-half">
-      <p>Total: KES <span id="dtotal" style="font-weight:bold;">0</span></p>
       <div id="d_msg_area"></div>
     </div>
     <div class="product-right">
-      <span class="instruction-red">Select tier below to get the best price. (note the minimum order quantity for each price).</span>
       <span class="label-blue">Price list</span>
       <select id="dtier" onchange="updatePrice('d')">
-        <option value="normal">Normal Tier (Min 100)</option>
-        <option value="offer">Offer Tier (Min 200)</option>
-      </select>
+        </select>
+      
       <span class="label-blue">Quantity</span>
-      <input type="number" id="dqty" placeholder="Quantity" onblur="validateMOQLogic('d')">
-      <span class="calc-msg">Click outside the box to calculate the total cost.</span>
+      <input type="number" id="dqty" placeholder="Quantity" oninput="updatePrice('d')" onblur="validateMOQLogic('d')">
+      <span class="instruction-red">Select Price list below to get the best price. (note the minimum order quantity for each price).</span>
+      
+      <div class="price-display">Total: KES <span id="dtotal">0</span></div>
       <button onclick="addItem('Diary','d')" style="margin-top:10px;">Add to Cart</button>
     </div>
   </div>
@@ -269,23 +284,21 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
     <div class="product-left">
       <h3>Assessment Books</h3>
       <img src="images/Assesment book.png" class="product-img-half">
-      <p>Total: KES <span id="atotal" style="font-weight:bold;">0</span></p>
       <div id="a_msg_area"></div>
     </div>
     <div class="product-right">
-      <span class="instruction-red">Select tier below to get the best price. (note the minimum order quantity for each price).</span>
       <span class="label-blue">Price list</span>
       <select id="atier" onchange="updatePrice('a')">
-        <option value="normal">Normal Tier (Min 100)</option>
-        <option value="offer">Offer Tier (Min 200)</option>
-      </select>
+        </select>
+      
       <span class="label-blue">Quantity</span>
-      <input type="number" id="aqty" placeholder="Quantity" onblur="validateMOQLogic('a')">
-      <span class="calc-msg">Click outside the box to calculate the total cost.</span>
+      <input type="number" id="aqty" placeholder="Quantity" oninput="updatePrice('a')" onblur="validateMOQLogic('a')">
+      <span class="instruction-red">Select Price list below to get the best price. (note the minimum order quantity for each price).</span>
+      
+      <div class="price-display">Total: KES <span id="atotal">0</span></div>
       <button onclick="addItem('Assessment','a')" style="margin-top:10px;">Add to Cart</button>
     </div>
   </div>
-</div>
   </div>
 <div id="about" class="section">
   <h2>BlueHawk Stationers: Elevating Institutional Identity</h2>
@@ -409,56 +422,36 @@ function syncTiers(id) {
     const tierSelect = document.getElementById(id + 'tier');
     const data = pricing[id][pages];
     
-    // This populates the dropdown dynamically based on the selected pages
+    // Updated Labels and added dynamic KES unit prices
     tierSelect.innerHTML = `
-      <option value="normal">Normal Tier (Min ${data.normalMoq})</option>
-      <option value="offer">Offer Tier (Min ${data.moq})</option>
+      <option value="normal">Normal Price list (Min ${data.normalMoq}) - KES ${data.normal}</option>
+      <option value="offer">Offer Price list (Min ${data.moq}) - KES ${data.offer}</option>
     `;
     updatePrice(id);
 }
 
 function updatePrice(type) {
-    let qty = 0, dataSet, tierSelect, warning, totalSpan;
+    let qty = 0, dataSet, tierSelect, totalSpan;
 
+    // Determine data set based on product type
     if (type === "a5" || type === "a4") {
         const pages = document.getElementById(type + "pages").value;
         qty = parseInt(document.getElementById(type + "qty").value) || 0;
         tierSelect = document.getElementById(type + "tier");
         dataSet = pricing[type][pages];
-        warning = document.getElementById(type + "warning");
         totalSpan = document.getElementById(type + "total");
     } else {
+        // Handle Diary (d) and Assessment (a)
         qty = parseInt(document.getElementById(type + "qty").value) || 0;
         tierSelect = document.getElementById(type === "d" ? "dtier" : "atier");
         dataSet = type === "d" ? pricing.diary : pricing.assessment;
-        warning = document.getElementById(type === "d" ? "dwarning" : "awarning");
         totalSpan = document.getElementById(type + "total");
     }
 
     let currentTier = tierSelect.value;
-
-    // --- AUTO-CORRECTION LOGIC ---
-    if (qty >= dataSet.moq && currentTier === "normal") {
-        tierSelect.value = "offer";
-        currentTier = "offer";
-        
-        // Visual Highlight: Flash green when auto-corrected to discount
-        totalSpan.parentElement.style.transition = "background 0.3s";
-        totalSpan.parentElement.style.background = "#d4edda"; 
-        setTimeout(() => { totalSpan.parentElement.style.background = "transparent"; }, 1000);
-    }
-
     const priceToUse = currentTier === "offer" ? dataSet.offer : dataSet.normal;
-    const minRequired = currentTier === "offer" ? dataSet.moq : dataSet.normalMoq;
 
-    // --- SMART MOQ ENFORCEMENT ---
-    if (qty > 0 && qty < minRequired) {
-        warning.innerText = `Minimum order for this tier is ${minRequired} units.`;
-        warning.style.display = "block";
-    } else {
-        warning.style.display = "none";
-    }
-
+    // Auto-calculate total
     totalSpan.textContent = (qty * priceToUse).toLocaleString();
 }
 
@@ -471,6 +464,26 @@ window.onload = function() {
     if (s) { 
         cart = JSON.parse(s); 
         updateCart(); 
+    }
+    
+    // 2. Initialize Exercise Books (A5/A4)
+    syncTiers('a5');
+    syncTiers('a4');
+    
+    // 3. Initialize Diary and Assessment Dropdowns
+    initStaticProducts('d', pricing.diary);
+    initStaticProducts('a', pricing.assessment);
+};
+
+// New helper function to show KES prices in the Diary/Assessment dropdowns
+function initStaticProducts(idPrefix, data) {
+    const tierSelect = document.getElementById(idPrefix + 'tier');
+    tierSelect.innerHTML = `
+        <option value="normal">Normal Price list (Min ${data.normalMoq}) - KES ${data.normal}</option>
+        <option value="offer">Offer Price list (Min ${data.moq}) - KES ${data.offer}</option>
+    `;
+    updatePrice(idPrefix);
+}
     }
     
     // 2. Initialize dropdowns for exercise books
