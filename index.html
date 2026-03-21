@@ -82,8 +82,16 @@ nav a:hover { color:#5ea8ff; transition:0.3s; }
 .hero h1 { font-size:3em; margin:10px 0 0 0; display:flex; align-items:center; }
 .hero img.title-img { max-width:80px; height:auto; margin-right:15px; }
 .hero-img { max-width:200px; height:auto; border-radius:10px; object-fit:cover; align-self:flex-start; }
-.section { display:none; padding:50px 20px; }
-.active { display:block; }
+/* Ensure sections are hidden by default */
+.section { 
+    display: none; 
+    padding: 50px 20px; 
+}
+
+/* This class handles the visibility toggle */
+.section.active { 
+    display: block !important; 
+}
 .grid { 
     display: grid; 
     grid-template-columns: repeat(2, 1fr); 
@@ -333,14 +341,15 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
 <div id="cart" class="section">
   <h2>My Cart</h2>
   <div class="cart-box">
-    <div id="emptyCartMessage">
+    <div id="emptyCartMessage" style="text-align: center; padding: 40px;">
       <p><b>Your Cart is Empty</b></p>
       <button onclick="show('home')">Go Back to Shopping</button>
     </div>
-    <div id="cartContent">
+    
+    <div id="cartContent" style="display: none;">
       <div style="margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px;">
         <h4 style="margin-bottom:10px;">Order Contact Details</h4>
-        <input id="cartPhone" type="text" maxlength="10" placeholder="Phone Number (e.g. 0712345678)*">
+        <input id="cartPhone" type="text" maxlength="10" placeholder="Phone Number*">
         <input id="cartEmail" type="email" placeholder="Email Address*">
       </div>
       <ul id="cartList"></ul>
@@ -396,19 +405,20 @@ const pricing = {
 };
 
 function show(id) {
-  // Hide all sections by removing the 'active' class
-  document.querySelectorAll(".section").forEach(s => {
-    s.classList.remove("active");
-    s.style.display = "none"; // Force hide
-  });
+    // 1. Find all sections and hide them
+    const sections = document.querySelectorAll(".section");
+    sections.forEach(s => {
+        s.classList.remove("active");
+    });
 
-  // Show the selected section
-  const target = document.getElementById(id);
-  if (target) {
-    target.classList.add("active");
-    target.style.display = "block"; // Force show
-    window.scrollTo(0, 0); // Reset scroll to top when switching tabs
-  }
+    // 2. Find the specific section by ID and show it
+    const target = document.getElementById(id);
+    if (target) {
+        target.classList.add("active");
+        window.scrollTo(0, 0); // Scroll to top for a better user experience
+    } else {
+        console.error("Section with ID " + id + " not found.");
+    }
 }
 function goToProduct(id) {
     show('home');
