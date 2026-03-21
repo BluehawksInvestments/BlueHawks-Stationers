@@ -35,7 +35,27 @@
   font-size: 1em;
 }
 
-  /* Add to your <style> section */
+  .hero { 
+    background: linear-gradient(135deg,#0a2e6d,#5ea8ff); 
+    color:white; 
+    padding:80px 20px; 
+    border-bottom-left-radius:50px; 
+    border-bottom-right-radius:50px; 
+    display:flex; 
+    justify-content: center; /* Centers the whole text block */
+    align-items:center;
+    text-align: left; /* Keeps the main titles aligned left */
+}
+
+.hero h1 { 
+    font-size:3em; 
+    margin:0; 
+}
+
+.subheading { 
+    margin-bottom: 5px; 
+}
+  
 .contact-icon-btn {
     display: flex;
     align-items: center;
@@ -193,12 +213,16 @@ nav img.title-img { width: 96px; height: 96px; object-fit: contain; margin-right
 </nav>
 
 <div id="home" class="section active">
-  <div class="hero">
-      <div>
-         <h1>BlueHawks Stationers</h1>
-         <h2 class="subheading">Elevating Institutional Identity</h2>
-      </div>
-  </div>
+  
+ <div class="hero">
+    <div class="hero-text-container" style="position: relative; display: inline-block; text-align: left;">
+        <h1>BlueHawks Stationers</h1>
+        <h2 class="subheading">Elevating Institutional Identity</h2>
+        <div style="text-align: right; margin-top: 10px; font-weight: bold; color: #ffc600; font-style: italic;">
+            Customized exercise books!
+        </div>
+    </div>
+</div>
 
   <h2>Order Products</h2>
 <div class="grid">
