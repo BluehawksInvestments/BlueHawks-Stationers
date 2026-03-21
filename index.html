@@ -733,26 +733,46 @@ function validateMOQLogic(type) {
 
 function showAmberPopup(type, qty, dataSet, tier) {
     const isBelowAbsoluteMin = qty < dataSet.normalMoq;
-    const message = isBelowAbsoluteMin 
-        ? `Quantity is below Minimum Order Quantity (${dataSet.normalMoq}).` 
-        : `Items do not qualify for Offer pricelist (Min ${dataSet.moq}).`;
+    
+    // Determine the message and whether the "Use Normal" button should show
+    let message = "";
+    let buttonsHtml = "";
 
-    // Implementation of the Amber Popup with 2 buttons
+    if (isBelowAbsoluteMin) {
+        message = `Quantity is below the Minimum Order Quantity of ${dataSet.normalMoq} units.`;
+        // Only provide the option to fix the MOQ
+        buttonsHtml = `<button onclick="fixMOQ('${type}', ${dataSet.normalMoq})">Add more items (Set to ${dataSet.normalMoq})</button>`;
+    } else {
+        // Quantity is between Normal MOQ and Offer MOQ
+        message = `Items do not qualify for Offer pricelist (Min ${dataSet.moq}).`;
+        buttonsHtml = `
+            <button onclick="fixMOQ('${type}', ${dataSet.moq})">Add more items for Discount</button>
+            <button onclick="useNormalPrice('${type}')" style="margin-top:10px; background:#444;">Use Normal Pricelist</button>
+        `;
+    }
+
     const popup = document.createElement("div");
     popup.id = "valPopup";
-    popup.style = "position:fixed; top:30%; left:50%; transform:translate(-50%, -50%); background:#ffbf00; padding:20px; border-radius:10px; z-index:9999; text-align:center; border:2px solid #b58900;";
+    popup.style = "position:fixed; top:30%; left:50%; transform:translate(-50%, -50%); background:#ffbf00; padding:20px; border-radius:10px; z-index:9999; text-align:center; border:2px solid #b58900; box-shadow: 0 4px 15px rgba(0,0,0,0.3); color: #000;";
     popup.innerHTML = `
-        <p><strong>${message}</strong></p>
-        <button onclick="fixMOQ('${type}', ${dataSet.moq})">Add more items</button>
-        <button onclick="useNormalPrice('${type}')" style="margin-top:10px; background:#444;">Use Normal Pricelist</button>
+        <p style="margin-bottom:15px;"><strong>${message}</strong></p>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            ${buttonsHtml}
+            <button onclick="document.getElementById('valPopup').remove()" style="background:transparent; border:none; text-decoration:underline; color:#333; cursor:pointer;">Cancel</button>
+        </div>
     `;
     document.body.appendChild(popup);
 }
 
 function fixMOQ(type, min) {
-    document.getElementById(type + "qty").value = min;
-    document.getElementById("valPopup").remove();
-    updatePrice(type);
+    const input = document.getElementById(type + "qty");
+    if (input) {
+        input.value = min;
+        // Trigger price update so the user sees the new total immediately
+        updatePrice(type);
+    }
+    const popup = document.getElementById("valPopup");
+    if (popup) popup.remove();
 }
 
 function useNormalPrice(type) {
