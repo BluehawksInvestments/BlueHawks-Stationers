@@ -499,35 +499,6 @@ function syncTiers(id) {
     updatePrice(id);
 }
 
-function updatePrice(type) {
-    let qty = 0, dataSet, tierSelect, totalSpan;
-
-    // Determine data set based on product type
-    if (type === "a5" || type === "a4") {
-        const pages = document.getElementById(type + "pages").value;
-        qty = parseInt(document.getElementById(type + "qty").value) || 0;
-        tierSelect = document.getElementById(type + "tier");
-        dataSet = pricing[type][pages];
-        totalSpan = document.getElementById(type + "total");
-    } else {
-        // Handle Diary (d) and Assessment (a)
-        qty = parseInt(document.getElementById(type + "qty").value) || 0;
-        tierSelect = document.getElementById(type === "d" ? "dtier" : "atier");
-        dataSet = type === "d" ? pricing.diary : pricing.assessment;
-        totalSpan = document.getElementById(type + "total");
-    }
-
-    let currentTier = tierSelect.value;
-    const priceToUse = currentTier === "offer" ? dataSet.offer : dataSet.normal;
-
-    // Auto-calculate total
-    totalSpan.textContent = (qty * priceToUse).toLocaleString();
-}
-
-// Initializing the tiers on load
-// --- Combined Initialization ---
-  
-// --- Combined Initialization ---
 window.onload = function() {
     // 1. Recover Cart Data
     let s = localStorage.getItem("cart");
@@ -558,29 +529,29 @@ function initStaticProducts(idPrefix, data) {
 }
 
 // Ensure updatePrice handles all IDs correctly
+  
 function updatePrice(type) {
-    let qty = 0, dataSet, tierSelect, totalSpan;
+    let qty = parseInt(document.getElementById(type + "qty").value) || 0;
+    let dataSet, tierSelect, totalSpan;
 
     if (type === "a5" || type === "a4") {
         const pages = document.getElementById(type + "pages").value;
-        qty = parseInt(document.getElementById(type + "qty").value) || 0;
-        tierSelect = document.getElementById(type + "tier");
         dataSet = pricing[type][pages];
+   tierSelect = document.getElementById(type === "d" ? "dtier" : "atier");
         totalSpan = document.getElementById(type + "total");
     } else {
-        // Updated to match the IDs 'dtier'/'atier' and 'dtotal'/'atotal'
-        qty = parseInt(document.getElementById(type + "qty").value) || 0;
-        tierSelect = document.getElementById(type + "tier"); 
         dataSet = (type === "d") ? pricing.diary : pricing.assessment;
+        tierSelect = document.getElementById(type === "d" ? "dtier" : "atier");
         totalSpan = document.getElementById(type + "total");
     }
 
-    if (tierSelect && dataSet) {
-        let currentTier = tierSelect.value;
-        const priceToUse = currentTier === "offer" ? dataSet.offer : dataSet.normal;
-        totalSpan.textContent = (qty * priceToUse).toLocaleString();
-    }
+    if (!tierSelect || !dataSet) return;
+
+    let currentTier = tierSelect.value;
+    const price = currentTier === "offer" ? dataSet.offer : dataSet.normal;
+    totalSpan.textContent = (qty * price).toLocaleString();
 }
+
 function addA5() {
     const qtyInput = document.getElementById("a5qty");
     const qty = parseInt(qtyInput.value) || 0;
