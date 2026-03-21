@@ -535,15 +535,15 @@ function updatePrice(type) {
     let dataSet, tierSelect, totalSpan;
 
     if (type === "a5" || type === "a4") {
-        const pages = document.getElementById(type + "pages").value;
-        dataSet = pricing[type][pages];
-   tierSelect = document.getElementById(type === "d" ? "dtier" : "atier");
-        totalSpan = document.getElementById(type + "total");
-    } else {
-        dataSet = (type === "d") ? pricing.diary : pricing.assessment;
-        tierSelect = document.getElementById(type === "d" ? "dtier" : "atier");
-        totalSpan = document.getElementById(type + "total");
-    }
+    const pages = document.getElementById(type + "pages").value;
+    dataSet = pricing[type][pages];
+    tierSelect = document.getElementById(type + "tier"); // ✅ FIXED
+    totalSpan = document.getElementById(type + "total");
+} else {
+    dataSet = (type === "d") ? pricing.diary : pricing.assessment;
+    tierSelect = document.getElementById(type + "tier"); // ✅ FIXED
+    totalSpan = document.getElementById(type + "total");
+}
 
     if (!tierSelect || !dataSet) return;
 
@@ -816,7 +816,7 @@ function showAmberPopup(type, qty, dataSet, tier) {
     `;
     document.body.appendChild(popup);
 }
-}
+
 function fixMOQ(type, min) {
     const input = document.getElementById(type + "qty");
     if (input) {
