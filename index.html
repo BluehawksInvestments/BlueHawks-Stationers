@@ -458,6 +458,7 @@ function updatePrice(type) {
 // Initializing the tiers on load
 // --- Combined Initialization ---
   
+// --- Combined Initialization ---
 window.onload = function() {
     // 1. Recover Cart Data
     let s = localStorage.getItem("cart");
@@ -475,26 +476,42 @@ window.onload = function() {
     initStaticProducts('a', pricing.assessment);
 };
 
-// New helper function to show KES prices in the Diary/Assessment dropdowns
+// Helper function to show KES prices in the Diary/Assessment dropdowns
 function initStaticProducts(idPrefix, data) {
     const tierSelect = document.getElementById(idPrefix + 'tier');
-    tierSelect.innerHTML = `
-        <option value="normal">Normal Price list (Min ${data.normalMoq}) - KES ${data.normal}</option>
-        <option value="offer">Offer Price list (Min ${data.moq}) - KES ${data.offer}</option>
-    `;
-    updatePrice(idPrefix);
-}
+    if (tierSelect) {
+        tierSelect.innerHTML = `
+            <option value="normal">Normal Price list (Min ${data.normalMoq}) - KES ${data.normal}</option>
+            <option value="offer">Offer Price list (Min ${data.moq}) - KES ${data.offer}</option>
+        `;
+        updatePrice(idPrefix);
     }
-    
-    // 2. Initialize dropdowns for exercise books
-    syncTiers('a5');
-    syncTiers('a4');
-    
-    // 3. Initialize totals for Diary and Assessment
-    updatePrice('d');
-    updatePrice('a');
-};
-  
+}
+
+// Ensure updatePrice handles all IDs correctly
+function updatePrice(type) {
+    let qty = 0, dataSet, tierSelect, totalSpan;
+
+    if (type === "a5" || type === "a4") {
+        const pages = document.getElementById(type + "pages").value;
+        qty = parseInt(document.getElementById(type + "qty").value) || 0;
+        tierSelect = document.getElementById(type + "tier");
+        dataSet = pricing[type][pages];
+        totalSpan = document.getElementById(type + "total");
+    } else {
+        // Updated to match the IDs 'dtier'/'atier' and 'dtotal'/'atotal'
+        qty = parseInt(document.getElementById(type + "qty").value) || 0;
+        tierSelect = document.getElementById(type + "tier"); 
+        dataSet = (type === "d") ? pricing.diary : pricing.assessment;
+        totalSpan = document.getElementById(type + "total");
+    }
+
+    if (tierSelect && dataSet) {
+        let currentTier = tierSelect.value;
+        const priceToUse = currentTier === "offer" ? dataSet.offer : dataSet.normal;
+        totalSpan.textContent = (qty * priceToUse).toLocaleString();
+    }
+}
 function addA5(){ 
     let qty=parseInt(document.getElementById("a5qty").value)||0; if(!qty) return alert("Enter quantity");
     let key = `A5 (${document.getElementById("a5pages").value} Pages - ${document.getElementById("a5type").value})`;
