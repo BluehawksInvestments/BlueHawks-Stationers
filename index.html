@@ -688,22 +688,63 @@ if (Object.keys(cart).length === 0) {
   doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.text("BILL TO:", 20, 55);
   doc.setFont("helvetica", "normal"); doc.text(`Email: ${contacts.email}`, 20, 60);
   doc.text(`Phone: ${contacts.phone}`, 20, 65);
-
-  // --- TABLE HEADER ---
-  let y = 80; doc.setDrawColor(10, 46, 109); doc.setLineWidth(0.5); doc.line(20, y, 190, y);
-  y += 7; doc.setFont("helvetica", "bold"); doc.text("Item Description", 22, y); doc.text("Qty", 110, y); doc.text("Total (KES)", 165, y);
-  y += 3; doc.line(20, y, 190, y); y += 10;
+// --- TABLE HEADER ---
+  let y = 80; 
+  doc.setDrawColor(10, 46, 109); 
+  doc.setLineWidth(0.5); 
+  doc.line(20, y, 190, y);
+  
+  y += 7; 
+  doc.setFont("helvetica", "bold"); 
+  doc.text("Item Description", 22, y); 
+  doc.text("Qty", 95, y);             // Moved Qty left
+  doc.text("@ (KES)", 115, y);         // Added Unit Price column
+  doc.text("Total (KES)", 155, y);     // Adjusted Total position
+  
+  y += 3; 
+  doc.line(20, y, 190, y); 
+  y += 10;
   
   // --- TABLE ITEMS ---
   doc.setFont("helvetica", "normal");
   let summaryForAdmin = ""; 
+  
   for (let key in cart) {
-    doc.text(key, 22, y); doc.text(cart[key].toString(), 110, y);
-    summaryForAdmin += `- ${key} x${cart[key]}\n`;
-    y += 10; doc.line(20, y-2, 190, y-2);
-  }
-  doc.setFont("helvetica", "bold"); doc.text(`GRAND TOTAL: KES ${total.toLocaleString()}`, 130, y+10);
+    let qty = cart[key];
+    let priceData = null;
 
+    // Fetch the correct price data for the math
+    if (key.includes("A5")) {
+      if (key.includes("80")) priceData = pricing.a5[80];
+      else if (key.includes("120")) priceData = pricing.a5[120];
+      else if (key.includes("200")) priceData = pricing.a5[200];
+    } else if (key.includes("A4")) {
+      if (key.includes("120")) priceData = pricing.a4[120];
+      else if (key.includes("200")) priceData = pricing.a4[200];
+    } else if (key === "Diary") priceData = pricing.diary;
+    else if (key === "Assessment") priceData = pricing.assessment;
+
+    // Calculate unit price based on MOQ
+    let unitPrice = priceData ? (qty >= priceData.moq ? priceData.offer : priceData.normal) : 100;
+    let itemTotal = unitPrice * qty;
+
+    // Draw row data
+    doc.text(key, 22, y); 
+    doc.text(qty.toString(), 95, y); 
+    doc.text(unitPrice.toLocaleString(), 115, y); // UNIT PRICE (@)
+    doc.text(itemTotal.toLocaleString(), 155, y); // TOTAL PER ITEM
+    
+    summaryForAdmin += `- ${key} x${qty}\n`;
+    y += 10; 
+    doc.line(20, y-2, 190, y-2);
+
+    // Page overflow check
+    if (y > 270) { doc.addPage(); y = 20; }
+  }
+  
+  doc.setFont("helvetica", "bold"); 
+  doc.text(`GRAND TOTAL: KES ${total.toLocaleString()}`, 130, y+10);
+ 
   // --- SIGNATURE AREA ---
   let sigY = y+40; 
   if (sigY > 250) { doc.addPage(); sigY = 30; } // Prevent signature from falling off the page
