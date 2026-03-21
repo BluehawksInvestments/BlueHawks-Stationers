@@ -530,11 +530,7 @@ function initStaticProducts(idPrefix, data) {
 
 // Ensure updatePrice handles all IDs correctly
   
-function updatePrice(type) {
-    let qty = parseInt(document.getElementById(type + "qty").value) || 0;
-    let dataSet, tierSelect, totalSpan;
-
-    if (type === "a5" || type === "a4") {
+if (type === "a5" || type === "a4") {
     const pages = document.getElementById(type + "pages").value;
     dataSet = pricing[type][pages];
     tierSelect = document.getElementById(type + "tier"); // ✅ FIXED
@@ -543,13 +539,6 @@ function updatePrice(type) {
     dataSet = (type === "d") ? pricing.diary : pricing.assessment;
     tierSelect = document.getElementById(type + "tier"); // ✅ FIXED
     totalSpan = document.getElementById(type + "total");
-}
-
-    if (!tierSelect || !dataSet) return;
-
-    let currentTier = tierSelect.value;
-    const price = currentTier === "offer" ? dataSet.offer : dataSet.normal;
-    totalSpan.textContent = (qty * price).toLocaleString();
 }
 
 function addA5() {
@@ -819,15 +808,21 @@ function showAmberPopup(type, qty, dataSet, tier) {
 
 function fixMOQ(type, min) {
     const input = document.getElementById(type + "qty");
+    const tierSelect = document.getElementById(type + "tier");
+
     if (input) {
         input.value = min;
-        // Trigger price update so the user sees the new total immediately
-        updatePrice(type);
     }
+
+    if (tierSelect) {
+        tierSelect.value = "normal"; // Force switch to Normal price list
+    }
+
+    updatePrice(type);
+
     const popup = document.getElementById("valPopup");
     if (popup) popup.remove();
 }
-
 function useNormalPrice(type) {
     document.getElementById(type + "tier").value = "normal";
     document.getElementById("valPopup").remove();
