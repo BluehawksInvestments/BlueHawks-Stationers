@@ -581,35 +581,63 @@ function updatePrice(type) {
         totalSpan.textContent = (qty * priceToUse).toLocaleString();
     }
 }
-function addA5(){ 
-    let qty=parseInt(document.getElementById("a5qty").value)||0; if(!qty) return alert("Enter quantity");
-    let key = `A5 (${document.getElementById("a5pages").value} Pages - ${document.getElementById("a5type").value})`;
-    cart[key]=(cart[key]||0)+qty; updateCart(); showSuccessPopup(`${qty} added to cart`);
+function addA5() {
+    const qtyInput = document.getElementById("a5qty");
+    const qty = parseInt(qtyInput.value) || 0;
+    const pages = document.getElementById("a5pages").value;
+    const tier = document.getElementById("a5tier").value;
+    const data = pricing.a5[pages];
+    const minRequired = (tier === "offer") ? data.moq : data.normalMoq;
+
+    if (qty < minRequired) {
+        alert(`Action Required: The minimum order for the ${tier.toUpperCase()} price list is ${minRequired} units. Please adjust your quantity.`);
+        qtyInput.focus();
+        return; 
+    }
+
+    let key = `A5 (${pages} Pages - ${document.getElementById("a5type").value})`;
+    cart[key] = (cart[key] || 0) + qty;
+    updateCart();
+    showSuccessPopup(`${qty} units added to cart!`);
 }
-function addA4(){ 
-    let qty=parseInt(document.getElementById("a4qty").value)||0; if(!qty) return alert("Enter quantity");
-    let key = `A4 (${document.getElementById("a4pages").value} Pages - ${document.getElementById("a4type").value})`;
-    cart[key]=(cart[key]||0)+qty; updateCart(); showSuccessPopup(`${qty} added to cart`);
+
+function addA4() {
+    const qtyInput = document.getElementById("a4qty");
+    const qty = parseInt(qtyInput.value) || 0;
+    const pages = document.getElementById("a4pages").value;
+    const tier = document.getElementById("a4tier").value;
+    const data = pricing.a4[pages];
+    const minRequired = (tier === "offer") ? data.moq : data.normalMoq;
+
+    if (qty < minRequired) {
+        alert(`Action Required: The minimum order for the ${tier.toUpperCase()} price list is ${minRequired} units. Please adjust your quantity.`);
+        qtyInput.focus();
+        return;
+    }
+
+    let key = `A4 (${pages} Pages - ${document.getElementById("a4type").value})`;
+    cart[key] = (cart[key] || 0) + qty;
+    updateCart();
+    showSuccessPopup(`${qty} units added to cart!`);
 }
+
 function addItem(name, type) {
-    // 'type' will be 'd' for diary or 'a' for assessment
-    let qty = parseInt(document.getElementById(type + 'qty').value) || 0;
-    if (qty <= 0) return alert("Please enter a valid quantity.");
-    
-    // Check MOQ before adding
-    let dataSet = type === 'd' ? pricing.diary : pricing.assessment;
-    let tier = document.getElementById(type + 'tier').value;
-    let minReq = tier === 'offer' ? dataSet.moq : dataSet.normalMoq;
-    
-    if (qty < minReq) {
-        return alert(`Minimum order for this item is ${minReq} units.`);
+    const qtyInput = document.getElementById(type + 'qty');
+    const qty = parseInt(qtyInput.value) || 0;
+    const tier = document.getElementById(type + 'tier').value;
+    const dataSet = (type === 'd') ? pricing.diary : pricing.assessment;
+    const minRequired = (tier === 'offer') ? dataSet.moq : dataSet.normalMoq;
+
+    if (qty < minRequired) {
+        alert(`Action Required: The minimum order for the ${tier.toUpperCase()} price list is ${minRequired} units. Please adjust your quantity.`);
+        qtyInput.focus();
+        return;
     }
 
     cart[name] = (cart[name] || 0) + qty;
     updateCart();
-    showSuccessPopup(`${qty} ${name} added to cart`);
+    showSuccessPopup(`${qty} ${name} added to cart!`);
 }
-
 function updateCart() {
   let list = document.getElementById("cartList");
   list.innerHTML = ""; total = 0; let entryCount = 0;
@@ -789,23 +817,21 @@ function validateMOQLogic(type) {
 
 function showAmberPopup(type, qty, dataSet, tier) {
     const isBelowAbsoluteMin = qty < dataSet.normalMoq;
-    
-    // Determine the message and whether the "Use Normal" button should show
     let message = "";
     let buttonsHtml = "";
 
     if (isBelowAbsoluteMin) {
-        message = `Quantity is below the Minimum Order Quantity of ${dataSet.normalMoq} units.`;
-        // Only provide the option to fix the MOQ
-        buttonsHtml = `<button onclick="fixMOQ('${type}', ${dataSet.normalMoq})">Add more items (Set to ${dataSet.normalMoq})</button>`;
+        message = `Quantity (${qty}) is below the Minimum Order Quantity of ${dataSet.normalMoq}.`;
+        // This button calls fixMOQ which now resets the tier to Normal
+        buttonsHtml = `<button onclick="fixMOQ('${type}', ${dataSet.normalMoq})">Update to MOQ (${dataSet.normalMoq}) & Normal Price</button>`;
     } else {
-        // Quantity is between Normal MOQ and Offer MOQ
-        message = `Items do not qualify for Offer pricelist (Min ${dataSet.moq}).`;
+        message = `Quantity (${qty}) does not qualify for the Offer pricelist (Min ${dataSet.moq}).`;
         buttonsHtml = `
-            <button onclick="fixMOQ('${type}', ${dataSet.moq})">Add more items for Discount</button>
-            <button onclick="useNormalPrice('${type}')" style="margin-top:10px; background:#444;">Use Normal Pricelist</button>
+            <button onclick="fixMOQ('${type}', ${dataSet.moq})">Add more for Discount (${dataSet.moq})</button>
+            <button onclick="useNormalPrice('${type}')" style="margin-top:10px; background:#444;">Keep ${qty} at Normal Price</button>
         `;
     }
+
 
     const popup = document.createElement("div");
     popup.id = "valPopup";
@@ -819,7 +845,7 @@ function showAmberPopup(type, qty, dataSet, tier) {
     `;
     document.body.appendChild(popup);
 }
-
+}
 function fixMOQ(type, min) {
     const input = document.getElementById(type + "qty");
     if (input) {
