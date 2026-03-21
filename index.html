@@ -776,13 +776,17 @@ function validateMOQLogic(type) {
 }
 
 function showAmberPopup(type, qty, dataSet, tier) {
+
+    // 🔥 FIX: remove existing popup first
+    const existing = document.getElementById("valPopup");
+    if (existing) existing.remove();
+
     const isBelowAbsoluteMin = qty < dataSet.normalMoq;
     let message = "";
     let buttonsHtml = "";
 
     if (isBelowAbsoluteMin) {
         message = `Quantity (${qty}) is below the Minimum Order Quantity of ${dataSet.normalMoq}.`;
-        // This button calls fixMOQ which now resets the tier to Normal
         buttonsHtml = `<button onclick="fixMOQ('${type}', ${dataSet.normalMoq})">Update to MOQ (${dataSet.normalMoq}) & Normal Price</button>`;
     } else {
         message = `Quantity (${qty}) does not qualify for the Offer pricelist (Min ${dataSet.moq}).`;
@@ -792,10 +796,10 @@ function showAmberPopup(type, qty, dataSet, tier) {
         `;
     }
 
-
     const popup = document.createElement("div");
     popup.id = "valPopup";
     popup.style = "position:fixed; top:30%; left:50%; transform:translate(-50%, -50%); background:#ffbf00; padding:20px; border-radius:10px; z-index:9999; text-align:center; border:2px solid #b58900; box-shadow: 0 4px 15px rgba(0,0,0,0.3); color: #000;";
+    
     popup.innerHTML = `
         <p style="margin-bottom:15px;"><strong>${message}</strong></p>
         <div style="display:flex; flex-direction:column; gap:10px;">
@@ -803,6 +807,7 @@ function showAmberPopup(type, qty, dataSet, tier) {
             <button onclick="document.getElementById('valPopup').remove()" style="background:transparent; border:none; text-decoration:underline; color:#333; cursor:pointer;">Cancel</button>
         </div>
     `;
+
     document.body.appendChild(popup);
 }
 
